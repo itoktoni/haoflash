@@ -1,0 +1,33 @@
+{
+    "name": "itoktoni/finance",
+    "description": "for creating Finance",
+    "authors": [{
+        "name": "Itok toni laksono",
+        "email": "itok.toni@gmail.com"
+    }],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Finance\\Providers\\ModuleServiceProvider",
+                "Modules\\Finance\\Providers\\CacheableAuthUserServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Finance\\": ""
+        },
+        "files": [
+            "plugins/Views.php",
+            "plugins/Helper.php",
+            "plugins/Notes.php",
+            "plugins/Alert.php",
+            "plugins/Response.php",
+            "plugins/Lang.php",
+            "plugins/Debug.php"
+        ]
+    }
+}
