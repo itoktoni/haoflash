@@ -50,15 +50,11 @@ class TeamController extends Controller
     {
         $status = Helper::shareStatus(self::$model->status)->prepend('- Select Status -', '');
         $group = Helper::shareOption((new GroupUserRepository()));
-        $company = Views::option(new CompanyRepository());
-        $supplier = Views::option(new SupplierRepository());
 
         $view = [
             'key' => self::$model->getKeyName(),
             'status' => $status,
             'group' => $group,
-            'supplier' => $supplier,
-            'company' => $company,
         ];
 
         return array_merge($view, $data);
