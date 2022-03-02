@@ -37,7 +37,7 @@ class PurchaseRequest extends FormRequest
 
         $map = collect($this->detail)->map(function ($item) use ($autonumber) {
             $data_product = ProductFacades::singleRepository($item['temp_id']);
-            $total = $item['temp_qty'] * Helper::filterInput($item['temp_price']) ?? 0;
+            $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
             $data[PoDetailFacades::mask_po_code()] = $autonumber;
             $data[PoDetailFacades::mask_product_id()] = $item['temp_id'];
             $data[PoDetailFacades::mask_product_price()] = $data_product->mask_buy ?? '';
