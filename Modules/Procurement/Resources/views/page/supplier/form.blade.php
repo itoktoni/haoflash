@@ -7,9 +7,9 @@
     </div>
 
     {!! Form::label('name', __('Contact Person'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_description') ? 'has-error' : ''}}">
-        {!! Form::text('supplier_description', null, ['class' => 'form-control']) !!}
-        {!! $errors->first('supplier_description', '<p class="help-block">:message</p>') !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_contact') ? 'has-error' : ''}}">
+        {!! Form::text('supplier_contact', null, ['class' => 'form-control']) !!}
+        {!! $errors->first('supplier_contact', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
@@ -21,10 +21,10 @@
         {!! $errors->first('supplier_email', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', __('Telp'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_telp') ? 'has-error' : ''}}">
-        {!! Form::text('supplier_telp', null, ['class' => 'form-control']) !!}
-        {!! $errors->first('supplier_telp', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', __('Phone'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_phone') ? 'has-error' : ''}}">
+        {!! Form::text('supplier_phone', null, ['class' => 'form-control']) !!}
+        {!! $errors->first('supplier_phone', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
@@ -47,8 +47,14 @@
 
 <div class="form-group">
 
+    {!! Form::label('name', __('Description'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_description') ? 'has-error' : ''}}">
+        {!! Form::textarea('supplier_description', null, ['class' => 'form-control', 'rows' => '3']) !!}
+        {!! $errors->first('supplier_description', '<p class="help-block">:message</p>') !!}
+    </div>
+
     {!! Form::label('name', __('Address'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-10 col-sm-10 {{ $errors->has('supplier_address') ? 'has-error' : ''}}">
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_address') ? 'has-error' : ''}}">
         {!! Form::textarea('supplier_address', null, ['class' => 'form-control', 'rows' => '3']) !!}
         {!! $errors->first('supplier_address', '<p class="help-block">:message</p>') !!}
     </div>

@@ -207,17 +207,20 @@ class PurchaseOrderController extends Controller
 
         $model = $receive->first();
 
+        $po = $this->get($code, ['has_supplier']);
+
         if (empty($model)) {
 
             $model = PoDetailFacades::where(PoDetailFacades::mask_po_code(), $code)
                 ->where(PoDetailFacades::mask_product_id(), request()->get('detail'))->firstOrFail();
 
             $master = $model->has_master;
-            $supplier = $model->has_supplier;
+            $supplier = $po->has_supplier;
+
             $data = [
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) ?? '',
+                'purchase_supplier' => $supplier ? $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) : '',
                 'purchase_notes' => $master->po_notes ?? '',
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'po_receive_date' => date('Y-m-d'),

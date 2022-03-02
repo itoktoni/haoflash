@@ -16,7 +16,8 @@ class Supplier extends Model
         'supplier_id',
         'supplier_name',
         'supplier_description',
-        'supplier_telp',
+        'supplier_phone',
+        'supplier_contact',
         'supplier_email',
         'supplier_ppn',
         'supplier_npwp',
@@ -31,7 +32,7 @@ class Supplier extends Model
     public $incrementing = true;
     public $rules = [
         'supplier_name' => 'required|min:3',
-        'supplier_telp' => 'required',
+        'supplier_phone' => 'required',
         'supplier_ppn' => 'required',
         'supplier_email' => 'required',
         'supplier_npwp' => 'integer|required_if:supplier_ppn,1',
@@ -42,7 +43,7 @@ class Supplier extends Model
     public $datatable = [
         'supplier_id' => [false => 'Code', 'width' => 50],
         'supplier_name' => [true => 'Name'],
-        'supplier_telp' => [true => 'Phone'],
+        'supplier_phone' => [true => 'Phone'],
         'supplier_email' => [true => 'Email'],
         'supplier_ppn' => [true => 'Name'],
     ];
