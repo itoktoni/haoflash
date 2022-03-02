@@ -239,7 +239,7 @@ class PurchaseOrderController extends Controller
             $model = array_merge($model->toArray(), $data);
         } else {
 
-            $master = $model->has_master;
+            $master = $po->has_master;
             $data = [
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'purchase_date' => $master->po_date_order ?? null,

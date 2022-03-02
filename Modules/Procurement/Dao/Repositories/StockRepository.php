@@ -15,7 +15,7 @@ class StockRepository extends Stock implements CrudInterface
     {
         $list = Helper::dataColumn($this->datatable);
         return $this->select(DB::raw("1 as stock_id,branch_name,stock_sell,stock_expired,stock_product_id, product_name, sum(stock_qty) as stock_qty"))
-            ->where('stock_sell', '!=', 0)
+            ->where('stock_sell', '!=', 0)->whereNotNull('stock_expired')
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')
             ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_sell', 'stock_expired'])->orderBy('stock_expired');

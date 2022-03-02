@@ -9,7 +9,7 @@ use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Models\Product;
 use Modules\Procurement\Dao\Facades\BranchFacades;
 
-class Stock extends Model
+class StockAccessories extends Model
 {
     use PowerJoins;
     protected $table = 'stocks';
@@ -57,7 +57,7 @@ class Stock extends Model
         'product_name' => [true => 'Product'],
         'stock_qty' => [true => 'Qty', 'width' => 100],
         'stock_sell' => [true => 'Sell Price'],
-        'stock_expired' => [true => 'Expired'],
+        'stock_expired' => [false => 'Expired'],
     ];
 
     public function mask_code()
