@@ -18,7 +18,7 @@ class Branch extends Model
         'branch_name',
         'branch_description',
         'branch_address',
-        'branch_telp',
+        'branch_phone',
         'branch_email',
     ];
 
@@ -41,7 +41,7 @@ class Branch extends Model
     public $datatable = [
         'branch_id' => [false => 'Code', 'width' => 50],
         'branch_name' => [true => 'Name'],
-        'branch_telp' => [true => 'Phone'],
+        'branch_phone' => [true => 'Phone'],
         'branch_email' => [true => 'Email'],
     ];
     

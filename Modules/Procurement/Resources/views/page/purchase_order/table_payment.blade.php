@@ -2,7 +2,6 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-left col-md-1">File</th>
             <th class="text-left col-md-2">Voucher</th>
             <th class="text-left col-md-1">Date</th>
             <!--<th class="text-left col-md-1">Bank From</th>
@@ -16,13 +15,6 @@
     <tbody class="markup">
         @foreach ($detail as $item)
         <tr>
-            <td data-title="File">
-                @if(!empty($item->payment_file)) 
-                <a href="{{ Helper::files('payment/'.$item->payment_file) }}" target="_blank" class="btn btn-danger btn-xs" rel="noopener noreferrer">Download</a>
-                @else
-                <a class="btn btn-warning btn-xs" href="">No. File</a>
-                @endif
-            </td>
             <td data-title="ID Product">
                 {{ $item->mask_voucher }}
             </td>
@@ -55,7 +47,7 @@
 
     <tbody>
         <tr>
-            <td data-title="Total Pembayaran" colspan="5" class="text-right">
+            <td data-title="Total Pembayaran" colspan="4" class="text-right">
                 <strong>Total Order</strong>
             </td>
             <td data-title="" class="text-right">
@@ -63,7 +55,7 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="5" class="text-right">
+            <td data-title="Total Pembayaran" colspan="4" class="text-right">
                 <strong>Total Payment</strong>
             </td>
             <td data-title="" class="text-right">
@@ -71,7 +63,7 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="5" class="text-right">
+            <td data-title="Total Pembayaran" colspan="4" class="text-right">
                 <strong>Outstanding</strong>
             </td>
             <td data-title="" class="text-right">
