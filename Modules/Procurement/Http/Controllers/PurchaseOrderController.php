@@ -239,7 +239,7 @@ class PurchaseOrderController extends Controller
             $model = array_merge($model->toArray(), $data);
         } else {
 
-            $master = $po->has_master;
+            $master = $model->has_master;
             $supplier = $po->has_supplier;
 
             $data = [
