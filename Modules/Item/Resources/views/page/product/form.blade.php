@@ -16,21 +16,19 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', __('Default Supplier'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('product_supplier_id') ? 'has-error' : ''}}">
-        {{ Form::select('product_supplier_id', $supplier, null, ['class'=> 'form-control ']) }}
-        {!! $errors->first('product_supplier_id', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', __('Minimum'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('product_min') ? 'has-error' : ''}}">
+        {!! Form::text('product_min', null, ['class' => 'form-control']) !!}
+        {!! $errors->first('product_min', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', __('SKU'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('product_sku') ? 'has-error' : ''}}">
-        {!! Form::text('product_sku', null, ['class' => 'form-control']) !!}
-        {!! $errors->first('product_sku', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', __('Maximum'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('product_max') ? 'has-error' : ''}}">
+        {!! Form::text('product_max', null, ['class' => 'form-control']) !!}
+        {!! $errors->first('product_max', '<p class="help-block">:message</p>') !!}
     </div>
 
 </div>
-
-<hr>
 
 <div class="form-group">
 
@@ -40,19 +38,8 @@
         {!! $errors->first('product_buy', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', __('Image'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4" {{ $errors->has('product_image') ? 'has-error' : ''}}">
-        <input type="hidden" value="{{ $model->product_image ?? null }}" name="product_image">
-        <input type="file" name="file" class="{{ $errors->has('product_image') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
-        {!! $errors->first('product_image', '<p class="help-block">:message</p>') !!}
-    </div>
-
-</div>
-
-<div class="form-group">
-
     {!! Form::label('name', __('Description'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-10 col-sm-10">
+    <div class="col-md-4 col-sm-4">
         {!! Form::textarea('product_description', null, ['class' => 'form-control', 'rows' => '5']) !!}
     </div>
 

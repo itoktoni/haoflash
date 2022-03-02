@@ -33,6 +33,7 @@ class PoReceive extends Model
         'po_receive_code',
         'po_receive_po_code',
         'po_receive_date',
+        'po_receive_expired_date',
         'po_receive_created_at',
         'po_receive_updated_at',
         'po_receive_deleted_at',
@@ -143,6 +144,36 @@ class PoReceive extends Model
     public function getMaskPoCodeAttribute()
     {
         return $this->{$this->mask_po_code()};
+    }
+
+    public function mask_qty()
+    {
+        return 'po_receive_qty';
+    }
+
+    public function setMaskQtyAttribute($value)
+    {
+        $this->attributes[$this->mask_qty()] = $value;
+    }
+
+    public function getMaskQtyAttribute()
+    {
+        return $this->{$this->mask_qty()};
+    }
+
+    public function mask_receive()
+    {
+        return 'po_receive_receive';
+    }
+
+    public function setMaskReceiveAttribute($value)
+    {
+        $this->attributes[$this->mask_receive()] = $value;
+    }
+
+    public function getMaskReceiveAttribute()
+    {
+        return $this->{$this->mask_receive()};
     }
 
     public function getMaskSupplierNameAttribute()

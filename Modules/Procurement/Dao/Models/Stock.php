@@ -25,6 +25,7 @@ class Stock extends Model
         'stock_qty',
         'stock_sell',
         'stock_buy',
+        'stock_expired',
         'stock_created_by',
         'stock_updated_by',
         'stock_created_at',
@@ -55,6 +56,8 @@ class Stock extends Model
         'branch_name' => [true => 'Branch', 'width' => 100],
         'product_name' => [true => 'Product'],
         'stock_qty' => [true => 'Qty', 'width' => 50],
+        'stock_sell' => [true => 'Sell Price'],
+        'stock_expired' => [true => 'Expired'],
     ];
 
     public function mask_code()
@@ -62,14 +65,29 @@ class Stock extends Model
         return 'stock_code';
     }
 
-    public function setCodeAttribute($value)
+    public function setMaskCodeAttribute($value)
     {
         $this->attributes[$this->mask_code()] = $value;
     }
 
-    public function getCodeAttribute()
+    public function getMaskCodeAttribute()
     {
         return $this->{$this->mask_code()};
+    }
+
+    public function mask_po_code()
+    {
+        return 'stock_po_code';
+    }
+
+    public function setMaskPoCodeAttribute($value)
+    {
+        $this->attributes[$this->mask_po_code()] = $value;
+    }
+
+    public function getMaskPoCodeAttribute()
+    {
+        return $this->{$this->mask_po_code()};
     }
 
     public function mask_receive_code()
@@ -77,69 +95,69 @@ class Stock extends Model
         return 'stock_po_receive_code';
     }
 
-    public function setReceiveCodeAttribute($value)
+    public function setMaskReceiveCodeAttribute($value)
     {
         $this->attributes[$this->mask_receive_code()] = $value;
     }
 
-    public function getReceiveCodeAttribute()
+    public function getMaskReceiveCodeAttribute()
     {
         return $this->{$this->mask_receive_code()};
     }
 
-    public function branch_id()
+    public function mask_branch_id()
     {
         return 'stock_branch_id';
     }
 
-    public function setBranchIdAttribute($value)
+    public function setMaskBranchIdAttribute($value)
     {
-        $this->attributes[$this->branch_id()] = $value;
+        $this->attributes[$this->mask_branch_id()] = $value;
     }
 
-    public function getBranchIdAttribute()
+    public function getMaskBranchIdAttribute()
     {
-        return $this->{$this->branch_id()};
+        return $this->{$this->mask_branch_id()};
     }
 
-    public function product_id()
+    public function mask_product_id()
     {
         return 'stock_product_id';
     }
 
-    public function setProductIdAttribute($value)
+    public function setMaskProductIdAttribute($value)
     {
-        $this->attributes[$this->product_id()] = $value;
+        $this->attributes[$this->mask_product_id()] = $value;
     }
 
-    public function getProductIdAttribute()
+    public function getMaskProductIdAttribute()
     {
-        return $this->{$this->product_id()};
+        return $this->{$this->mask_product_id()};
     }
 
-    public function qty()
+    public function mask_qty()
     {
         return 'stock_qty';
     }
 
-    public function setQtyAttribute($value)
+    public function setMaskQtyAttribute($value)
     {
-        $this->attributes[$this->qty()] = $value;
+        $this->attributes[$this->mask_qty()] = $value;
     }
 
-    public function getQtyAttribute()
+    public function getMaskQtyAttribute()
     {
-        return $this->{$this->qty()};
+        return $this->{$this->mask_qty()};
     }
 
     public function has_branch()
     {
-        return $this->hasOne(Branch::class, BranchFacades::getKeyName(), $this->branch_id());
+        return $this->hasOne(Branch::class, BranchFacades::getKeyName(), $this->mask_branch_id());
     }
 
     public function has_product()
     {
-        return $this->hasOne(Product::class, ProductFacades::getKeyName(), $this->product_id());
+        return $this->hasOne(Product::class, ProductFacades::getKeyName(), $this->mask_product_id());
     }
 
     public static function boot()

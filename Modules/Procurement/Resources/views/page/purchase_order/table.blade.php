@@ -1,7 +1,7 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-left col-md-1">ID</th>
+            <th class="text-left col-md-1">Action</th>
             <th class="text-left col-md-4">Product Name</th>
             <th class="text-right col-md-1">Qty</th>
             <th class="text-right col-md-2">Price</th>
@@ -19,7 +19,7 @@
                 <a id="delete" master="{{ $item->po_detail_po_code }}" value="{{ $item->po_detail_product_id }}"
                     href="{{ route(config('module').'_delete') }}"
                     class="btn btn-danger btn-xs btn-block delete-{{ $item->po_detail_product_id }}">
-                    Delete {{ $item->po_detail_product_id }}
+                    Delete
                 </a>
                 @endif
                 <input type="hidden" value="{{ $item['temp_id'] ?? $item->po_detail_product_id }}" name="temp_id[]">

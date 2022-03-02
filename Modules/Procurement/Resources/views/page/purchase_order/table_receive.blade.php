@@ -11,6 +11,10 @@
     </thead>
     <tbody class="markup">
         @foreach ($detail as $item)
+        @php
+        $receive = Adapter::getTotalStockPoProduct($model->{$model->getKeyName()}, $item->mask_product_id);
+        $remaining = $item->mask_qty - $receive;
+        @endphp
         <tr>
             <td data-title="Product Name">
                 {{ $item->mask_product_name }}
@@ -19,10 +23,10 @@
                 {{ $item->mask_qty }}
             </td>
             <td data-title="Receive" class="col-lg-1">
-                {{ 0 }}
+                {{ $receive }}
             </td>
-            <td data-title="Bank To" class="col-lg-1">
-                {{ $item->mask_qty }}
+            <td data-title="Remaining" class="col-lg-1">
+                {{ $remaining }}
             </td>
             <td data-title="Account" class="col-lg-1 text-center">
                 <a href="{!! route($module.'_form_receive_detail', ['code' => $model->{$model->getKeyName()}, 'detail' => $item->mask_product_id]) !!}" class="btn btn-success btn-xs">{{ __('Receive') }}</a>

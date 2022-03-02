@@ -5,6 +5,7 @@ namespace Modules\Procurement\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
+use Modules\Procurement\Dao\Repositories\StockBdpRepository;
 use Modules\Procurement\Dao\Repositories\StockRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\System\Http\Requests\DeleteRequest;
@@ -18,13 +19,13 @@ use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
 
-class StockController extends Controller
+class StockBdpController extends Controller
 {
     public static $template;
     public static $service;
     public static $model;
 
-    public function __construct(StockRepository $model, SingleService $service)
+    public function __construct(StockBdpRepository $model, SingleService $service)
     {
         self::$model = self::$model ?? $model;
         self::$service = self::$service ?? $service;

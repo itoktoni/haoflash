@@ -136,7 +136,7 @@
                     }
                     var total = numeral(product_price).value() * numeral(product_qty).value();
                     var markup = "<tr>" +
-                        "<td data-title='ID' class='col-lg-1'><button id='delete' value='" + product_id + "' type='button' class='btn btn-danger btn-xs btn-block'> Delete " + product_id + "</button></td>" +
+                        "<td data-title='ID' class='col-lg-1'><button id='delete' value='" + product_id + "' type='button' class='btn btn-danger btn-xs btn-block'> Delete </button></td>" +
                         "<td data-title='Product'>" +
                         "<input class='form-control input-sm text-left' readonly name='detail[" + counter + "][temp_product]' value='" + product_name + "'>" +
                         "</td>" +

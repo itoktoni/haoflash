@@ -14,7 +14,7 @@
             </header>
             <div class="panel-body line">
                 <div class="">
-
+                    <!--
                     <div class="form-group">
 
                         {!! Form::label('name', __('Bank From'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
@@ -30,6 +30,7 @@
                         </div>
 
                     </div>
+                    -->
 
                     <div class="form-group">
 
@@ -61,25 +62,9 @@
                             {!! $errors->first('payment_value_approve', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('File'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4" {{ $errors->has('file') ? 'has-error' : ''}}">
-                            <input type="file" name="file" class="{{ $errors->has('file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
-                            {!! $errors->first('file', '<p class="help-block">:message</p>') !!}
-                        </div>
-
-                    </div>
-
-                    <div class="form-group">
-
-                        {!! Form::label('name', __('Account'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_account') ? 'has-error' : ''}}">
-                            {!! Form::text('payment_account', $supplier->supplier_bank_account ?? null, ['class' => 'form-control']) !!}
-                            {!! $errors->first('payment_account', '<p class="help-block">:message</p>') !!}
-                        </div>
-
                         {!! Form::label('name', __('Notes'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
                         <div class="col-md-4 col-sm-4 {{ $errors->has('payment_notes_approve') ? 'has-error' : ''}}">
-                            {!! Form::textarea('payment_notes_approve', 'Transfer to account number : '.$supplier->supplier_bank_account ?? null, ['class' => 'form-control',
+                            {!! Form::textarea('payment_notes_approve', null, ['class' => 'form-control',
                             'rows' => 3]) !!}
                             {!! $errors->first('payment_notes_approve', '<p class="help-block">:message</p>') !!}
                         </div>
@@ -87,6 +72,25 @@
                         <input type="hidden" value="{{ $model->{$model->getKeyName()} }}" name="code">
 
                     </div>
+
+                    <!--
+                    <div class="form-group">
+
+                        {!! Form::label('name', __('File'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+                        <div class="col-md-4 col-sm-4" {{ $errors->has('file') ? 'has-error' : ''}}">
+                            <input type="file" name="file" class="{{ $errors->has('file') ? 'has-error' : ''}} btn btn-default btn-sm btn-block">
+                            {!! $errors->first('file', '<p class="help-block">:message</p>') !!}
+                        </div>
+
+                        {!! Form::label('name', __('Account'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_account') ? 'has-error' : ''}}">
+                            {!! Form::text('payment_account', $supplier->supplier_bank_account ?? null, ['class' => 'form-control']) !!}
+                            {!! $errors->first('payment_account', '<p class="help-block">:message</p>') !!}
+                        </div>
+
+                    </div>
+
+                    -->
 
                     <hr>
 

@@ -42,6 +42,7 @@ class PurchaseReceiveService
                         'stock_branch_id' => $data->po_receive_branch_id,
                         'stock_product_id' => $data->po_receive_product_id,
                         'stock_qty' => 1,
+                        'stock_expired' => $data->po_receive_expired_date,
                         'stock_sell' => $data->po_receive_sell,
                         'stock_buy' => $data->po_receive_buy,
                     ]);
@@ -54,17 +55,19 @@ class PurchaseReceiveService
                         'stock_branch_id' => $data->po_receive_branch_id,
                         'stock_product_id' => $data->po_receive_product_id,
                         'stock_qty' => 1,
+                        'stock_expired' => $data->po_receive_expired_date,
                         'stock_sell' => $data->po_receive_sell,
                         'stock_buy' => $data->po_receive_buy,
                     ]);
                 }
             }
-            $po = [PoFacades::mask_status() => PurchaseStatus::Receive];
-            if ($data->complete == 1) {
-                $po = [PoFacades::mask_status() => PurchaseStatus::Finish];
-            }
 
-            PoFacades::where(PoFacades::getKeyName(), $data->po_receive_po_code)->update($po);
+            // $po = [PoFacades::mask_status() => PurchaseStatus::Receive];
+            // if ($data->complete == 1) {
+            //     $po = [PoFacades::mask_status() => PurchaseStatus::Finish];
+            // }
+
+            // PoFacades::where(PoFacades::getKeyName(), $data->po_receive_po_code)->update($po);
 
             if ($check->count() > 0) {
 

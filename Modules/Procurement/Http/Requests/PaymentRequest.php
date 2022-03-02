@@ -39,7 +39,7 @@ class PaymentRequest extends FormRequest
         if (request()->isMethod('POST')) {
             return [
                 'payment_date' => 'required',
-                'payment_bank_from' => 'required',
+                'payment_value_approve' => 'required|numeric',
                 'payment_person' => 'required',
             ];
         }

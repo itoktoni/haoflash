@@ -28,7 +28,7 @@
     </div>
 </div>
 
-
+<!--
 <div class="form-group">
 
     {!! Form::label('name', __('Bank Name'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
@@ -43,6 +43,7 @@
         {!! $errors->first('supplier_bank_account', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
+-->
 
 <div class="form-group">
 
@@ -66,12 +67,12 @@
 
     {!! Form::label('name', __('NPWP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
     <div class="col-md-3 col-sm-3 {{ $errors->has('supplier_npwp') ? 'has-error' : ''}}">
-        {!! Form::text('supplier_npwp', null, ['class' => 'form-control', 'id' => 'supplier_npwp', $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
+        {!! Form::text('supplier_npwp', null, ['class' => 'form-control', 'id' => 'supplier_npwp', isset($model) && $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
         {!! $errors->first('supplier_npwp', '<p class="help-block">:message</p>') !!}
     </div>
     {!! Form::label('name', __('PKP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
     <div class="col-md-3 col-sm-3 {{ $errors->has('supplier_pkp') ? 'has-error' : ''}}">
-        {!! Form::text('supplier_pkp', null, ['class' => 'form-control', 'id' => 'supplier_pkp', $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
+        {!! Form::text('supplier_pkp', null, ['class' => 'form-control', 'id' => 'supplier_pkp', isset($model) && $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
         {!! $errors->first('supplier_pkp', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

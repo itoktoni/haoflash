@@ -42,7 +42,7 @@ class DataService
         return $this;
     }
 
-    public function EditAction($data)
+    public function EditAction($data, $active = true)
     {
         $this->action = $data;
         return $this;

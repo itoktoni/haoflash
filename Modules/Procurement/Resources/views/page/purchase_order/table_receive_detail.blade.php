@@ -5,16 +5,17 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-left col-md-2">Receive Code</th>
+            <th class="text-left col-md-3">Receive Code</th>
             <th class="text-left col-md-1">Receive Date</th>
             <th class="text-left col-md-1">Created Time</th>
             <th class="text-left col-md-1">Branch</th>
-            @if($model->po_receive_type == CategoryType::Virtual)
+            @if($model->po_receive_type != CategoryType::Accesories)
             <th class="text-left col-md-1">Start Number</th>
             <th class="text-left col-md-1">End Number</th>
+            <th class="text-left col-md-1">Expired Date</th>
             @endif
             <th class="text-left col-md-1">Harga Jual</th>
-            <th style="width: 4%;" class="text-left">Receive</th>
+            <th style="width: 4%;" class="text-left">Qty</th>
         </tr>
     </thead>
     <tbody class="markup">
@@ -40,12 +41,15 @@
             <td data-title="Branch">
                 {{ $item->has_branch->branch_name ?? '' }}
             </td>
-            @if($model->po_receive_type == CategoryType::Virtual)
+            @if($model->po_receive_type != CategoryType::Accesories)
             <td data-title="Start Number">
                 {{ $item->po_receive_start ?? '' }}
             </td>
             <td data-title="End Number">
                 {{ $item->po_receive_end ?? '' }}
+            </td>
+            <td data-title="End Number">
+                {{ $item->po_receive_expired_date ?? '' }}
             </td>
             @endif
             <td data-title="Harga Jual" class="col-lg-1">
@@ -57,7 +61,7 @@
         </tr>
         @endforeach
         <tr>
-            <td colspan="{{ $model->po_receive_type == CategoryType::Virtual ? '7' : '5' }}">Total Penerimaan Barang</td>
+            <td colspan="{{ $model->po_receive_type != CategoryType::Accesories ? '8' : '5' }}">Total Penerimaan Barang</td>
             <td>{{ $detail->sum('po_receive_receive') }}</td>
         </tr>
     </tbody>

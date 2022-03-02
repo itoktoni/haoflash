@@ -5,9 +5,9 @@
             <th class="text-left col-md-1">File</th>
             <th class="text-left col-md-2">Voucher</th>
             <th class="text-left col-md-1">Date</th>
-            <th class="text-left col-md-1">Bank From</th>
+            <!--<th class="text-left col-md-1">Bank From</th>
             <th class="text-left col-md-1">Bank To</th>
-            <th class="text-left col-md-2">Account Number</th>
+            <th class="text-left col-md-2">Account Number</th>-->
             <th class="text-left col-md-2">Account Name</th>
             <th class="text-left col-md-3">Notes</th>
             <th class="text-right col-md-1">Amount</th>
@@ -29,6 +29,7 @@
             <td data-title="Date">
                 {{ $item->mask_date }}
             </td>
+            <!--
             <td data-title="Bank From" class="col-lg-1">
                 {{ $item->mask_from }}
             </td>
@@ -38,6 +39,7 @@
             <td data-title="Account" class="col-lg-1">
                 {{ $item->mask_account }}
             </td>
+            -->
             <td data-title="Person" class="col-lg-1">
                 {{ $item->mask_person }}
             </td> 
@@ -53,7 +55,7 @@
 
     <tbody>
         <tr>
-            <td data-title="Total Pembayaran" colspan="8" class="text-right">
+            <td data-title="Total Pembayaran" colspan="5" class="text-right">
                 <strong>Total Order</strong>
             </td>
             <td data-title="" class="text-right">
@@ -61,7 +63,7 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="8" class="text-right">
+            <td data-title="Total Pembayaran" colspan="5" class="text-right">
                 <strong>Total Payment</strong>
             </td>
             <td data-title="" class="text-right">
@@ -69,8 +71,8 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="8" class="text-right">
-                <strong>UnPaid </strong>
+            <td data-title="Total Pembayaran" colspan="5" class="text-right">
+                <strong>Outstanding</strong>
             </td>
             <td data-title="" class="text-right">
                 {{ Helper::createRupiah($detail->sum('payment_value_approve') - $model->mask_total) }}

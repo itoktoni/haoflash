@@ -23,6 +23,8 @@ class Product extends Model
         'product_sku',
         'product_buy',
         'product_sell',
+        'product_min',
+        'product_max',
         'product_price',
         'product_image',
         'product_category_id',
@@ -43,6 +45,7 @@ class Product extends Model
         'product_name' => 'required|min:3',
         'product_category_id' => 'required',
         'product_buy' => 'required|integer',
+        'product_min' => 'required|integer|min:1',
     ];
 
     const CREATED_AT = 'product_created_at';

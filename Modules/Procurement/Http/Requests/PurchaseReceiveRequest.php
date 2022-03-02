@@ -33,7 +33,7 @@ class PurchaseReceiveRequest extends FormRequest
     {
         $autonumber = Helper::autoNumber(self::$model->getTable(), self::$model->getKeyName(), 'RCV' . date('Ym'), 20);
         $selisih = $complete = 0;
-        $complete = ($this->remaining + $this->po_receive_receive) == $this->po_receive_qty ? 1 : 0;
+        // $complete = ($this->remaining + $this->po_receive_receive) == $this->po_receive_qty ? 1 : 0;
 
         try {
             $selisih = ($this->po_receive_end - $this->po_receive_start) + 1;
@@ -52,9 +52,9 @@ class PurchaseReceiveRequest extends FormRequest
         if (request()->isMethod('POST')) {
             return [
                 'po_receive_qty' => 'required|integer',
-                'po_receive_receive' => 'required|integer',
+                'po_receive_receive' => 'required|integer|min:1',
                 'po_receive_buy' => 'required',
-                'po_receive_sell' => 'required|numeric|min:1',
+                'po_receive_sell' => 'required|numeric',
                 'po_receive_branch_id' => 'required',
             ];
         }
@@ -64,22 +64,32 @@ class PurchaseReceiveRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
+
+            $receive = !empty($this->po_receive_receive) ? $this->po_receive_receive : 0;
+            $qty = !empty($this->po_receive_qty) ? $this->po_receive_qty : 0;
+            $remaining = !empty($this->remaining) ? $this->remaining : 0;
+            
             if ($this->po_receive_type != CategoryType::Accesories) {
+
+                if (empty($this->po_receive_expired_date)) {
+
+                    $validator->errors()->add('po_receive_expired_date', 'Expired Date Harus diisi');
+                }
 
                 if (empty($this->po_receive_start)) {
 
-                    $validator->errors()->add('po_receive_start', 'Jika type BDP atau Virtual Start number harus harus ');
+                    $validator->errors()->add('po_receive_start', 'Start number harus diisi ');
                 }
                 if (empty($this->po_receive_end)) {
 
-                    $validator->errors()->add('po_receive_end', 'Jika type BDP atau Virtual Start number harus harus ');
+                    $validator->errors()->add('po_receive_end', 'Start number harus diisi ');
                 }
                 try {
                     $calculate = $this->po_receive_end - $this->po_receive_start;
                     if ($calculate < 0) {
                         $validator->errors()->add('po_receive_end', 'Number End harus lebih besar dari Start');
                     }
-                    if($calculate+1 != $this->po_receive_receive){
+                    if($calculate+1 != $receive){
                         $validator->errors()->add('po_receive_receive', 'Jumlah Qty Receive tidak sama dengan Jumlah Serial Number');
                     }
                 } catch (\Throwable $th) {
@@ -87,20 +97,20 @@ class PurchaseReceiveRequest extends FormRequest
                     $validator->errors()->add('po_receive_end', 'Format tidak valid');
                 }
             }
-            if ($this->po_receive_receive > $this->po_receive_qty) {
+            if ($receive > $qty) {
 
                 $validator->errors()->add('po_receive_receive', 'Qty receive harus lebih besar dari Qty');
             }
-            if ($this->po_receive_sell <= $this->po_receive_buy) {
+            if ($this->po_receive_type == CategoryType::Virtual && $this->po_receive_sell <= $this->po_receive_buy) {
 
                 $validator->errors()->add('po_receive_sell', 'Harga Jual harus lebih besar dari harga beli');
             }
-            if (($this->remaining + $this->po_receive_receive) > $this->po_receive_qty) {
+            if (($remaining + $receive) > $qty) {
 
                 $validator->errors()->add('po_receive_receive', 'Qty Receive Sudah Melebihi Qty Pesanan');
             }
 
-            if ($this->purchase_status == PurchaseStatus::Create || $this->purchase_status == PurchaseStatus::Cancel || $this->purchase_status == PurchaseStatus::Finish) {
+            if ($this->purchase_status == PurchaseStatus::Create || $this->purchase_status == PurchaseStatus::Cancel) {
 
                 $validator->errors()->add('purchase_status', 'Status Harus Sudah Di proses atau di receive');
             }

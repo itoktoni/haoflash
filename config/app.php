@@ -7,6 +7,7 @@ use Modules\Master\Dao\Enums\PaymentType;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\System\Dao\Enums\ActionStatus;
 use Modules\System\Dao\Enums\GroupUserStatus;
+use Modules\System\Plugins\Adapter;
 use Modules\System\Plugins\Views;
 use Modules\System\Plugins\Notes;
 use Modules\System\Plugins\Response;
@@ -277,6 +278,7 @@ return [
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Helper' => Helper::class,
+        'Adapter' => Adapter::class,
         'Views' => Views::class,
         'Notes' => Notes::class,
         'Lang' => Lang::class,

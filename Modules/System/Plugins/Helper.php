@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Modules\Procurement\Dao\Facades\PoReceiveFacades;
+use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\System\Dao\Facades\FilterFacades;
 use Modules\System\Dao\Facades\TeamFacades;
 use Thedevsaddam\LaravelSchema\Schema\Schema as Table;
