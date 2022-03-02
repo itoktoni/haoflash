@@ -18,7 +18,7 @@ class StockBdpRepository extends Stock implements CrudInterface
             ->where('stock_sell', 0)
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')
-            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_sell', 'stock_expired']);
+            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_sell', 'stock_expired'])->orderBy('stock_expired');
 
         // return DB::table('view_summary_stock');
     }
