@@ -18,24 +18,27 @@
                 </h2>
                 @endif
             </div>
-            <div class="col-md-6">
-                <h2 class="panel-title text-right">
-                    @if(empty($model->mask_status) || $model->mask_status == PurchaseStatus::Create)
-                    <span id="add" class="btn btn-primary detail">Add Detail</span>
-                    @endif
-                </h2>
-            </div>
+
         </div>
         <div class="panel-body line">
+
+            <div class="form-group">
+                <label class="col-md-2 control-label" for="inputDefault">Category</label>
+                <div class="col-md-4 {{ $errors->has('category') ? 'has-error' : ''}}">
+                    {{ Form::select('', $category, null, ['class'=> 'form-control', 'id' => 'category']) }}
+                </div>
+
+                <label class="col-md-2 control-label" for="inputDefault">Product</label>
+                <div class="col-md-4 {{ $errors->has('product') ? 'has-error' : ''}}">
+                    {{ Form::select('', $product, null, ['class'=> 'form-control', 'id' => 'product']) }}
+                </div>
+
+            </div>
             <div class="">
                 <div class="form-group {{ $errors->has('detail') ? 'has-error' : ''}}">
-                    <label class="col-md-1 control-label" for="inputDefault">Product</label>
-                    <div class="col-md-3 {{ $errors->has('product') ? 'has-error' : ''}}">
-                        {{ Form::select('', $product, null, ['class'=> 'form-control', 'id' => 'product']) }}
-                    </div>
 
                     <label class="col-md-1 control-label" for="inputDefault">Qty</label>
-                    <div class="col-md-1">
+                    <div class="col-md-2">
                         {!! Form::text('', null, ['id' => 'qty', 'class' => 'number form-control']) !!}
                     </div>
 
@@ -45,9 +48,17 @@
                     </div>
 
                     <label class="col-md-1 control-label" for="inputDefault">Total</label>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         {!! Form::text('', null, ['id' => 'sub_total', 'readonly', 'class' => 'number form-control'])
                         !!}
+                    </div>
+
+                    <div class="col-md-2">
+                        <h2 class="panel-title text-right">
+                            @if(empty($model->mask_status) || $model->mask_status == PurchaseStatus::Create)
+                            <span style="margin-top:0px" id="add" class="btn btn-primary btn-block detail">Add Detail</span>
+                            @endif
+                        </h2>
                     </div>
 
                 </div>

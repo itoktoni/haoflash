@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Repositories\ProductRepository;
 
 Route::match(
@@ -23,3 +24,20 @@ Route::match(
     }
 )->name('product_api');
 
+Route::match(
+    [
+        'GET',
+        'POST'
+    ],
+    'category_api',
+    function () {
+        $input = request()->get('id');
+       
+        $query = false;
+        if ($input) {
+            $query = ProductFacades::where(ProductFacades::mask_category_id(), $input);
+            return $query->get()->toArray();
+        }
+        return $query;
+    }
+)->name('category_api');

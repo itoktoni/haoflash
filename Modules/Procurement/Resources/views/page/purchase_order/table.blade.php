@@ -52,6 +52,19 @@
         @endisset
     </tbody>
 
+    @if($model->mask_tax)
+    <tbody>
+        <tr>
+            <td data-title="Total Tax" colspan="4" class="text-right">
+                <strong>Total Tax</strong>
+            </td>
+            <td data-title="" class="text-right">
+                {!! Form::text('', $model->mask_tax ?? 0 , ['readonly', 'class' => 'number form-control text-right']) !!}
+            </td>
+        </tr>
+    </tbody>
+    @endif
+
     @if(env('WEBSITE.DISCOUNT'))
     <tbody>
         <tr>

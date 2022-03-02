@@ -219,6 +219,26 @@
             });
         });
 
+        $('#category').change(function(e) {
+            var id = $("#category option:selected").val();
+            $.ajax({
+                url: '{{ route("category_api") }}',
+                method: 'POST',
+                data: {
+                    id: id,
+                    "_token": "{{ csrf_token() }}"
+                },
+                success: function(result) {
+
+                    $("#product").empty();
+                    $('#product').append('<option value="">- Select Product -</option>');
+                    $.each(result, function(i,item) {
+                        $('#product').append('<option value="' + item.product_id + '">' + item.product_name + '</option>');
+                    });
+                    $("#product").trigger("chosen:updated");
+                }
+            });
+        });
 
         $("#detail").on('input', '#qty', function() {
             calculate();

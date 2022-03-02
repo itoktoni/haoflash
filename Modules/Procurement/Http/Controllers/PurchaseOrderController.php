@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Modules\Finance\Dao\Enums\PaymentStatus;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Finance\Dao\Repositories\PaymentRepository;
+use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
@@ -48,16 +49,18 @@ class PurchaseOrderController extends Controller
     {
         // $product = Views::option(new ProductRepository());
         // $supplier = Views::option(new SupplierRepository());
-
+        
         $supplier = Views::option(new SupplierRepository(),false,true)->mapWithKeys(function($item){
             $data[$item->supplier_id] = $item->supplier_name.' - '.strtoupper(SupplierType::getDescription($item->supplier_ppn));
             return $data;
         })->toArray();
-
+        
         $status = PurchaseStatus::getOptions();
+        $category = Views::option(new CategoryRepository());
 
         $view = [
             // 'product' => $product,
+            'category' => $category,
             'supplier' => $supplier,
             'status' => $status,
             'model' => self::$model,
