@@ -50,7 +50,7 @@ class Customer extends Model
         'customer_name' => [true => 'Name'],
         'customer_phone' => [true => 'Phone'],
         'customer_email' => [true => 'Email'],
-        'customer_ppn' => [true => 'Name'],
+        'customer_ppn' => [true => 'PKP/Non PKP'],
     ];
 
     public function mask_name()

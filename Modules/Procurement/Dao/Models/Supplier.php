@@ -45,7 +45,7 @@ class Supplier extends Model
         'supplier_name' => [true => 'Name'],
         'supplier_phone' => [true => 'Phone'],
         'supplier_email' => [true => 'Email'],
-        'supplier_ppn' => [true => 'Name'],
+        'supplier_ppn' => [true => 'PKP/Non PKP'],
     ];
 
     public function mask_name()
