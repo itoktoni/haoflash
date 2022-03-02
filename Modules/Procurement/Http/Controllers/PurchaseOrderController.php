@@ -240,11 +240,13 @@ class PurchaseOrderController extends Controller
         } else {
 
             $master = $po->has_master;
+            $supplier = $po->has_supplier;
+
             $data = [
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $model->supplier_name.' - '.strtoupper(SupplierType::getDescription($model->supplier_ppn)) ?? '',
+                'purchase_supplier' => $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) ?? '',
                 'purchase_notes' => $master->po_notes ?? '',
             ];
 

@@ -77,11 +77,11 @@ class Po extends Model
         'po_code' => [true => 'Purchase Code'],
         'supplier_name' => [true => 'Supplier Name'],
         'po_date_order' => [true => 'Date', 'width' => 70],
-        'po_sum_value' => [true => 'Value', 'width' => 120],
-        'po_sum_tax' => [true => 'Tax', 'width' => 120],
+        'po_sum_value' => [true => 'Value', 'width' => 80],
+        'po_sum_tax' => [true => 'Tax', 'width' => 80],
         'po_sum_total' => [true => 'Total', 'width' => 120],
-        'po_payment' => [true => 'Payment', 'width' => 120, 'class' => 'text-center', 'status' => 'status'],
-        'po_status' => [true => 'Status', 'width' => 120, 'class' => 'text-center', 'status' => 'status'],
+        'po_payment' => [true => 'Payment', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
+        'po_status' => [true => 'Status', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
     ];
 
     protected $casts = [
