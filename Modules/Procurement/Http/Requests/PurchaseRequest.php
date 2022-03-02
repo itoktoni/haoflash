@@ -6,8 +6,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
+use Modules\Procurement\Dao\Enums\SupplierType;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoFacades;
+use Modules\Procurement\Dao\Facades\SupplierFacades;
 use Modules\Procurement\Dao\Models\Po;
 use Modules\System\Plugins\Helper;
 
@@ -45,13 +47,23 @@ class PurchaseRequest extends FormRequest
             return $data;
         }); 
 
+        
+
         $total_value = Helper::filterInput($map->sum(PoDetailFacades::mask_total())) ?? 0;
         $total_discount = Helper::filterInput($this->{PoFacades::mask_discount()}) ?? 0;
-        $total_summary = $total_value - $total_discount;
+        $supplier = SupplierFacades::find($this->po_supplier_id);
+        
+        $total_tax = 0;
+        if($supplier && $supplier->mask_ppn == SupplierType::PPN){
+            $total_tax = $total_value * 10 / 100;
+        }
+
+        $total_summary = ($total_value - $total_discount) + $total_tax;
 
         $this->merge([
             PoFacades::getKeyName() => $autonumber,
             PoFacades::mask_value() => $total_value,
+            PoFacades::mask_tax() => $total_tax,
             PoFacades::mask_discount() => $total_discount,
             PoFacades::mask_total() => $total_summary,
             'detail' => array_values($map->toArray()),

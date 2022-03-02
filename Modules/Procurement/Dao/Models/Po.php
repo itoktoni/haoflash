@@ -48,6 +48,7 @@ class Po extends Model
         'po_sum_value',
         'po_sum_discount',
         'po_sum_total',
+        'po_sum_tax',
     ];
 
     // public $with = ['has_detail', 'has_supplier'];
@@ -76,8 +77,8 @@ class Po extends Model
         'po_code' => [true => 'Purchase Code'],
         'supplier_name' => [true => 'Supplier Name'],
         'po_date_order' => [true => 'Date', 'width' => 60],
-        'po_sum_value' => [false => 'Value', 'width' => 60],
-        'po_sum_discount' => [false => 'Discount', 'width' => 60],
+        'po_sum_value' => [true => 'Value', 'width' => 60],
+        'po_sum_tax' => [true => 'Tax', 'width' => 60],
         'po_sum_total' => [true => 'Total', 'width' => 60],
         'po_payment' => [true => 'Payment', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
         'po_status' => [true => 'Status', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
@@ -217,6 +218,26 @@ class Po extends Model
     public function getMaskDiscountFormatAttribute()
     {
         return Helper::createRupiah($this->{$this->mask_discount()});
+    }
+
+    public function mask_tax()
+    {
+        return 'po_sum_tax';
+    }
+
+    public function setMaskTaxAttribute($value)
+    {
+        $this->attributes[$this->mask_tax()] = $value;
+    }
+
+    public function getMaskTaxAttribute()
+    {
+        return $this->{$this->mask_tax()};
+    }
+
+    public function getMaskTaxFormatAttribute()
+    {
+        return Helper::createRupiah($this->{$this->mask_tax()});
     }
 
     public function mask_created_at()

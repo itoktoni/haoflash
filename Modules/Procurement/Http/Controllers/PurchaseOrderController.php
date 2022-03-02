@@ -9,6 +9,7 @@ use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
+use Modules\Procurement\Dao\Enums\SupplierType;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
 use Modules\Procurement\Dao\Models\PoReceive;
@@ -47,11 +48,17 @@ class PurchaseOrderController extends Controller
     {
         // $product = Views::option(new ProductRepository());
         // $supplier = Views::option(new SupplierRepository());
+
+        $supplier = Views::option(new SupplierRepository(),false,true)->mapWithKeys(function($item){
+            $data[$item->supplier_id] = $item->supplier_name.' - '.strtoupper(SupplierType::getDescription($item->supplier_ppn));
+            return $data;
+        })->toArray();
+
         $status = PurchaseStatus::getOptions();
 
         $view = [
-            // 'supplier' => $supplier,
             // 'product' => $product,
+            'supplier' => $supplier,
             'status' => $status,
             'model' => self::$model,
         ];
@@ -67,10 +74,8 @@ class PurchaseOrderController extends Controller
 
     public function create()
     {
-        $supplier = Views::option(new SupplierRepository());
         $product = Views::option(new ProductRepository());
         return view(Views::create())->with($this->share([
-            'supplier' => $supplier,
             'product' => $product,
         ]));
     }
@@ -89,6 +94,8 @@ class PurchaseOrderController extends Controller
                 self::$model->mask_status() => PurchaseStatus::class,
                 self::$model->mask_payment() => PurchasePayment::class,
             ])->EditColumn([
+                self::$model->mask_value() => 'mask_value_format',
+                self::$model->mask_tax() => 'mask_tax_format',
                 self::$model->mask_total() => 'mask_total_rupiah',
             ])->EditAction([
                 'page'      => config('page'),
@@ -99,13 +106,11 @@ class PurchaseOrderController extends Controller
     public function edit($code)
     {
         $data = $this->get($code);
-        $supplier = Views::option(new SupplierRepository());
         $product = Views::option(new ProductRepository());
 
         return view(Views::update())->with($this->share([
             'model' => $data,
             'product' => $product,
-            'supplier' => $supplier,
             'detail' => $data->has_detail,
         ]));
     }
@@ -173,14 +178,12 @@ class PurchaseOrderController extends Controller
     public function formReceive($code)
     {
         $data = $this->get($code);
-        $supplier = Views::option(new SupplierRepository());
         $product = Views::option(new ProductRepository());
 
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
                 'model' => $data,
                 'detail' => $data->has_detail,
-                'supplier' => $supplier,
                 'product' => $product,
             ]));
     }
@@ -207,10 +210,11 @@ class PurchaseOrderController extends Controller
                 ->where(PoDetailFacades::mask_product_id(), request()->get('detail'))->firstOrFail();
 
             $master = $model->has_master;
+            $supplier = $model->has_supplier;
             $data = [
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $master->has_supplier->supplier_name ?? '',
+                'purchase_supplier' => $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) ?? '',
                 'purchase_notes' => $master->po_notes ?? '',
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'po_receive_date' => date('Y-m-d'),
@@ -234,7 +238,7 @@ class PurchaseOrderController extends Controller
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $model->has_supplier->supplier_name ?? '',
+                'purchase_supplier' => $model->supplier_name.' - '.strtoupper(SupplierType::getDescription($model->supplier_ppn)) ?? '',
                 'purchase_notes' => $master->po_notes ?? '',
             ];
 
