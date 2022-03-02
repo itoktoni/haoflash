@@ -6,14 +6,14 @@ if($province_data){
 
 $city = DB::table('rajaongkir_cities')
 ->where('rajaongkir_city_province_id', $province_data)
-->get()->pluck('rajaongkir_city_name', 'rajaongkir_city_id');
+->get()->pluck('rajaongkir_city_name', 'rajaongkir_city_id')->prepend('- Select City -', '');
 }
 
 $city_data = old('customer_city') ?? null;
 if($city_data){
 
 $area = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city_data)
-->pluck('rajaongkir_area_name','rajaongkir_area_id')->prepend('- Select Area -');
+->pluck('rajaongkir_area_name','rajaongkir_area_id')->prepend('- Select Area -', '');
 }
 @endphp
 
@@ -81,7 +81,7 @@ $area = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city_da
 <div class="form-group">
     {!! Form::label('name', __('Area'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
     <div class="col-md-4 col-sm-4 {{ $errors->has('customer_area') ? 'has-error' : ''}}">
-        {{ Form::select('customer_area', $area, null, ['class'=> 'form-control ', 'id' => 'area']) }}
+        {{ Form::select('customer_area', $area, old('customer_area') ?? null, ['class'=> 'form-control ', 'id' => 'area']) }}
         {!! $errors->first('customer_area', '<p class="help-block">:message</p>') !!}
     </div>
 
@@ -142,12 +142,13 @@ $area = DB::table('rajaongkir_areas')->where('rajaongkir_area_city_id', $city_da
 
     {!! Form::label('name', __('NPWP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
     <div class="col-md-3 col-sm-3 {{ $errors->has('customer_npwp') ? 'has-error' : ''}}">
-        {!! Form::text('customer_npwp', null, ['class' => 'form-control', 'id' => 'customer_npwp', isset($model) && $model->customer_ppn == 1 ? '' : 'readonly']) !!}
+        {!! Form::text('customer_npwp', null, ['class' => 'form-control', 'id' => 'customer_npwp', old('customer_ppn') == 1 || (isset($model) && $model->customer_ppn == 1) ? '' : 'readonly']) !!}
         {!! $errors->first('customer_npwp', '<p class="help-block">:message</p>') !!}
     </div>
+
     {!! Form::label('name', __('PKP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
     <div class="col-md-3 col-sm-3 {{ $errors->has('customer_pkp') ? 'has-error' : ''}}">
-        {!! Form::text('customer_pkp', null, ['class' => 'form-control', 'id' => 'customer_pkp', isset($model) && $model->customer_ppn == 1 ? '' : 'readonly']) !!}
+        {!! Form::text('customer_pkp', null, ['class' => 'form-control', 'id' => 'customer_pkp', old('customer_ppn') == 1 || (isset($model) && $model->customer_ppn == 1) ? '' : 'readonly']) !!}
         {!! $errors->first('customer_pkp', '<p class="help-block">:message</p>') !!}
     </div>
 </div>

@@ -43,7 +43,7 @@ class Customer extends Model
         'customer_province' => 'required',
         'customer_city' => 'required',
         'customer_area' => 'required',
-        'customer_address' => 'required',
+        'customer_address' => 'required|min:10',
         'customer_rt' => 'required',
         'customer_rw' => 'required',
         'customer_npwp' => 'integer|required_if:customer_ppn,1',
