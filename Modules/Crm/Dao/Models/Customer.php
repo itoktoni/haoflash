@@ -44,6 +44,8 @@ class Customer extends Model
         'customer_city' => 'required',
         'customer_area' => 'required',
         'customer_address' => 'required',
+        'customer_rt' => 'required',
+        'customer_rw' => 'required',
         'customer_npwp' => 'integer|required_if:customer_ppn,1',
         'customer_pkp' => 'integer|required_if:customer_ppn,1',
     ];
