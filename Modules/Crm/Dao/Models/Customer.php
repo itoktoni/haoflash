@@ -40,6 +40,10 @@ class Customer extends Model
         'customer_phone' => 'required',
         'customer_ppn' => 'required',
         'customer_email' => 'required',
+        'customer_province' => 'required',
+        'customer_city' => 'required',
+        'customer_area' => 'required',
+        'customer_address' => 'required',
         'customer_npwp' => 'integer|required_if:customer_ppn,1',
         'customer_pkp' => 'integer|required_if:customer_ppn,1',
     ];
