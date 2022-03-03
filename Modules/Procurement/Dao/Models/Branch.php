@@ -49,4 +49,19 @@ class Branch extends Model
         '1' => ['Enable', 'info'],
         '0' => ['Disable', 'default'],
     ];
+
+    public function mask_name()
+    {
+        return 'branch_name';
+    }
+
+    public function setMaskNameAttribute($value)
+    {
+        $this->attributes[$this->mask_name()] = $value;
+    }
+
+    public function getMaskNameAttribute()
+    {
+        return $this->{$this->mask_name()};
+    }
 }

@@ -11,6 +11,7 @@ use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\Procurement\Dao\Enums\SupplierType;
+use Modules\Procurement\Dao\Facades\BranchFacades;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
 use Modules\Procurement\Dao\Models\PoReceive;
@@ -199,7 +200,11 @@ class PurchaseOrderController extends Controller
 
     public function formReceiveDetail($code)
     {
-        $branch = Views::option(new BranchRepository());
+        $data_branch = BranchFacades::first();
+        $branch = [];
+        if($data_branch){
+            $branch[$data_branch->{$data_branch->getKeyName()}] = $data_branch->mask_name;
+        }
         $detail = request()->get('detail');
 
         $receive = PoReceive::with(['has_branch'])->where(PoReceiveFacades::mask_po_code(), $code)
@@ -258,7 +263,7 @@ class PurchaseOrderController extends Controller
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
                 'model' => (object) $model,
-                'branch' => [1 => $branch[1]],
+                'branch' => $branch,
                 'detail' => $receive,
             ]));
     }
