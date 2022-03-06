@@ -46,6 +46,7 @@ class Product extends Model
         'product_category_id' => 'required',
         'product_buy' => 'required|integer',
         'product_min' => 'required|integer|min:1',
+        'product_description' => 'required',
     ];
 
     const CREATED_AT = 'product_created_at';
@@ -70,8 +71,8 @@ class Product extends Model
         'product_supplier_id' => [false => 'Supplier'],
         'category_name' => [true => 'Category'],
         'product_name' => [true => 'Name'],
-        'product_min' => [true => 'Minimum', 'width' => 100],
-        'product_buy' => [true => 'Buy', 'width' => 100],
+        'product_min' => [true => 'Min Stock', 'width' => 100],
+        'product_buy' => [false => 'Buy', 'width' => 100],
         'product_image' => [false => 'Image', 'width' => 100, 'class' => 'text-center'],
         'product_description' => [false => 'Image'],
     ];

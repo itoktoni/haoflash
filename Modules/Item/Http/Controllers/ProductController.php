@@ -5,6 +5,7 @@ namespace Modules\Item\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Item\Http\Requests\ProductRequest;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Requests\GeneralRequest;
@@ -52,7 +53,7 @@ class ProductController extends Controller
         return view(Views::create())->with($this->share());
     }
 
-    public function save(GeneralRequest $request, CreateService $service)
+    public function save(ProductRequest $request, CreateService $service)
     {
         $data = $service->save(self::$model, $request);
         return Response::redirectBack($data);
@@ -62,10 +63,6 @@ class ProductController extends Controller
     {
         return $service
             ->setModel(self::$model)
-            ->EditColumn([
-                self::$model->mask_supplier_id() => 'mask_supplier_name',
-                self::$model->mask_buy() => 'mask_buy_format',
-            ])
             ->make();
     }
 
@@ -76,7 +73,7 @@ class ProductController extends Controller
         ]));
     }
 
-    public function update($code, GeneralRequest $request, UpdateService $service)
+    public function update($code, ProductRequest $request, UpdateService $service)
     {
         $data = $service->update(self::$model, $request, $code);
         return Response::redirectBack($data);

@@ -140,6 +140,9 @@
                         "<td data-title='Product'>" +
                         "<input class='form-control input-sm text-left' readonly name='detail[" + counter + "][temp_product]' value='" + product_name + "'>" +
                         "</td>" +
+                        "<td data-title='Product'>" +
+                        "<textarea class='form-control input-sm text-left' readonly name='detail[" + counter + "][temp_desc]'>" +product_desc+"</textarea>"+
+                        "</td>" +
                         "<td data-title='Qty/Disc' class='text-right col-lg-1'>" +
                         "<input tabindex='" + counter + "1' class='form-control input-sm text-right number temp_qty' name='detail[" + counter + "][temp_qty]' value='" + product_qty + "'></td>" +
                         "<td data-title='Price' class='text-right col-lg-1'>" +
@@ -187,17 +190,6 @@
 
         $('#product').change(function(e) {
             var id = $("#product option:selected").val();
-            // var supplier = $("#supplier option:selected").val();
-            // if (supplier == '') {
-            //     new PNotify({
-            //         title: 'Error Select Supplier',
-            //         text: 'You must select Supplier',
-            //         addclass: 'notification-danger',
-            //         icon: 'fa fa-bolt'
-            //     });
-
-            //     return false;
-            // }
             $.ajax({
                 url: '{{ route("product_api") }}',
                 method: 'POST',
@@ -207,9 +199,11 @@
                 },
                 success: function(result) {
                     if (result) {
+                        // console.log(result);
                         var mask_price = number_format(result.product_buy.toString());
                         var price = $('#price').val(mask_price);
                         var sub_total = $('#sub_total').val(mask_price);
+                        var desc = $('#desc').val(result.product_description);
                         setTimeout(function() {
                             $('#qty').val(1);
                             $('#qty').focus();

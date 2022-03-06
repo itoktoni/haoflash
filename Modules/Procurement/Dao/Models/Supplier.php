@@ -4,6 +4,8 @@ namespace Modules\Procurement\Dao\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\Procurement\Dao\Enums\SupplierPph;
+use Modules\Procurement\Dao\Enums\SupplierPpn;
 use Modules\Procurement\Dao\Enums\SupplierType;
 use Wildside\Userstamps\Userstamps;
 
@@ -20,6 +22,7 @@ class Supplier extends Model
         'supplier_contact',
         'supplier_email',
         'supplier_ppn',
+        'supplier_pph',
         'supplier_npwp',
         'supplier_pkp',
         'supplier_bank_name',
@@ -34,7 +37,11 @@ class Supplier extends Model
         'supplier_name' => 'required|min:3',
         'supplier_phone' => 'required',
         'supplier_ppn' => 'required',
-        'supplier_email' => 'required',
+        'supplier_email' => 'required|email',
+        'supplier_contact' => 'required',
+        'supplier_address' => 'required',
+        'supplier_description' => 'required',
+        'supplier_pph' => 'required_if:supplier_ppn,1',
         'supplier_npwp' => 'integer|required_if:supplier_ppn,1',
         'supplier_pkp' => 'integer|required_if:supplier_ppn,1',
     ];
@@ -42,10 +49,12 @@ class Supplier extends Model
     public $searching = 'supplier_name';
     public $datatable = [
         'supplier_id' => [false => 'Code', 'width' => 50],
-        'supplier_name' => [true => 'Name'],
+        'supplier_name' => [true => 'Nama Supplier'],
+        'supplier_contact' => [true => 'PIC'],
         'supplier_phone' => [true => 'Phone'],
         'supplier_email' => [true => 'Email'],
-        'supplier_ppn' => [true => 'PKP/Non PKP'],
+        'supplier_ppn' => [true => 'PPN'],
+        'supplier_pph' => [true => 'PPH'],
     ];
 
     public function mask_name()
@@ -95,7 +104,31 @@ class Supplier extends Model
 
     public function getMaskPpnNameAttribute()
     {
-        return SupplierType::getDescription($this->{$this->mask_ppn()}) ?? '';
+        return strtoupper(SupplierPpn::getDescription($this->{$this->mask_ppn()})) ?? '';
+    }
+
+    public function mask_pph()
+    {
+        return 'supplier_pph';
+    }
+
+    public function setMaskPphAttribute($value)
+    {
+        $this->attributes[$this->mask_pph()] = $value;
+    }
+
+    public function getMaskPphAttribute()
+    {
+        return $this->{$this->mask_pph()};
+    }
+
+    public function getMaskPphNameAttribute()
+    {
+        $pph = '-';
+        if($this->mask_pph){
+           $pph = strtoupper(SupplierPph::getDescription($this->mask_pph));
+        }
+        return $pph;
     }
 
 }

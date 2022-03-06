@@ -4,6 +4,7 @@ namespace Modules\Procurement\Dao\Repositories;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
+use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Procurement\Dao\Models\Stock;
 use Modules\Procurement\Dao\Models\StockAccessories;
 use Modules\System\Dao\Interfaces\CrudInterface;
@@ -15,11 +16,12 @@ class StockAccessoriesRepository extends StockAccessories implements CrudInterfa
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable);
-        return $this->select(DB::raw("1 as stock_id,branch_name,stock_sell,stock_expired,stock_product_id, product_name, sum(stock_qty) as stock_qty"))
-            ->whereNull('stock_expired')
+        return $this->select(DB::raw("1 as stock_id,branch_name,supplier_name,stock_buy,stock_expired,stock_product_id, product_name,product_description, sum(stock_qty) as stock_qty"))
+            ->where('stock_type', CategoryType::Accesories)
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')
-            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_sell', 'stock_expired'])->orderBy('stock_expired');
+            ->joinRelationship('has_supplier')
+            ->groupBy(['stock_product_id', 'stock_branch_id','stock_supplier_id', 'stock_buy', 'stock_expired'])->orderBy('stock_expired');
 
         // return DB::table('view_summary_stock');
     }

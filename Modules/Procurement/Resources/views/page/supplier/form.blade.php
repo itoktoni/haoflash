@@ -66,18 +66,27 @@
 <div class="form-group">
 
     {!! Form::label('name', __('Type PPN'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-2 col-sm-2 {{ $errors->has('supplier_ppn') ? 'has-error' : ''}}">
-        {{ Form::select('supplier_ppn', $check, null, ['class'=> 'form-control ', 'id' => 'check']) }}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_ppn') ? 'has-error' : ''}}">
+        {{ Form::select('supplier_ppn', $ppn, null, ['class'=> 'form-control ', 'id' => 'ppn']) }}
         {!! $errors->first('supplier_ppn', '<p class="help-block">:message</p>') !!}
     </div>
 
-    {!! Form::label('name', __('NPWP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
-    <div class="col-md-3 col-sm-3 {{ $errors->has('supplier_npwp') ? 'has-error' : ''}}">
+    {!! Form::label('name', __('Type PPH'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_pph') ? 'has-error' : ''}}">
+        {{ Form::select('supplier_pph', $pph, null, ['class'=> 'form-control ', 'id' => 'pph']) }}
+        {!! $errors->first('supplier_pph', '<p class="help-block">:message</p>') !!}
+    </div>
+</div>
+
+<div class="form-group">
+
+    {!! Form::label('name', __('NPWP'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_npwp') ? 'has-error' : ''}}">
         {!! Form::text('supplier_npwp', null, ['class' => 'form-control', 'id' => 'supplier_npwp', isset($model) && $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
         {!! $errors->first('supplier_npwp', '<p class="help-block">:message</p>') !!}
     </div>
-    {!! Form::label('name', __('PKP'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
-    <div class="col-md-3 col-sm-3 {{ $errors->has('supplier_pkp') ? 'has-error' : ''}}">
+    {!! Form::label('name', __('PKP'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('supplier_pkp') ? 'has-error' : ''}}">
         {!! Form::text('supplier_pkp', null, ['class' => 'form-control', 'id' => 'supplier_pkp', isset($model) && $model->supplier_ppn == 1 ? '' : 'readonly']) !!}
         {!! $errors->first('supplier_pkp', '<p class="help-block">:message</p>') !!}
     </div>
@@ -87,8 +96,8 @@
 <script>
     $(document).ready(function() {
 
-        $('#check').change(function(e) {
-            var id = $("#check option:selected").val();
+        $('#ppn').change(function(e) {
+            var id = $("#ppn option:selected").val();
 
             if (id == "1") {
                 $("#supplier_npwp").attr('readonly', false);

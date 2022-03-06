@@ -1,12 +1,13 @@
 <?php
 
 use Kirschbaum\PowerJoins\PowerJoinsServiceProvider;
+use Modules\Finance\Dao\Enums\PaymentMethod;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Master\Dao\Enums\PaymentModel;
 use Modules\Master\Dao\Enums\PaymentType;
+use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\System\Dao\Enums\ActionStatus;
-use Modules\System\Dao\Enums\GroupUserStatus;
 use Modules\System\Plugins\Adapter;
 use Modules\System\Plugins\Views;
 use Modules\System\Plugins\Notes;
@@ -14,6 +15,7 @@ use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Lang;
 use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
+use Modules\System\Plugins\Query;
 use Modules\System\Providers\CacheableAuthUserServiceProvider;
 use Modules\Transaction\Dao\Enums\TransactionStatus;
 
@@ -299,6 +301,10 @@ return [
         'Client' => Webklex\IMAP\Facades\Client::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'EnvEditor' => GeoSot\EnvEditor\Facades\EnvEditor::class,
+        'Query' => Query::class,
+        'GroupUserType' => GroupUserType::class,
+        'PurchasePayment' => PurchasePayment::class,
+        'PaymentMethod' => PaymentMethod::class,
     ],
 
 ];

@@ -59,10 +59,10 @@
                             {!! $errors->first('po_receive_buy', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('Selling Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_sell') ? 'has-error' : ''}}">
-                            {!! Form::text('po_receive_sell', null, ['class' => 'form-control', 'readonly']) !!}
-                            {!! $errors->first('po_receive_sell', '<p class="help-block">:message</p>') !!}
+                        {!! Form::label('name', __('Supplier'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_supplier_id') ? 'has-error' : ''}}">
+                            {{ Form::select('po_receive_supplier_id', $supplier, null, ['class'=> 'form-control', 'id' => 'supplier']) }}
+                            {!! $errors->first('po_receive_supplier_id', '<p class="help-block">:message</p>') !!}
                         </div>
 
                     </div>
@@ -115,6 +115,7 @@
                                 <th class="text-left col-md-2">Stock code</th>
                                 <th class="text-left col-md-1">Product ID</th>
                                 <th class="text-left col-md-2">Product Name</th>
+                                <th class="text-left col-md-2">Product Description</th>
                                 <th class="text-left col-md-1">Qty</th>
                             </tr>
                         </thead>
@@ -130,10 +131,13 @@
                                 <td data-title="Product ID">
                                     {{ $item->has_product->mask_name ?? '' }}
                                 </td>
+                                <td data-title="Product ID">
+                                    {!! nl2br($item->has_product->mask_description) ?? '' !!}
+                                </td>
                                 <td data-title="Receive" class="col-lg-1">
                                     {{ $item->stock_qty ?? '' }}
                                 </td>
-                              
+
                             </tr>
                             @endforeach
                         </tbody>

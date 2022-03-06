@@ -49,6 +49,10 @@ class Po extends Model
         'po_sum_discount',
         'po_sum_total',
         'po_sum_tax',
+        'po_sum_dpp',
+        'po_sum_ppn',
+        'po_sum_pph',
+        'po_last_status',
     ];
 
     // public $with = ['has_detail', 'has_supplier'];
@@ -74,24 +78,30 @@ class Po extends Model
 
     public $searching = 'po_code';
     public $datatable = [
-        'po_code' => [true => 'Purchase Code'],
+        'po_code' => [true => 'Purchase Code', 'width' => 100],
         'supplier_name' => [true => 'Supplier Name'],
-        'po_date_order' => [true => 'Date', 'width' => 70],
-        'po_sum_value' => [true => 'Value', 'width' => 80],
-        'po_sum_tax' => [true => 'Tax', 'width' => 80],
-        'po_sum_total' => [true => 'Total', 'width' => 120],
-        'po_payment' => [true => 'Payment', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
-        'po_status' => [true => 'Status', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
+        'po_date_order' => [true => 'Date', 'width' => 60],
+        'po_updated_at' => [true => 'Last At', 'width' => 60],
+        'name' => [true => 'Last By', 'width' => 60],
+        'po_sum_value' => [false => 'Value', 'width' => 80],
+        'po_sum_dpp' => [true => 'DPP', 'width' => 60],
+        'po_sum_ppn' => [true => 'PPN', 'width' => 60],
+        'po_sum_pph' => [true => 'PPH', 'width' => 60],
+        'po_sum_total' => [true => 'Total', 'width' => 80],
+        'po_payment' => [true => 'Payment', 'width' => 55, 'class' => 'text-center', 'status' => 'status'],
+        'po_status' => [true => 'Status', 'width' => 50, 'class' => 'text-center', 'status' => 'status'],
     ];
 
     protected $casts = [
-        'po_created_at' => 'datetime:Y-m-d',
+        'po_created_at' => 'datetime:Y-m-d H:i:s',
+        'po_updated_at' => 'datetime:Y-m-d H:i:s',
         'po_status' => 'integer',
         'po_payment' => 'integer',
     ];
 
     public function mask_status()
     {
+       
         return 'po_status';
     }
 
@@ -103,6 +113,21 @@ class Po extends Model
     public function getMaskStatusAttribute()
     {
         return $this->{$this->mask_status()};
+    }
+
+    public function mask_last_status()
+    {
+        return 'po_last_status';
+    }
+
+    public function setLastMaskStatusAttribute($value)
+    {
+        $this->attributes[$this->mask_last_status()] = $value;
+    }
+
+    public function getLastMaskStatusAttribute()
+    {
+        return $this->{$this->mask_last_status()};
     }
 
     public function mask_payment()
@@ -240,6 +265,66 @@ class Po extends Model
         return Helper::createRupiah($this->{$this->mask_tax()});
     }
 
+    public function mask_dpp()
+    {
+        return 'po_sum_dpp';
+    }
+
+    public function setMaskDppAttribute($value)
+    {
+        $this->attributes[$this->mask_dpp()] = $value;
+    }
+
+    public function getMaskDppAttribute()
+    {
+        return $this->{$this->mask_dpp()};
+    }
+
+    public function getMaskDppFormatAttribute()
+    {
+        return Helper::createRupiah($this->{$this->mask_dpp()});
+    }
+
+    public function mask_ppn()
+    {
+        return 'po_sum_ppn';
+    }
+
+    public function setMaskPpnAttribute($value)
+    {
+        $this->attributes[$this->mask_ppn()] = $value;
+    }
+
+    public function getMaskPpnAttribute()
+    {
+        return $this->{$this->mask_ppn()};
+    }
+
+    public function getMaskPpnFormatAttribute()
+    {
+        return Helper::createRupiah($this->{$this->mask_ppn()});
+    }
+
+    public function mask_pph()
+    {
+        return 'po_sum_pph';
+    }
+
+    public function setMaskPphAttribute($value)
+    {
+        $this->attributes[$this->mask_pph()] = $value;
+    }
+
+    public function getMaskPphAttribute()
+    {
+        return $this->{$this->mask_pph()};
+    }
+
+    public function getMaskPphFormatAttribute()
+    {
+        return Helper::createRupiah($this->{$this->mask_pph()});
+    }
+
     public function mask_created_at()
     {
         return self::CREATED_AT;
@@ -275,6 +360,11 @@ class Po extends Model
         return $this->hasMany(PoDetail::class, PoDetailFacades::mask_po_code(), PoFacades::getKeyName());
     }
 
+    public function has_user()
+    {
+        return $this->hasone(User::class, TeamFacades::getKeyName(), self::UPDATED_BY);
+    }
+
     public function has_supplier()
     {
         return $this->hasone(Supplier::class, SupplierFacades::getKeyName(), $this->mask_supplier_id());
@@ -289,6 +379,10 @@ class Po extends Model
     {
         parent::creating(function ($model) {
             $model->mask_payment = PurchasePayment::Unpaid;
+        });
+
+        parent::updated(function($model){
+            // $model-> = $model->mask_status;
         });
 
         parent::boot();

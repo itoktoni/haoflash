@@ -18,14 +18,25 @@ class Branch extends Model
         'branch_name',
         'branch_description',
         'branch_address',
+        'branch_contact',
         'branch_phone',
         'branch_email',
+        'branch_created_at',
+        'branch_updated_at',
+        'branch_deleted_at',
+        'branch_created_by',
+        'branch_updated_by',
+        'branch_deleted_by',
     ];
 
     public $timestamps = true;
     public $incrementing = true;
     public $rules = [
         'branch_name' => 'required|min:3',
+        'branch_phone' => 'required',
+        'branch_contact' => 'required',
+        'branch_description' => 'required',
+        'branch_address' => 'required',
     ];
 
     const CREATED_AT = 'branch_created_at';
@@ -40,9 +51,10 @@ class Branch extends Model
 
     public $datatable = [
         'branch_id' => [false => 'Code', 'width' => 50],
-        'branch_name' => [true => 'Name'],
+        'branch_name' => [true => 'Nama Outlet'],
+        'branch_contact' => [true => 'PIC'],
         'branch_phone' => [true => 'Phone'],
-        'branch_email' => [true => 'Email'],
+        'branch_email' => [false => 'Email'],
     ];
     
     public $status    = [

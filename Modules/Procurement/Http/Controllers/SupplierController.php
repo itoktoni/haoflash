@@ -3,7 +3,8 @@
 namespace Modules\Procurement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Modules\Procurement\Dao\Enums\SupplierType;
+use Modules\Procurement\Dao\Enums\SupplierPph;
+use Modules\Procurement\Dao\Enums\SupplierPpn;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Requests\GeneralRequest;
@@ -31,7 +32,8 @@ class SupplierController extends Controller
     private function share($data = [])
     {
         $view = [
-            'check' => SupplierType::getOptions()
+            'ppn' => SupplierPpn::getOptions(),
+            'pph' => SupplierPph::getOptions()
         ];
 
         return array_merge($view, $data);
@@ -61,6 +63,7 @@ class SupplierController extends Controller
             ->setModel(self::$model)
             ->EditColumn([
                 self::$model->mask_ppn() => 'mask_ppn_name',
+                self::$model->mask_pph() => 'mask_pph_name',
             ])
             ->make();
     }

@@ -37,9 +37,12 @@ class Customer extends Model
     public $incrementing = true;
     public $rules = [
         'customer_name' => 'required|min:3',
+        'customer_contact' => 'required',
         'customer_phone' => 'required',
+        'customer_owner' => 'required',
+        'customer_description' => 'required',
         'customer_ppn' => 'required',
-        'customer_email' => 'required',
+        'customer_email' => 'required|email',
         'customer_province' => 'required',
         'customer_city' => 'required',
         'customer_area' => 'required',

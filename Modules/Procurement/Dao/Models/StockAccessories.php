@@ -8,6 +8,8 @@ use Kirschbaum\PowerJoins\PowerJoins;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Models\Product;
 use Modules\Procurement\Dao\Facades\BranchFacades;
+use Modules\Procurement\Dao\Facades\SupplierFacades;
+use Modules\System\Plugins\Helper;
 
 class StockAccessories extends Model
 {
@@ -52,12 +54,13 @@ class StockAccessories extends Model
 
     public $datatable = [
         'stock_id' => [false => 'Code', 'width' => 50],
-        'stock_branch_id' => [false => 'Code', 'width' => 50],
+        'supplier_name' => [true => 'Supplier', 'width' => 100],
         'branch_name' => [true => 'Branch', 'width' => 100],
         'product_name' => [true => 'Product'],
-        'stock_qty' => [true => 'Qty', 'width' => 100],
-        'stock_sell' => [true => 'Sell Price'],
-        'stock_expired' => [false => 'Expired'],
+        'product_description' => [true => 'Description'],
+        'stock_qty' => [true => 'Qty', 'width' => 50],
+        'stock_buy' => [true => 'Price', 'width' => 50],
+        'stock_expired' => [false => 'Expired', 'width' => 80],
     ];
 
     public function mask_code()
@@ -120,6 +123,21 @@ class StockAccessories extends Model
         return $this->{$this->mask_branch_id()};
     }
 
+    public function mask_supplier_id()
+    {
+        return 'stock_supplier_id';
+    }
+
+    public function setMaskSupplierIdAttribute($value)
+    {
+        $this->attributes[$this->mask_supplier_id()] = $value;
+    }
+
+    public function getMaskSupplierIdAttribute()
+    {
+        return $this->{$this->mask_supplier_id()};
+    }
+
     public function mask_product_id()
     {
         return 'stock_product_id';
@@ -133,6 +151,31 @@ class StockAccessories extends Model
     public function getMaskProductIdAttribute()
     {
         return $this->{$this->mask_product_id()};
+    }
+
+    public function mask_buy()
+    {
+        return 'stock_buy';
+    }
+
+    public function setMaskBuyAttribute($value)
+    {
+        $this->attributes[$this->mask_buy()] = $value;
+    }
+
+    public function getMaskBuyAttribute()
+    {
+        return $this->{$this->mask_buy()};
+    }
+
+    public function getMaskBuyFormatAttribute()
+    {
+        return Helper::createRupiah($this->{$this->mask_buy()});
+    }
+
+    public function getMaskProductDescriptionAttribute()
+    {
+        return nl2br($this->product_description) ?? '';
     }
 
     public function mask_qty()
@@ -153,6 +196,11 @@ class StockAccessories extends Model
     public function has_branch()
     {
         return $this->hasOne(Branch::class, BranchFacades::getKeyName(), $this->mask_branch_id());
+    }
+
+    public function has_supplier()
+    {
+        return $this->hasOne(Supplier::class, SupplierFacades::getKeyName(), $this->mask_supplier_id());
     }
 
     public function has_product()

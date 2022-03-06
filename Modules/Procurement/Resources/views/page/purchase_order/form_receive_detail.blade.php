@@ -53,8 +53,14 @@
 
                     <div class="form-group">
 
-                        {!! Form::label('name', __('Receive Date'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_date') ? 'has-error' : ''}}">
+                    {!! Form::label('name', __('Buying Price'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_buy') ? 'has-error' : ''}}">
+                            {!! Form::text('po_receive_buy', null, ['class' => 'form-control', $model->po_receive_type == CategoryType::BDP ? '' : 'readonly']) !!}
+                            {!! $errors->first('po_receive_buy', '<p class="help-block">:message</p>') !!}
+                        </div>
+
+                        {!! Form::label('name', __('Receive Date'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_date') ? 'has-error' : ''}}">
                             <div class="input-group">
                                 {!! Form::text('po_receive_date', $model->po_receive_date ?? date('Y-m-d'), ['class' =>
                                 'form-control date']) !!}
@@ -65,8 +71,8 @@
                             {!! $errors->first('po_receive_date', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('Branch'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_branch_id') ? 'has-error' : ''}}">
+                        {!! Form::label('name', __('Branch'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_branch_id') ? 'has-error' : ''}}">
                             {{ Form::select('po_receive_branch_id', $branch, null, ['class'=> 'form-control ']) }}
                             {!! $errors->first('po_receive_branch_id', '<p class="help-block">:message</p>') !!}
                         </div>
@@ -74,18 +80,6 @@
                     </div>
 
                     <div class="form-group">
-
-                        {!! Form::label('name', __('Buying Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_buy') ? 'has-error' : ''}}">
-                            {!! Form::text('po_receive_buy', null, ['class' => 'form-control', $model->po_receive_type == CategoryType::BDP ? '' : 'readonly']) !!}
-                            {!! $errors->first('po_receive_buy', '<p class="help-block">:message</p>') !!}
-                        </div>
-
-                        {!! Form::label('name', __('Selling Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('po_receive_sell') ? 'has-error' : ''}}">
-                            {!! Form::text('po_receive_sell', null, ['class' => 'form-control']) !!}
-                            {!! $errors->first('po_receive_sell', '<p class="help-block">:message</p>') !!}
-                        </div>
 
                         <input type="hidden" value="{{ $model->po_receive_po_code ?? null }}" name="code">
                         <input type="hidden" value="{{ $model->po_receive_po_code ?? null }}" name="po_receive_po_code">
@@ -158,7 +152,10 @@
             <div class="text-right action-wrapper">
                 <a id="linkMenu" href="{!! route($route_index) !!}" class="btn btn-warning">{{ __('Back') }}</a>
                 @isset($actions['post_payment'])
+                @if($model->purchase_status != PurchaseStatus::Cancel && $model->purchase_status != PurchaseStatus::Finish)
+
                 <button type="submit" class="btn btn-primary">{{ __('Receive') }}</button>
+                @endisset
                 @endisset
             </div>
         </div>

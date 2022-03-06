@@ -7,6 +7,7 @@ use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoFacades;
+use Modules\Procurement\Dao\Facades\PoReceiveFacades;
 use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Plugins\Alert;
@@ -24,14 +25,16 @@ class PurchaseReceiveService
             if ($data->po_receive_type == CategoryType::Accesories) {
 
                 StockFacades::create([
-                    'stock_code' => Helper::autoNumber(StockFacades::getTable(), StockFacades::getKeyName(), 'SN' . date('Ym'), 20),
+                    'stock_code' => Helper::autoNumber(StockFacades::getTable(), StockFacades::mask_code(), 'SN' . date('Ym'), 20),
                     'stock_po_code' => $data->po_receive_po_code,
                     'stock_po_receive_code' => $data->po_receive_code,
                     'stock_branch_id' => $data->po_receive_branch_id,
+                    'stock_supplier_id' => $data->po_receive_supplier_id,
                     'stock_product_id' => $data->po_receive_product_id,
                     'stock_qty' => $data->po_receive_receive,
                     'stock_sell' => $data->po_receive_sell,
                     'stock_buy' => $data->po_receive_buy,
+                    'stock_type' => CategoryType::Accesories,
                 ]);
             } elseif ($data->po_receive_type == CategoryType::Virtual) {
                 foreach (range($data->po_receive_start, $data->po_receive_end) as $selisih) {
@@ -40,34 +43,44 @@ class PurchaseReceiveService
                         'stock_po_code' => $data->po_receive_po_code,
                         'stock_po_receive_code' => $data->po_receive_code,
                         'stock_branch_id' => $data->po_receive_branch_id,
+                        'stock_supplier_id' => $data->po_receive_supplier_id,
                         'stock_product_id' => $data->po_receive_product_id,
                         'stock_qty' => 1,
                         'stock_expired' => $data->po_receive_expired_date,
                         'stock_sell' => $data->po_receive_sell,
                         'stock_buy' => $data->po_receive_buy,
+                        'stock_type' => CategoryType::Virtual,
+
                     ]);
                 }
             } elseif ($data->po_receive_type == CategoryType::BDP) {
                 foreach (range($data->po_receive_start, $data->po_receive_end) as $selisih) {
                     StockFacades::create([
+                        'stock_code' => $selisih,
                         'stock_po_code' => $data->po_receive_po_code,
                         'stock_po_receive_code' => $data->po_receive_code,
                         'stock_branch_id' => $data->po_receive_branch_id,
+                        'stock_supplier_id' => $data->po_receive_supplier_id,
                         'stock_product_id' => $data->po_receive_product_id,
                         'stock_qty' => 1,
                         'stock_expired' => $data->po_receive_expired_date,
                         'stock_sell' => $data->po_receive_sell,
                         'stock_buy' => $data->po_receive_buy,
+                        'stock_type' => CategoryType::BDP,
+
                     ]);
                 }
             }
 
-            // $po = [PoFacades::mask_status() => PurchaseStatus::Receive];
-            // if ($data->complete == 1) {
-            //     $po = [PoFacades::mask_status() => PurchaseStatus::Finish];
-            // }
+            $total_receive_qty = PoReceiveFacades::where(PoReceiveFacades::mask_po_code(), $data->po_receive_po_code)->sum(PoReceiveFacades::mask_receive());
+            $total_detail_qty = PoDetailFacades::where(PoDetailFacades::mask_po_code(), $data->po_receive_po_code)->sum(PoDetailFacades::mask_qty());
 
-            // PoFacades::where(PoFacades::getKeyName(), $data->po_receive_po_code)->update($po);
+            $po = [PoFacades::mask_status() => PurchaseStatus::Receive, PoFacades::getUpdatedAtColumn() => date('Y-m-d H:i:s')];
+            if ($total_receive_qty == $total_detail_qty) {
+                $po = [PoFacades::mask_status() => PurchaseStatus::Finish, PoFacades::getUpdatedAtColumn() => date('Y-m-d H:i:s')];
+            }
+
+            PoFacades::where(PoFacades::getKeyName(), $data->po_receive_po_code)->update($po);
 
             if ($check->count() > 0) {
 

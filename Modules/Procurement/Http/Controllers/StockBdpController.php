@@ -8,6 +8,7 @@ use Modules\Procurement\Dao\Repositories\BranchRepository;
 use Modules\Procurement\Dao\Repositories\StockBdpRepository;
 use Modules\Procurement\Dao\Repositories\StockRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
+use Modules\Procurement\Http\Services\DataSummaryStockVoucherService;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Requests\GeneralRequest;
 use Modules\System\Http\Services\CreateService;
@@ -52,18 +53,7 @@ class StockBdpController extends Controller
         ]);
     }
 
-    // public function create()
-    // {
-    //     return view(Views::create())->with($this->share());
-    // }
-
-    public function save(GeneralRequest $request, CreateService $service)
-    {
-        $data = $service->save(self::$model, $request);
-        return Response::redirectBack($data);
-    }
-
-    public function data(DataService $service)
+    public function data(DataSummaryStockVoucherService $service)
     {
         return $service
             ->setModel(self::$model)
@@ -71,43 +61,10 @@ class StockBdpController extends Controller
                 'page'      => config('page'),
                 'folder'    => config('folder'),
             ], false)
+            ->EditColumn([
+                self::$model->mask_buy() => 'mask_buy_format',
+                'product_description' => 'mask_product_description',
+            ])
             ->make();
-    }
-
-    public function edit($code)
-    {
-        return view(Views::update())->with($this->share([
-            'model' => $this->get($code),
-        ]));
-    }
-
-    public function update($code, GeneralRequest $request, UpdateService $service)
-    {
-        $data = $service->update(self::$model, $request, $code);
-        return Response::redirectBack($data);
-    }
-
-    public function show($code)
-    {
-        return view(Views::show())->with($this->share([
-            'fields' => Helper::listData(self::$model->datatable),
-            'model' => $this->get($code),
-        ]));
-    }
-
-    public function get($code = null, $relation = null)
-    {
-        $relation = $relation ?? request()->get('relation');
-        if ($relation) {
-            return self::$service->get(self::$model, $code, $relation);
-        }
-        return self::$service->get(self::$model, $code);
-    }
-
-    public function delete(DeleteRequest $request, DeleteService $service)
-    {
-        // $code = $request->get('code');
-        // $data = $service->delete(self::$model, $code);
-        // return Response::redirectBack($data);
     }
 }

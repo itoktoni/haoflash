@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
 use Modules\Procurement\Dao\Repositories\StockRepository;
+use Modules\Procurement\Dao\Repositories\StockSummaryRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
+use Modules\Procurement\Http\Services\DataStockVoucherService;
+use Modules\Procurement\Http\Services\DataSummaryStockVoucherService;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Requests\GeneralRequest;
 use Modules\System\Http\Services\CreateService;
@@ -18,7 +21,7 @@ use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
 
-class StockController extends Controller
+class StockVoucherController extends Controller
 {
     public static $template;
     public static $service;
@@ -46,23 +49,12 @@ class StockController extends Controller
 
     public function index()
     {
-        return view(Views::index(config('page'), config('folder')))->with([
+        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))->with([
             'fields' => Helper::listData(self::$model->datatable),
         ]);
     }
 
-    // public function create()
-    // {
-    //     return view(Views::create())->with($this->share());
-    // }
-
-    public function save(GeneralRequest $request, CreateService $service)
-    {
-        $data = $service->save(self::$model, $request);
-        return Response::redirectBack($data);
-    }
-
-    public function data(DataService $service)
+    public function data(DataStockVoucherService $service)
     {
         return $service
             ->setModel(self::$model)
@@ -70,20 +62,33 @@ class StockController extends Controller
                 'page'      => config('page'),
                 'folder'    => config('folder'),
             ], false)
+            ->EditColumn([
+                self::$model->mask_buy() => 'mask_buy_format',
+                'product_description' => 'mask_product_description',
+            ])
             ->make();
     }
 
-    public function edit($code)
+    public function indexSummary(StockSummaryRepository $model)
     {
-        return view(Views::update())->with($this->share([
-            'model' => $this->get($code),
-        ]));
+        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))->with([
+            'fields' => Helper::listData($model->datatable),
+        ]);
     }
 
-    public function update($code, GeneralRequest $request, UpdateService $service)
+    public function dataSummary(DataSummaryStockVoucherService $service, StockSummaryRepository $model)
     {
-        $data = $service->update(self::$model, $request, $code);
-        return Response::redirectBack($data);
+        return $service
+            ->setModel($model)
+            ->EditAction([
+                'page'      => config('page'),
+                'folder'    => config('folder'),
+            ], false)
+            ->EditColumn([
+                self::$model->mask_buy() => 'mask_buy_format',
+                'product_description' => 'mask_product_description',
+            ])
+            ->make();
     }
 
     public function show($code)
@@ -101,12 +106,5 @@ class StockController extends Controller
             return self::$service->get(self::$model, $code, $relation);
         }
         return self::$service->get(self::$model, $code);
-    }
-
-    public function delete(DeleteRequest $request, DeleteService $service)
-    {
-        // $code = $request->get('code');
-        // $data = $service->delete(self::$model, $code);
-        // return Response::redirectBack($data);
     }
 }

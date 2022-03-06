@@ -114,7 +114,17 @@ class UpdateGroupModuleService extends UpdateService
                             $metode = 'GET';
                         }
 
+                        if (strpos(strtolower($function), 'index') !== false) {
+                            $visible = '1';
+                            $metode = 'GET';
+                        }
+
                         if (strpos(strtolower($function), 'post') !== false) {
+                            $visible = '0';
+                            $metode = 'POST';
+                        }
+
+                        if (strpos(strtolower($function), 'data') !== false) {
                             $visible = '0';
                             $metode = 'POST';
                         }

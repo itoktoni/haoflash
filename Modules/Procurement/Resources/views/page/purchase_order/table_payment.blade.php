@@ -8,6 +8,8 @@
             <th class="text-left col-md-1">Bank To</th>
             <th class="text-left col-md-2">Account Number</th>-->
             <th class="text-left col-md-2">Account Name</th>
+            <th class="text-left col-md-1">Method</th>
+            <th class="text-left col-md-1">Bank</th>
             <th class="text-left col-md-3">Notes</th>
             <th class="text-right col-md-1">Amount</th>
         </tr>
@@ -35,6 +37,12 @@
             <td data-title="Person" class="col-lg-1">
                 {{ $item->mask_person }}
             </td> 
+            <td data-title="Person" class="col-lg-1">
+                {{ $item->mask_method_name }}
+            </td> 
+            <td data-title="Person" class="col-lg-1">
+                {{ $item->mask_bank_from }}
+            </td> 
             <td data-title="Notes" class="col-lg-2">
                 {{ $item->mask_notes_approve }}
             </td>
@@ -47,7 +55,7 @@
 
     <tbody>
         <tr>
-            <td data-title="Total Pembayaran" colspan="4" class="text-right">
+            <td data-title="Total Pembayaran" colspan="6" class="text-right">
                 <strong>Total Order</strong>
             </td>
             <td data-title="" class="text-right">
@@ -55,7 +63,7 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="4" class="text-right">
+            <td data-title="Total Pembayaran" colspan="6" class="text-right">
                 <strong>Total Payment</strong>
             </td>
             <td data-title="" class="text-right">
@@ -63,7 +71,7 @@
             </td>
         </tr>
         <tr>
-            <td data-title="Total Pembayaran" colspan="4" class="text-right">
+            <td data-title="Total Pembayaran" colspan="6" class="text-right">
                 <strong>Outstanding</strong>
             </td>
             <td data-title="" class="text-right">

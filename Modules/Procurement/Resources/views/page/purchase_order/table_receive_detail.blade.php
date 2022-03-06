@@ -5,7 +5,7 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
-            <th class="text-left col-md-3">Receive Code</th>
+            <th class="text-left col-md-2">Receive Code</th>
             <th class="text-left col-md-1">Receive Date</th>
             <th class="text-left col-md-1">Created Time</th>
             <th class="text-left col-md-1">Branch</th>
@@ -14,7 +14,6 @@
             <th class="text-left col-md-1">End Number</th>
             <th class="text-left col-md-1">Expired Date</th>
             @endif
-            <th class="text-left col-md-1">Harga Jual</th>
             <th style="width: 4%;" class="text-left">Qty</th>
         </tr>
     </thead>
@@ -52,16 +51,14 @@
                 {{ $item->po_receive_expired_date ?? '' }}
             </td>
             @endif
-            <td data-title="Harga Jual" class="col-lg-1">
-                {{ Helper::createRupiah($item->po_receive_sell) }}
-            </td>
+           
             <td data-title="Receive" class="col-lg-1">
                 {{ $item->po_receive_receive }}
             </td>
         </tr>
         @endforeach
         <tr>
-            <td colspan="{{ $model->po_receive_type != CategoryType::Accesories ? '8' : '5' }}">Total Penerimaan Barang</td>
+            <td colspan="{{ $model->po_receive_type != CategoryType::Accesories ? '7' : '4' }}">Total Penerimaan Barang</td>
             <td>{{ $detail->sum('po_receive_receive') }}</td>
         </tr>
     </tbody>

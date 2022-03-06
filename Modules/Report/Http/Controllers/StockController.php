@@ -33,15 +33,8 @@ class StockController extends Controller
 
     private function share($data = [])
     {
-        $location = Views::option(new LocationRepository());
-        $warehouse = Views::option(new WarehouseRepository());
         $customer = Views::option(new TeamRepository());
-        $product = Views::option(new ProductRepository());
-
         $view = [
-            'location' => $location,
-            'warehouse' => $warehouse,
-            'product' => $product,
             'customer' => $customer,
         ];
 

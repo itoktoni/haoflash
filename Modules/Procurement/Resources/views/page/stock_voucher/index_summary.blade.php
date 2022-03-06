@@ -19,11 +19,11 @@
         processing: true,
                 dom: '<<t>p><"pull-left"i>',
                 serverSide: true,
-                order: [ [0, 'desc'] ],
+                order: [ [6, 'desc'] ],
                 pageLength: {{ env('WEBSITE_PAGINATION', 10) }},
                 pagingType: 'first_last_numbers',
                 ajax: {
-                url: '{{ route($route_data) }}',
+                url: '{{ route($module."_data_summary") }}',
                     method : 'POST',
                     data: function(d) {
                         d.code = $('select[name=code]').val();
@@ -64,7 +64,7 @@
 
         <div class="panel panel-default">
             <header class="panel-heading">
-                <h2 class="panel-title">{{ __('Data') }} {{ __($form_name) }}
+                <h2 class="panel-title">{{ __('Data') }} Summary {{ __($form_name) }}
                 </h2>
             </header>
 

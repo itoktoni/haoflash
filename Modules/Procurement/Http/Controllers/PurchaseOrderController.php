@@ -3,6 +3,8 @@
 namespace Modules\Procurement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
+use Modules\Finance\Dao\Enums\PaymentMethod;
 use Modules\Finance\Dao\Enums\PaymentStatus;
 use Modules\Finance\Dao\Repositories\BankRepository;
 use Modules\Finance\Dao\Repositories\PaymentRepository;
@@ -10,6 +12,8 @@ use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
+use Modules\Procurement\Dao\Enums\SupplierPph;
+use Modules\Procurement\Dao\Enums\SupplierPpn;
 use Modules\Procurement\Dao\Enums\SupplierType;
 use Modules\Procurement\Dao\Facades\BranchFacades;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
@@ -26,10 +30,12 @@ use Modules\Procurement\Http\Services\DeleteReceiveService;
 use Modules\Procurement\Http\Services\PurchaseCreateService;
 use Modules\Procurement\Http\Services\PurchaseReceiveService;
 use Modules\Procurement\Http\Services\PurchaseUpdateService;
+use Modules\System\Dao\Enums\GroupUserType;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Services\CreateService;
 use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\SingleService;
+use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
@@ -50,20 +56,22 @@ class PurchaseOrderController extends Controller
     {
         // $product = Views::option(new ProductRepository());
         // $supplier = Views::option(new SupplierRepository());
-        
-        $supplier = Views::option(new SupplierRepository(),false,true)->mapWithKeys(function($item){
-            $data[$item->supplier_id] = $item->supplier_name.' - '.strtoupper(SupplierType::getDescription($item->supplier_ppn));
+
+        $supplier = Views::option(new SupplierRepository(), false, true)->mapWithKeys(function ($item) {
+            $pph = '';
+            if ($item->mask_pph) {
+                $pph = ' ('.strtolower(SupplierPph::getDescription($item->mask_pph)).')';
+            }
+            $data[$item->supplier_id] = $item->supplier_name . ' - ' . strtoupper(SupplierPpn::getDescription($item->supplier_ppn)) . $pph;
             return $data;
-        })->toArray();
-        
-        $status = PurchaseStatus::getOptions();
+        })->prepend('- Select Supplier -', '')->toArray();
+
         $category = Views::option(new CategoryRepository());
 
         $view = [
             // 'product' => $product,
             'category' => $category,
             'supplier' => $supplier,
-            'status' => $status,
             'model' => self::$model,
         ];
         return array_merge($view, $data);
@@ -79,8 +87,13 @@ class PurchaseOrderController extends Controller
     public function create()
     {
         $product = Views::option(new ProductRepository());
+        // $status = PurchaseStatus::getOptions();
+        $status = [PurchaseStatus::Create => PurchaseStatus::getDescription(PurchaseStatus::Create)];
+        // if(auth()->user()->group_user == GroupUserType::Developer){
+        // }
         return view(Views::create())->with($this->share([
             'product' => $product,
+            'status' => $status,
         ]));
     }
 
@@ -98,8 +111,10 @@ class PurchaseOrderController extends Controller
                 self::$model->mask_status() => PurchaseStatus::class,
                 self::$model->mask_payment() => PurchasePayment::class,
             ])->EditColumn([
-                self::$model->mask_value() => 'mask_value_format',
-                self::$model->mask_tax() => 'mask_tax_format',
+                self::$model->mask_dpp() => 'mask_dpp_format',
+                self::$model->mask_pph() => 'mask_pph_format',
+                self::$model->mask_ppn() => 'mask_ppn_format',
+                'po_updated_at' => 'po_updated_at',
                 self::$model->mask_total() => 'mask_total_rupiah',
             ])->EditAction([
                 'page'      => config('page'),
@@ -112,9 +127,15 @@ class PurchaseOrderController extends Controller
         $data = $this->get($code);
         $product = Views::option(new ProductRepository());
 
-        return view(Views::update())->with($this->share([
+        $status = PurchaseStatus::getOptions();
+        if (auth()->user()->group_user != GroupUserType::Developer) {
+            $status = [$data->mask_status => PurchaseStatus::getDescription($data->mask_status)];
+        }
+
+        return view(Views::update(config('page'), config('folder')))->with($this->share([
             'model' => $data,
             'product' => $product,
+            'status' => $status,
             'detail' => $data->has_detail,
         ]));
     }
@@ -146,13 +167,15 @@ class PurchaseOrderController extends Controller
 
     public function delete(DeleteRequest $request, DeletePurchaseService $service)
     {
-        $master = $request->get('master');
-        $code = $request->get('code');
+        Alert::error('Delete tidak diperbolehkan !');
+        $data = [];
+        // $master = $request->get('master');
+        // $code = $request->get('code');
 
-        if ($request->has('transaction')) {
-            $data = $service->deleteTransaction(self::$model, $master, $code);
-        }
-        $data = $service->delete(self::$model, $code);
+        // if ($request->has('transaction')) {
+        //     $data = $service->deleteTransaction(self::$model, $master, $code);
+        // }
+        // $data = $service->delete(self::$model, $code);
         return Response::redirectBack($data);
     }
 
@@ -163,10 +186,13 @@ class PurchaseOrderController extends Controller
         $bank = Views::option(new BankRepository(), false, true)
             ->pluck('bank_name', 'bank_name')->prepend('- Select Bank - ', '')->toArray();
 
+        $method = PaymentMethod::getOptions();
+
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
                 'model' => $data,
                 'bank' => $bank,
+                'method' => $method,
                 'supplier' => $supplier,
                 'payment' => PaymentStatus::class,
                 'detail' => $data->has_payment ?? false
@@ -184,11 +210,17 @@ class PurchaseOrderController extends Controller
         $data = $this->get($code);
         $product = Views::option(new ProductRepository());
 
+        $status = PurchaseStatus::getOptions();
+        if (auth()->user()->group_user != GroupUserType::Developer) {
+            $status = [$data->mask_status => PurchaseStatus::getDescription($data->mask_status)];
+        }
+
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
                 'model' => $data,
                 'detail' => $data->has_detail,
                 'product' => $product,
+                'status' => $status,
             ]));
     }
 
@@ -202,7 +234,7 @@ class PurchaseOrderController extends Controller
     {
         $data_branch = BranchFacades::first();
         $branch = [];
-        if($data_branch){
+        if ($data_branch) {
             $branch[$data_branch->{$data_branch->getKeyName()}] = $data_branch->mask_name;
         }
         $detail = request()->get('detail');
@@ -225,7 +257,7 @@ class PurchaseOrderController extends Controller
             $data = [
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $supplier ? $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) : '',
+                'purchase_supplier' => $supplier ? $supplier->supplier_name . ' - ' . strtoupper(SupplierPpn::getDescription($supplier->supplier_ppn)) : '',
                 'purchase_notes' => $master->po_notes ?? '',
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'po_receive_date' => date('Y-m-d'),
@@ -251,14 +283,12 @@ class PurchaseOrderController extends Controller
                 'purchase_product_name' => $model->has_product->mask_name ?? '',
                 'purchase_date' => $master->po_date_order ?? null,
                 'purchase_status' => $master->po_status ?? '',
-                'purchase_supplier' => $supplier->supplier_name.' - '.strtoupper(SupplierType::getDescription($supplier->supplier_ppn)) ?? '',
+                'purchase_supplier' => $supplier->supplier_name . ' - ' . strtoupper(Supplierppn::getDescription($supplier->supplier_ppn)) ?? '',
                 'purchase_notes' => $master->po_notes ?? '',
             ];
 
             $model = array_merge($model->toArray(), $data);
         }
-
-        // dd((Object) $model);
 
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
@@ -276,7 +306,7 @@ class PurchaseOrderController extends Controller
 
     public function showReceiveDetail($code)
     {
-        $model = PoReceiveFacades::with(['has_detail', 'has_detail.has_product'])->findOrFail($code);
+        $model = PoReceiveFacades::with(['has_detail', 'has_detail.has_product', 'has_detail.has_supplier'])->findOrFail($code);
 
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([

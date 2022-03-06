@@ -29,7 +29,9 @@
                 {{ $remaining }}
             </td>
             <td data-title="Account" class="col-lg-1 text-center">
+                @if(($model->mask_status == PurchaseStatus::Process || $model->mask_status == PurchaseStatus::Receive) && $remaining > 0)
                 <a href="{!! route($module.'_form_receive_detail', ['code' => $model->{$model->getKeyName()}, 'detail' => $item->mask_product_id]) !!}" class="btn btn-success btn-xs">{{ __('Receive') }}</a>
+                @endif
                 <!-- <a href="{!! route($route_index) !!}" class="btn btn-danger btn-xs">{{ __('Invoice') }}</a> -->
             </td>
         </tr>

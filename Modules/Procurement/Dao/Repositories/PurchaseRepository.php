@@ -14,7 +14,9 @@ class PurchaseRepository extends Po implements CrudInterface
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable);
-        return  $this->select($list)->leftJoinRelationship('has_supplier');
+        return $this->select($list)
+        ->leftJoinRelationship('has_user')
+        ->leftJoinRelationship('has_supplier');
     }
 
     public function saveRepository($request)

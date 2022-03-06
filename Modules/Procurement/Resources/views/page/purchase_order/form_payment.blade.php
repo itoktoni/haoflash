@@ -14,23 +14,6 @@
             </header>
             <div class="panel-body line">
                 <div class="">
-                    <!--
-                    <div class="form-group">
-
-                        {!! Form::label('name', __('Bank From'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_bank_from') ? 'has-error' : ''}}">
-                            {{ Form::select('payment_bank_from', $bank, null, ['class'=> 'form-control ']) }}
-                            {!! $errors->first('payment_bank_from', '<p class="help-block">:message</p>') !!}
-                        </div>
-
-                        {!! Form::label('name', __('Bank To'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_bank_to') ? 'has-error' : ''}}">
-                            {!! Form::text('payment_bank_to', $supplier->supplier_bank_name ?? null, ['class' => 'form-control']) !!}
-                            {!! $errors->first('payment_bank_to', '<p class="help-block">:message</p>') !!}
-                        </div>
-
-                    </div>
-                    -->
 
                     <div class="form-group">
 
@@ -50,6 +33,22 @@
                                 </span>
                             </div>
                             {!! $errors->first('payment_date', '<p class="help-block">:message</p>') !!}
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        {!! Form::label('name', __('Payment Method'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_method') ? 'has-error' : ''}}">
+                            {{ Form::select('payment_method', $method, null, ['class'=> 'form-control ']) }}
+                            {!! $errors->first('payment_method', '<p class="help-block">:message</p>') !!}
+                        </div>
+
+                        {!! Form::label('name', __('Bank'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+                        <div class="col-md-4 col-sm-4 {{ $errors->has('payment_from') ? 'has-error' : ''}}">
+                            {{ Form::select('payment_from', $bank, null, ['class'=> 'form-control ']) }}
+                            {!! $errors->first('payment_from', '<p class="help-block">:message</p>') !!}
                         </div>
 
                     </div>
@@ -102,9 +101,9 @@
         <div class="navbar-fixed-bottom" id="menu_action">
             <div class="text-right action-wrapper">
                 <a id="linkMenu" href="{!! route($route_index) !!}" class="btn btn-warning">{{ __('Back') }}</a>
-                @isset($actions['post_payment'])
+                @if(isset($actions['post_payment']) && $model->mask_payment != PurchasePayment::Paid)
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-                @endisset
+                @endif
             </div>
         </div>
         {!! Form::close() !!}

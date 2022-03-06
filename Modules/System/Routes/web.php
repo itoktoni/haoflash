@@ -44,7 +44,7 @@ Route::group(
                     foreach ($cache_query as $route) {
                         $link = $route->system_action_link . '/{code}';
 
-                        if (in_array($route->system_action_function, $method) || strpos($route->system_action_code, 'report') !== false  || strpos($route->system_action_code, 'post') !== false || strpos($route->system_action_code, 'list') !== false) {
+                        if (in_array($route->system_action_function, $method) || strpos($route->system_action_code, 'report') !== false  || strpos($route->system_action_code, 'post') !== false || strpos($route->system_action_code, 'list') !== false || strpos($route->system_action_code, 'index') !== false || strpos($route->system_action_code, 'data') !== false) {
 
                             $link = $route->system_action_link;
                         }

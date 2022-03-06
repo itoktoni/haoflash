@@ -6,20 +6,20 @@ use BenSampo\Enum\Enum;
 use Modules\System\Dao\Enums\ColorType;
 use Modules\System\Dao\Traits\StatusTrait;
 
-class SupplierType extends Enum
+class SupplierPph extends Enum
 {
     use StatusTrait;
 
     const Type                  =  null;
-    const PPN                   =  1;
-    const NON_PPN               =  2;
+    const PPH                   =  1;
+    const NON_PPH               =  2;
 
     public static function colors()
     {
         return [
             self::Type => ColorType::Primary,
-            self::PPN => ColorType::Success,
-            self::NON_PPN => ColorType::Danger,
+            self::PPH => ColorType::Success,
+            self::NON_PPH => ColorType::Danger,
         ];
     }
 

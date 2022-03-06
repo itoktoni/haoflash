@@ -5,8 +5,10 @@ namespace Modules\Finance\Dao\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 use Kirschbaum\PowerJoins\PowerJoins;
 use Mehradsadeghi\FilterQueryString\FilterQueryString;
+use Modules\Finance\Dao\Enums\PaymentMethod;
 use Modules\Finance\Dao\Enums\PaymentModel;
 use Modules\Finance\Dao\Enums\PaymentStatus;
 use Modules\Finance\Dao\Enums\PaymentType;
@@ -52,6 +54,7 @@ class Payment extends Model
         'payment_deleted_at',
         'payment_date',
         'payment_type',
+        'payment_method',
     ];
 
     protected $filters = [
@@ -79,6 +82,7 @@ class Payment extends Model
         'payment_status' => 'integer',
         'payment_model' => 'integer',
         'payment_type' => 'integer',
+        'payment_method' => 'integer',
     ];
 
     const CREATED_AT = 'payment_created_at';
@@ -119,6 +123,26 @@ class Payment extends Model
     public function getMaskModelAttribute()
     {
         return $this->{$this->mask_model()};
+    }
+
+    public function mask_method()
+    {
+        return 'payment_method';
+    }
+
+    public function setMaskMethodAttribute($value)
+    {
+        $this->attributes[$this->mask_method()] = $value;
+    }
+
+    public function getMaskMethodAttribute()
+    {
+        return $this->{$this->mask_method()};
+    }
+
+    public function getMaskMethodNameAttribute()
+    {
+        return PaymentMethod::getDescription($this->{$this->mask_method()});
     }
 
     public function mask_from()
@@ -392,12 +416,16 @@ class Payment extends Model
                     $payment = $po->has_payment->sum($model->mask_approve());
 
                     if (($payment + $model->mask_approve) >= $total) {
-                        
+
                         $po->mask_payment = PurchasePayment::Paid;
                     }
 
                     $po->save();
                 }
+
+                $po->update([
+                    PoFacades::getUpdatedAtColumn() => date('Y-m-d H:i:s')
+                ]);
             }
         });
 

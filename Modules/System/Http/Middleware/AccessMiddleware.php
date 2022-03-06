@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
-use Modules\System\Dao\Enums\GroupUserStatus;
+use Modules\System\Dao\Enums\GroupUserType;
 use Modules\System\Dao\Facades\GroupUserConnectionGroupModuleFacades;
 use Modules\System\Dao\Facades\GroupUserFacades;
 use Modules\System\Dao\Models\Action;
@@ -72,7 +72,7 @@ class AccessMiddleware
 
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->group_user == GroupUserStatus::Customer && auth()->check() && env('ENABLE_FRONTEND')) {
+        if (auth()->user()->group_user == GroupUserType::Customer && auth()->check() && env('ENABLE_FRONTEND')) {
             return redirect()->to('/');
         }
 

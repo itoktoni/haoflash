@@ -54,7 +54,7 @@ class PurchaseReceiveRequest extends FormRequest
                 'po_receive_qty' => 'required|integer',
                 'po_receive_receive' => 'required|integer|min:1',
                 'po_receive_buy' => 'required',
-                'po_receive_sell' => 'required|numeric',
+                // 'po_receive_sell' => 'required|numeric',
                 'po_receive_branch_id' => 'required',
             ];
         }
@@ -101,10 +101,10 @@ class PurchaseReceiveRequest extends FormRequest
 
                 $validator->errors()->add('po_receive_receive', 'Qty receive harus lebih besar dari Qty');
             }
-            if ($this->po_receive_type == CategoryType::Virtual && $this->po_receive_sell <= $this->po_receive_buy) {
+            // if ($this->po_receive_type == CategoryType::Virtual && $this->po_receive_sell <= $this->po_receive_buy) {
 
-                $validator->errors()->add('po_receive_sell', 'Harga Jual harus lebih besar dari harga beli');
-            }
+            //     $validator->errors()->add('po_receive_sell', 'Harga Jual harus lebih besar dari harga beli');
+            // }
             if (($remaining + $receive) > $qty) {
 
                 $validator->errors()->add('po_receive_receive', 'Qty Receive Sudah Melebihi Qty Pesanan');

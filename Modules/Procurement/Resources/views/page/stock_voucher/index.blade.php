@@ -19,7 +19,7 @@
         processing: true,
                 dom: '<<t>p><"pull-left"i>',
                 serverSide: true,
-                order: [ [0, 'desc'] ],
+                order: [ [6, 'desc'] ],
                 pageLength: {{ env('WEBSITE_PAGINATION', 10) }},
                 pagingType: 'first_last_numbers',
                 ajax: {
