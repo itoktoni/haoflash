@@ -6,12 +6,13 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Procurement\Dao\Models\Stock;
+use Modules\Procurement\Dao\Models\StockBdp;
 use Modules\Procurement\Dao\Models\StockSummary;
 use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Notes;
 
-class StockSummaryRepository extends StockSummary
+class StockSummaryRepository extends StockBdp
 {
     public function dataRepository()
     {

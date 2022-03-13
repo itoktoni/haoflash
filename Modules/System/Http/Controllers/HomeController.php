@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Route;
 use Modules\System\Dao\Enums\GroupUserStatus;
+use Modules\System\Dao\Enums\GroupUserType;
 use Modules\System\Dao\Facades\GroupUserFacades;
 use Modules\System\Http\Charts\HomeChart;
 use Modules\System\Plugins\Helper;
@@ -59,7 +60,7 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        if (env('ENABLE_FRONTEND', true) && auth()->user()->group_user == GroupUserStatus::Customer) {
+        if (env('ENABLE_FRONTEND', true) && auth()->user()->group_user == GroupUserType::Customer) {
             return redirect('/');
         }
 

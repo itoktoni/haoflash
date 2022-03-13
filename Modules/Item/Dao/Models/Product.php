@@ -70,6 +70,7 @@ class Product extends Model
         'product_sku' => [false => 'SKU', 'width' => 100],
         'product_supplier_id' => [false => 'Supplier'],
         'category_name' => [true => 'Category'],
+        'category_type' => [false => 'Type'],
         'product_name' => [true => 'Name'],
         'product_min' => [true => 'Min Stock', 'width' => 100],
         'product_buy' => [false => 'Buy', 'width' => 100],

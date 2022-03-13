@@ -27,6 +27,7 @@ class Stock extends Model
         'stock_supplier_id',
         'stock_qty',
         'stock_sell',
+        'stock_transfer',
         'stock_buy',
         'stock_type',
         'stock_expired',
@@ -34,6 +35,9 @@ class Stock extends Model
         'stock_updated_by',
         'stock_created_at',
         'stock_updated_at',
+        'stock_activated_at',
+        'stock_activated_by',
+        'stock_refer_product_id',
     ];
 
     const CREATED_AT = 'stock_created_at';

@@ -49,4 +49,19 @@ class Category extends Model
     {
         return CategoryType::getDescription($this->{$this->mask_type()});
     }
+
+    public function mask_name()
+    {
+        return 'category_name';
+    }
+
+    public function setMaskNameAttribute($value)
+    {
+        $this->attributes[$this->mask_name()] = $value;
+    }
+
+    public function getMaskNameAttribute()
+    {
+        return $this->{$this->mask_name()};
+    }
 }

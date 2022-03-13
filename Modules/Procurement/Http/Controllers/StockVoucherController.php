@@ -17,6 +17,7 @@ use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\DeleteService;
 use Modules\System\Http\Services\SingleService;
 use Modules\System\Http\Services\UpdateService;
+use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
@@ -106,5 +107,12 @@ class StockVoucherController extends Controller
             return self::$service->get(self::$model, $code, $relation);
         }
         return self::$service->get(self::$model, $code);
+    }
+
+    public function delete(DeleteRequest $request, DeleteService $service)
+    {
+        Alert::error('Delete tidak diperbolehkan !');
+        $data = [];
+        return Response::redirectBack($data);
     }
 }

@@ -17,6 +17,7 @@ use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\DeleteService;
 use Modules\System\Http\Services\SingleService;
 use Modules\System\Http\Services\UpdateService;
+use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
@@ -112,8 +113,8 @@ class StockAccessoriesController extends Controller
 
     public function delete(DeleteRequest $request, DeleteService $service)
     {
-        // $code = $request->get('code');
-        // $data = $service->delete(self::$model, $code);
-        // return Response::redirectBack($data);
+        Alert::error('Delete tidak diperbolehkan !');
+        $data = [];
+        return Response::redirectBack($data);
     }
 }

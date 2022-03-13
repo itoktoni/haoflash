@@ -20,8 +20,24 @@ class StockBdpRepository extends StockSummaryRepository
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')
             ->joinRelationship('has_supplier')
-            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_supplier_id','stock_buy', 'stock_expired'])->orderBy('stock_expired');
+            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_supplier_id', 'stock_buy', 'stock_expired'])->orderBy('stock_expired');
+    }
 
-        // return DB::table('view_summary_stock');
+    public function updateRepository($request, $code)
+    {
+        try {
+            $update = $this->where($this->mask_product_id(), $code)
+                ->whereBetween($this->mask_code(), [$request->start, $request->end])
+                ->update([
+                    'stock_product_id' => $request->stock_product_id,
+                    'stock_refer_product_id' => $request->stock_refer_product_id,
+                    'stock_activated_at' => date('Y-m-d H:i:s'),
+                    'stock_activated_by' => auth()->user()->id,
+                    'stock_type' => CategoryType::Virtual,
+                ]);
+            return Notes::update($request->toArray());
+        } catch (QueryException $ex) {
+            return Notes::error($ex->getMessage());
+        }
     }
 }

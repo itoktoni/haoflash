@@ -42,6 +42,7 @@ class PurchaseRequest extends FormRequest
             $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
             $data[PoDetailFacades::mask_po_code()] = $autonumber;
             $data[PoDetailFacades::mask_product_id()] = $item['temp_id'];
+            $data[PoDetailFacades::mask_notes()] = $item['temp_desc'];
             $data[PoDetailFacades::mask_product_price()] = $data_product->mask_buy ?? '';
             $data[PoDetailFacades::mask_qty()] = Helper::filterInput($item['temp_qty']);
             $data[PoDetailFacades::mask_price()] = Helper::filterInput($item['temp_price']) ?? 0;

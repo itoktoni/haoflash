@@ -5,13 +5,17 @@ namespace Modules\Procurement\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Config;
+use Modules\Procurement\Dao\Models\DoDetail;
 use Modules\Procurement\Dao\Models\MovementDetail;
 use Modules\Procurement\Dao\Models\PoDetail;
 use Modules\Procurement\Dao\Models\PoReceive;
 use Modules\Procurement\Dao\Models\PurchaseDetail;
+use Modules\Procurement\Dao\Models\RoDetail;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
+use Modules\Procurement\Dao\Repositories\DoRepository;
 use Modules\Procurement\Dao\Repositories\MovementRepository;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
+use Modules\Procurement\Dao\Repositories\RoRepository;
 use Modules\Procurement\Dao\Repositories\StockRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 
@@ -42,11 +46,23 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind('po_facades', function () {
             return new PurchaseRepository();
         });
-        $this->app->bind('po_receive_facades', function () {
-            return new PoReceive();
-        });
         $this->app->bind('po_detail_facades', function () {
             return new PoDetail();
+        });
+        $this->app->bind('ro_facades', function () {
+            return new RoRepository();
+        });
+        $this->app->bind('ro_detail_facades', function () {
+            return new RoDetail();
+        });
+        $this->app->bind('delivery_facades', function () {
+            return new DoRepository();
+        });
+        $this->app->bind('do_detail_facades', function () {
+            return new DoDetail();
+        });
+        $this->app->bind('po_receive_facades', function () {
+            return new PoReceive();
         });
         $this->app->bind('movement_facades', function () {
             return new MovementRepository();
@@ -73,10 +89,11 @@ class ModuleServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('Procurement.php'),
+            __DIR__ . '/../Config/config.php' => config_path('Procurement.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'Procurement'
+            __DIR__ . '/../Config/config.php',
+            'Procurement'
         );
     }
 
@@ -89,11 +106,11 @@ class ModuleServiceProvider extends ServiceProvider
     {
         $viewPath = resource_path('views/modules/Procurement');
 
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
-        ],'views');
+        ], 'views');
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
             return $path . '/modules/Procurement';
@@ -112,7 +129,7 @@ class ModuleServiceProvider extends ServiceProvider
         if (is_dir($langPath)) {
             $this->loadTranslationsFrom($langPath, 'Procurement');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'Procurement');
+            $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'Procurement');
         }
     }
 
