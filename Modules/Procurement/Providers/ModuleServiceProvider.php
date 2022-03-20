@@ -5,6 +5,9 @@ namespace Modules\Procurement\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use Illuminate\Support\Facades\Config;
+use Modules\Procurement\Dao\Models\DeDetail;
+use Modules\Procurement\Dao\Models\DePrepare;
+use Modules\Procurement\Dao\Models\DeReceive;
 use Modules\Procurement\Dao\Models\DoDetail;
 use Modules\Procurement\Dao\Models\MovementDetail;
 use Modules\Procurement\Dao\Models\PoDetail;
@@ -12,6 +15,7 @@ use Modules\Procurement\Dao\Models\PoReceive;
 use Modules\Procurement\Dao\Models\PurchaseDetail;
 use Modules\Procurement\Dao\Models\RoDetail;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
+use Modules\Procurement\Dao\Repositories\DeRepository;
 use Modules\Procurement\Dao\Repositories\DoRepository;
 use Modules\Procurement\Dao\Repositories\MovementRepository;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
@@ -49,20 +53,26 @@ class ModuleServiceProvider extends ServiceProvider
         $this->app->bind('po_detail_facades', function () {
             return new PoDetail();
         });
+        $this->app->bind('po_receive_facades', function () {
+            return new PoReceive();
+        });
         $this->app->bind('ro_facades', function () {
             return new RoRepository();
         });
         $this->app->bind('ro_detail_facades', function () {
             return new RoDetail();
         });
-        $this->app->bind('delivery_facades', function () {
-            return new DoRepository();
+        $this->app->bind('de_facades', function () {
+            return new DeRepository();
         });
-        $this->app->bind('do_detail_facades', function () {
-            return new DoDetail();
+        $this->app->bind('de_detail_facades', function () {
+            return new DeDetail();
         });
-        $this->app->bind('po_receive_facades', function () {
-            return new PoReceive();
+        $this->app->bind('de_receive_facades', function () {
+            return new DeReceive();
+        });
+        $this->app->bind('de_prepare_facades', function () {
+            return new DePrepare();
         });
         $this->app->bind('movement_facades', function () {
             return new MovementRepository();

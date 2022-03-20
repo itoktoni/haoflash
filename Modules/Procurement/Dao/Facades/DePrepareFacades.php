@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Facade;
 use Modules\System\Plugins\Helper;
 
-class DoDetailFacades extends Facade
+class DePrepareFacades extends Facade
 {
     protected static function getFacadeAccessor()
     {

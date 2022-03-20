@@ -2,7 +2,7 @@
 
 namespace Modules\Procurement\Http\Services;
 
-use Modules\Procurement\Dao\Facades\PoDetailFacades;
+use Modules\Procurement\Dao\Facades\RoDetailFacades;
 use Modules\Procurement\Dao\Facades\PurchaseDetailFacades;
 use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\Procurement\Dao\Models\PurchaseDetail;
@@ -16,13 +16,14 @@ class RequestUpdateService extends UpdateService
     public function update(CrudInterface $repository, $data, $code)
     {
         $check = $repository->updateRepository($data->all(), $code);
-        PoDetailFacades::upsert($data['detail'], [
-            PoDetailFacades::mask_po_code(),
-            PoDetailFacades::mask_product_id(),
+        RoDetailFacades::upsert($data['detail'], [
+            RoDetailFacades::mask_ro_code(),
+            RoDetailFacades::mask_product_id(),
         ], [
-            PoDetailFacades::mask_qty(),
-            PoDetailFacades::mask_price(),
-            PoDetailFacades::mask_total(),
+            RoDetailFacades::mask_notes(),
+            RoDetailFacades::mask_qty(),
+            RoDetailFacades::mask_price(),
+            RoDetailFacades::mask_total(),
         ]);
 
         if (isset($check['status']) && $check['status']) {

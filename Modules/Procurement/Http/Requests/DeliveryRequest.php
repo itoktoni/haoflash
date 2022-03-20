@@ -1,0 +1,120 @@
+<?php
+
+namespace Modules\Procurement\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Modules\Item\Dao\Facades\ProductFacades;
+use Modules\Procurement\Dao\Enums\PurchasePayment;
+use Modules\Procurement\Dao\Enums\PurchaseStatus;
+use Modules\Procurement\Dao\Enums\SupplierPph;
+use Modules\Procurement\Dao\Enums\SupplierPpn;
+use Modules\Procurement\Dao\Enums\SupplierType;
+use Modules\Procurement\Dao\Facades\PoDetailFacades;
+use Modules\Procurement\Dao\Facades\DeDetailFacades;
+use Modules\Procurement\Dao\Facades\DeFacades;
+use Modules\Procurement\Dao\Facades\StockFacades;
+use Modules\Procurement\Dao\Facades\SupplierFacades;
+use Modules\Procurement\Dao\Models\De;
+use Modules\Procurement\Dao\Models\Po;
+use Modules\Procurement\Dao\Models\Ro;
+use Modules\System\Plugins\Helper;
+
+class DeliveryRequest extends FormRequest
+{
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+
+    private static $model;
+
+    public function __construct(De $models)
+    {
+        self::$model = $models;
+    }
+
+    public function prepareForValidation()
+    {
+        $autonumber = Helper::autoNumber(self::$model->getTable(), self::$model->getKeyName(), 'DO' . date('Ym'), env('WEBSITE_AUTONUMBER'));
+        if (!empty($this->code)) {
+            $autonumber = $this->code;
+        }
+
+        $input = $this->detail;
+        $map = collect($this->detail)->map(function ($item) use ($autonumber) {
+            $data_product = ProductFacades::singleRepository($item['temp_id']);
+            $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
+            $data[DeDetailFacades::mask_do_code()] = $autonumber;
+            $data[DeDetailFacades::mask_product_id()] = $item['temp_id'];
+            $data[DeDetailFacades::mask_notes()] = $item['temp_desc'];
+            $data[DeDetailFacades::mask_product_price()] = $data_product->mask_buy ?? '';
+            $data[DeDetailFacades::mask_qty()] = Helper::filterInput($item['temp_qty']);
+            $data[DeDetailFacades::mask_price()] = Helper::filterInput($item['temp_price']) ?? 0;
+            $data[DeDetailFacades::mask_total()] = $total;
+            return $data;
+        });
+
+        $total_value = Helper::filterInput($map->sum(DeDetailFacades::mask_total())) ?? 0;
+        $total_discount = Helper::filterInput($this->{DeFacades::mask_discount()}) ?? 0;
+
+        $total_summary = $total_value;
+
+        $this->merge([
+            DeFacades::getKeyName() => $autonumber,
+            DeFacades::mask_value() => $total_value,
+            DeFacades::mask_discount() => $total_discount,
+            DeFacades::mask_total() => $total_summary,
+            'detail' => array_values($map->toArray()),
+            'input' => $input,
+        ]);
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+
+            if (empty($this->code)) {
+
+                foreach ($this->input as $detail) {
+                    $id_product = $detail['temp_id'];
+                    $name_product = $detail['temp_product'];
+
+                    $stock = StockFacades::where(StockFacades::mask_product_id(), $id_product)
+                        ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                        ->whereNull(StockFacades::mask_transfer())
+                        ->sum('stock_qty');
+
+                    if ($stock < $detail['temp_qty']) {
+                        $validator->errors()->add($id_product, 'Stock ' . $name_product . ' tinggal = ' . $stock);
+                    }
+                }
+            }
+        });
+    }
+
+    public function rules()
+    {
+        if (request()->isMethod('POST')) {
+            return [
+                DeFacades::mask_branch_id() => 'required',
+                'detail' => 'required',
+            ];
+        }
+        return [];
+    }
+
+    public function attributes()
+    {
+        return [
+            DeFacades::mask_branch_id() => 'Branch',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'detail.required' => 'Please input detail product !'
+        ];
+    }
+}

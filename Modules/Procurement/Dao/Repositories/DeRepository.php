@@ -3,13 +3,12 @@
 namespace Modules\Procurement\Dao\Repositories;
 
 use Illuminate\Database\QueryException;
-use Modules\Procurement\Dao\Models\Delivery;
-use Modules\Procurement\Dao\Models\Ro;
+use Modules\Procurement\Dao\Models\De;
 use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Notes;
 
-class DoRepository extends Delivery implements CrudInterface
+class DeRepository extends De implements CrudInterface
 {
     public function dataRepository()
     {

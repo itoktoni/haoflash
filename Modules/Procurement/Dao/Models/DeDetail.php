@@ -5,24 +5,25 @@ namespace Modules\Procurement\Dao\Models;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Models\Product;
+use Modules\Procurement\Dao\Facades\DeFacades;
 use Modules\Procurement\Dao\Facades\DeliveryFacades;
 use Modules\Procurement\Dao\Facades\DoFacades;
 
-class DoDetail extends Model
+class DeDetail extends Model
 {
-    protected $table = 'ro_detail';
-    protected $primaryKey = 'ro_detail_ro_code';
+    protected $table = 'do_detail';
+    protected $primaryKey = 'do_detail_do_code';
 
     protected $fillable = [
-        'ro_detail_ro_code',
-        'ro_detail_notes',
-        'ro_detail_product_id',
-        'ro_detail_product_price',
-        'ro_detail_qty',
-        'ro_detail_price',
-        'ro_detail_total',
-        'ro_detail_receive',
-        'ro_detail_remaining',
+        'do_detail_do_code',
+        'do_detail_notes',
+        'do_detail_product_id',
+        'do_detail_product_price',
+        'do_detail_qty',
+        'do_detail_price',
+        'do_detail_total',
+        'do_detail_receive',
+        'do_detail_prepare',
     ];
 
     // public $with = ['has_product'];
@@ -30,24 +31,24 @@ class DoDetail extends Model
     public $timestamps = false;
     public $incrementing = false;
 
-    public function mask_ro_code()
+    public function mask_do_code()
     {
-        return 'ro_detail_ro_code';
+        return 'do_detail_do_code';
     }
 
     public function setMaskPoCodeAttribute($value)
     {
-        $this->attributes[$this->mask_ro_code()] = $value;
+        $this->attributes[$this->mask_do_code()] = $value;
     }
 
     public function getMaskPoCodeAttribute()
     {
-        return $this->{$this->mask_ro_code()};
+        return $this->{$this->mask_do_code()};
     }
 
     public function mask_product_id()
     {
-        return 'ro_detail_product_id';
+        return 'do_detail_product_id';
     }
 
     public function setMaskProductIdAttribute($value)
@@ -67,7 +68,7 @@ class DoDetail extends Model
 
     public function mask_product_price()
     {
-        return 'ro_detail_product_price';
+        return 'do_detail_product_price';
     }
 
     public function setMaskProductPriceAttribute($value)
@@ -82,7 +83,7 @@ class DoDetail extends Model
 
     public function mask_receive_price()
     {
-        return 'ro_detail_receive_price';
+        return 'do_detail_receive_price';
     }
 
     public function setMaskReceivePriceAttribute($value)
@@ -98,7 +99,7 @@ class DoDetail extends Model
 
     public function mask_qty()
     {
-        return 'ro_detail_qty';
+        return 'do_detail_qty';
     }
 
     public function setMaskQtyAttribute($value)
@@ -113,7 +114,7 @@ class DoDetail extends Model
 
     public function mask_price()
     {
-        return 'ro_detail_price';
+        return 'do_detail_price';
     }
 
     public function setMaskPriceAttribute($value)
@@ -128,7 +129,7 @@ class DoDetail extends Model
 
     public function mask_sent()
     {
-        return 'ro_detail_sent';
+        return 'do_detail_sent';
     }
 
     public function setMaskSentAttribute($value)
@@ -143,7 +144,7 @@ class DoDetail extends Model
 
     public function mask_receive()
     {
-        return 'ro_detail_receive';
+        return 'do_detail_receive';
     }
 
     public function setMaskReceiveAttribute($value)
@@ -158,7 +159,7 @@ class DoDetail extends Model
 
     public function mask_notes()
     {
-        return 'ro_detail_notes';
+        return 'do_detail_notes';
     }
 
     public function setMaskNotesAttribute($value)
@@ -173,7 +174,7 @@ class DoDetail extends Model
 
     public function mask_total()
     {
-        return 'ro_detail_total';
+        return 'do_detail_total';
     }
 
     public function setMaskTotalAttribute($value)
@@ -193,6 +194,6 @@ class DoDetail extends Model
 
     public function has_master()
     {
-        return $this->hasOne(Delivery::class, DeliveryFacades::getKeyName(), $this->mask_ro_code());
+        return $this->hasOne(De::class, DeFacades::getKeyName(), $this->mask_do_code());
     }
 }

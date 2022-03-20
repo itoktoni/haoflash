@@ -3,35 +3,51 @@
 namespace Modules\Procurement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Modules\Finance\Dao\Enums\PaymentMethod;
-use Modules\Finance\Dao\Enums\PaymentStatus;
-use Modules\Finance\Dao\Repositories\BankRepository;
-use Modules\Finance\Dao\Repositories\PaymentRepository;
+use Modules\Item\Dao\Enums\CategoryType;
+use Modules\Item\Dao\Facades\CategoryFacades;
+use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
-use Modules\Procurement\Dao\Enums\PurchasePayment;
-use Modules\Procurement\Dao\Enums\PurchaseStatus;
-use Modules\Procurement\Dao\Enums\SupplierPph;
+use Modules\Procurement\Dao\Enums\DeliveryStatus;
 use Modules\Procurement\Dao\Enums\SupplierPpn;
 use Modules\Procurement\Dao\Enums\SupplierType;
 use Modules\Procurement\Dao\Facades\BranchFacades;
+use Modules\Procurement\Dao\Facades\DeDetailFacades;
+use Modules\Procurement\Dao\Facades\DeFacades;
+use Modules\Procurement\Dao\Facades\DePrepareFacades;
+use Modules\Procurement\Dao\Facades\DeReceiveFacades;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
+use Modules\Procurement\Dao\Models\DePrepare;
 use Modules\Procurement\Dao\Models\PoReceive;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
-use Modules\Procurement\Dao\Repositories\PurchaseRepository;
+use Modules\Procurement\Dao\Repositories\DeRepository;
+use Modules\Procurement\Dao\Repositories\RequestRepository;
+use Modules\Procurement\Dao\Repositories\RoRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
+use Modules\Procurement\Http\Requests\DeliveryPrepareRequest;
+use Modules\Procurement\Http\Requests\DeliveryReceiveRequest;
+use Modules\Procurement\Http\Requests\DeliveryRequest;
 use Modules\Procurement\Http\Requests\PaymentRequest;
 use Modules\Procurement\Http\Requests\PurchaseReceiveRequest;
 use Modules\Procurement\Http\Requests\PurchaseRequest;
-use Modules\Procurement\Http\Services\DeletePurchaseService;
+use Modules\Procurement\Http\Requests\RequestReceiveRequest;
+use Modules\Procurement\Http\Requests\RequestRequest;
+use Modules\Procurement\Http\Services\DeletePrepareService;
+use Modules\Procurement\Http\Services\DeleteRequestService;
 use Modules\Procurement\Http\Services\DeleteReceiveService;
-use Modules\Procurement\Http\Services\PurchaseCreateService;
+use Modules\Procurement\Http\Services\DeliveryCreateService;
+use Modules\Procurement\Http\Services\DeliveryPrepareService;
+use Modules\Procurement\Http\Services\DeliveryReceiveService;
+use Modules\Procurement\Http\Services\DeliveryUpdateService;
 use Modules\Procurement\Http\Services\PurchaseReceiveService;
 use Modules\Procurement\Http\Services\PurchaseUpdateService;
+use Modules\Procurement\Http\Services\RequestCreateService;
+use Modules\Procurement\Http\Services\RequestReceiveService;
+use Modules\Procurement\Http\Services\RequestUpdateService;
 use Modules\System\Dao\Enums\GroupUserType;
 use Modules\System\Http\Requests\DeleteRequest;
+use Modules\System\Http\Requests\GeneralRequest;
 use Modules\System\Http\Services\CreateService;
 use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\SingleService;
@@ -40,13 +56,13 @@ use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
 
-class PurchaseOrderController extends Controller
+class DeliveryOrderController extends Controller
 {
     public static $template;
     public static $service;
     public static $model;
 
-    public function __construct(PurchaseRepository $model, SingleService $service)
+    public function __construct(DeRepository $model, SingleService $service)
     {
         self::$model = self::$model ?? $model;
         self::$service = self::$service ?? $service;
@@ -54,24 +70,28 @@ class PurchaseOrderController extends Controller
 
     private function share($data = [])
     {
-        // $product = Views::option(new ProductRepository());
-        // $supplier = Views::option(new SupplierRepository());
+        $get = auth()->user()->branch;
+        $branch = Views::option(new BranchRepository(), false, true)->where(BranchFacades::getKeyName(), '!=', env('BRANCH_ID'));
+        if (auth()->user()->mask_group_user != GroupUserType::Developer) {
+            $branch = $branch->where(BranchFacades::getKeyName(), auth()->user()->branch);
+        }
+        $branch = $branch->pluck(BranchFacades::mask_name(), BranchFacades::getKeyName())
+            ->prepend('- Select Branch -', '');
 
-        $supplier = Views::option(new SupplierRepository(), false, true)->mapWithKeys(function ($item) {
-            $pph = '';
-            if ($item->mask_pph) {
-                $pph = ' (' . strtolower(SupplierPph::getDescription($item->mask_pph)) . ')';
-            }
-            $data[$item->supplier_id] = $item->supplier_name . ' - ' . strtoupper(SupplierPpn::getDescription($item->supplier_ppn)) . $pph;
-            return $data;
-        })->prepend('- Select Supplier -', '')->toArray();
+        $category = Views::option(new CategoryRepository(), false, true)
+            ->where(CategoryFacades::mask_type(), '!=', CategoryType::BDP)
+            ->pluck(CategoryFacades::mask_name(), CategoryFacades::getKeyName())
+            ->prepend('- Select Category -');
 
-        $category = Views::option(new CategoryRepository());
+        $product = Views::option(new ProductRepository(), false, true)
+            ->where(CategoryFacades::mask_type(), '!=', CategoryType::BDP)
+            ->pluck(ProductFacades::mask_name(), ProductFacades::getKeyName())
+            ->prepend('- Select Product -');
 
         $view = [
-            // 'product' => $product,
+            'product' => $product,
             'category' => $category,
-            'supplier' => $supplier,
+            'branch' => $branch,
             'model' => self::$model,
         ];
         return array_merge($view, $data);
@@ -86,18 +106,14 @@ class PurchaseOrderController extends Controller
 
     public function create()
     {
-        $product = Views::option(new ProductRepository());
-        // $status = PurchaseStatus::getOptions();
-        $status = [PurchaseStatus::Create => PurchaseStatus::getDescription(PurchaseStatus::Create)];
-        // if(auth()->user()->group_user == GroupUserType::Developer){
-        // }
+        $status = [DeliveryStatus::Create => DeliveryStatus::getDescription(DeliveryStatus::Create)];
+
         return view(Views::create())->with($this->share([
-            'product' => $product,
             'status' => $status,
         ]));
     }
 
-    public function save(PurchaseRequest $request, PurchaseCreateService $service)
+    public function save(DeliveryRequest $request, DeliveryCreateService $service)
     {
         $data = $service->save(self::$model, $request);
         return Response::redirectBack($data);
@@ -108,13 +124,9 @@ class PurchaseOrderController extends Controller
         return $service
             ->setModel(self::$model)
             ->EditStatus([
-                self::$model->mask_status() => PurchaseStatus::class,
-                self::$model->mask_payment() => PurchasePayment::class,
+                self::$model->mask_status() => DeliveryStatus::class,
             ])->EditColumn([
-                self::$model->mask_dpp() => 'mask_dpp_format',
-                self::$model->mask_pph() => 'mask_pph_format',
-                self::$model->mask_ppn() => 'mask_ppn_format',
-                'po_updated_at' => 'po_updated_at',
+                'do_updated_at' => 'do_updated_at',
                 self::$model->mask_total() => 'mask_total_rupiah',
             ])->EditAction([
                 'page'      => config('page'),
@@ -124,23 +136,21 @@ class PurchaseOrderController extends Controller
 
     public function edit($code)
     {
-        $data = $this->get($code);
-        $product = Views::option(new ProductRepository());
+        $data = $this->get($code, ['has_detail']);
 
-        $status = PurchaseStatus::getOptions();
+        $status = DeliveryStatus::getOptions();
         if (auth()->user()->group_user != GroupUserType::Developer) {
-            $status = [$data->mask_status => PurchaseStatus::getDescription($data->mask_status)];
+            $status = [$data->mask_status => DeliveryStatus::getDescription($data->mask_status)];
         }
 
         return view(Views::update(config('page'), config('folder')))->with($this->share([
             'model' => $data,
-            'product' => $product,
             'status' => $status,
             'detail' => $data->has_detail,
         ]));
     }
 
-    public function update($code, PurchaseRequest $request, PurchaseUpdateService $service)
+    public function update($code, DeliveryRequest $request, DeliveryUpdateService $service)
     {
         $data = $service->update(self::$model, $request, $code);
         return Response::redirectBack($data);
@@ -165,54 +175,21 @@ class PurchaseOrderController extends Controller
         return self::$service->get(self::$model, $code);
     }
 
-    public function delete(DeleteRequest $request, DeletePurchaseService $service)
+    public function delete(DeleteRequest $request)
     {
         Alert::error('Delete tidak diperbolehkan !');
         $data = [];
-        // $master = $request->get('master');
-        // $code = $request->get('code');
-
-        // if ($request->has('transaction')) {
-        //     $data = $service->deleteTransaction(self::$model, $master, $code);
-        // }
-        // $data = $service->delete(self::$model, $code);
         return Response::redirectBack($data);
     }
 
-    public function formPayment($code)
-    {
-        $data = $this->get($code);
-        $supplier = $data->has_supplier;
-        $bank = Views::option(new BankRepository(), false, true)
-            ->pluck('bank_name', 'bank_name')->prepend('- Select Bank - ', '')->toArray();
-
-        $method = PaymentMethod::getOptions();
-
-        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
-            ->with($this->share([
-                'model' => $data,
-                'bank' => $bank,
-                'method' => $method,
-                'supplier' => $supplier,
-                'payment' => PaymentStatus::class,
-                'detail' => $data->has_payment ?? false
-            ]));
-    }
-
-    public function postPayment(PaymentRequest $request, CreateService $service, PaymentRepository $repository)
-    {
-        $data = $service->save($repository, $request);
-        return Response::redirectBack($data);
-    }
-
-    public function formReceive($code)
+    public function formPrepare($code)
     {
         $data = $this->get($code);
         $product = Views::option(new ProductRepository());
 
-        $status = PurchaseStatus::getOptions();
+        $status = DeliveryStatus::getOptions();
         if (auth()->user()->group_user != GroupUserType::Developer) {
-            $status = [$data->mask_status => PurchaseStatus::getDescription($data->mask_status)];
+            $status = [$data->mask_status => DeliveryStatus::getDescription($data->mask_status)];
         }
 
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
@@ -224,15 +201,98 @@ class PurchaseOrderController extends Controller
             ]));
     }
 
-    public function postReceive($code, PurchaseRequest $request, PurchaseUpdateService $service)
+    public function postPrepare($code, PurchaseRequest $request, PurchaseUpdateService $service)
     {
         $data = $service->update(self::$model, $request, $code);
         return Response::redirectBack($data);
     }
 
+    public function formPrepareDetail($code)
+    {
+        $id = request()->get('detail');
+
+        $query = DePrepareFacades::with(['has_master', 'has_product', 'has_product.has_category'])
+            ->where(DePrepareFacades::mask_do_code(), $code)
+            ->where(DePrepareFacades::mask_product_id(), $id);
+
+        $total = $query->sum(DePrepareFacades::mask_qty());
+        $detail = $query->get();
+        $prepare = $query->first();
+
+        if (!$prepare) {
+
+            $prepare = DeDetailFacades::with(['has_master', 'has_product', 'has_product.has_category'])
+                ->where(DeDetailFacades::mask_do_code(), $code)
+                ->where(DeDetailFacades::mask_product_id(), $id)->first();
+        }
+
+        $model = $prepare->has_master ?? false;
+
+        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
+            ->with($this->share([
+                'model' => (object) $model,
+                'detail' => $detail,
+                'prepare' => $prepare,
+                'total' => $total,
+            ]));
+    }
+
+    public function postPrepareDetail(DeliveryPrepareRequest $request, DeliveryPrepareService $service, DePrepare $model)
+    {
+        $data = $service->save($model, $request);
+        return Response::redirectBack($data);
+    }
+
+    public function showPrepareDetail($code)
+    {
+        $model = DePrepareFacades::with(['has_detail', 'has_detail.has_product', 'has_detail.has_supplier'])->findOrFail($code);
+
+        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
+            ->with($this->share([
+                'model' => $model,
+                'detail' => $model->has_detail ?? false,
+            ]));
+    }
+
+    public function deletePrepareDetail($code, DeletePrepareService $service)
+    {
+        $check = $service->delete($code);
+        return Response::redirectBack();
+    }
+
+    public function formReceive($code)
+    {
+        $data = $this->get($code);
+        if ($data->mask_status == DeliveryStatus::Ready || $data->mask_status == DeliveryStatus::Receive) {
+            $product = Views::option(new ProductRepository());
+
+            $status = DeliveryStatus::getOptions([DeliveryStatus::Ready, DeliveryStatus::Receive, DeliveryStatus::Cancel]);
+            if (auth()->user()->group_user != GroupUserType::Developer) {
+                $status = [$data->mask_status => DeliveryStatus::getDescription($data->mask_status)];
+            }
+
+            return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
+                ->with($this->share([
+                    'model' => $data,
+                    'detail' => $data->has_detail,
+                    'product' => $product,
+                    'status' => $status,
+                ]));
+        }
+
+        Alert::error('Status Must Ready for Pickup');
+        return Response::redirectBack('Not Otorized');
+    }
+
+    public function postReceive(DeliveryReceiveRequest $request, DeliveryReceiveService $service)
+    {
+        $data = $service->save(self::$model, $request);
+        return Response::redirectBack($data);
+    }
+
     public function formReceiveDetail($code)
     {
-        $data_branch = BranchFacades::find(env('BRANCH_ID'));
+        $data_branch = BranchFacades::first();
         $branch = [];
         if ($data_branch) {
             $branch[$data_branch->{$data_branch->getKeyName()}] = $data_branch->mask_name;

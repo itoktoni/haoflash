@@ -47,6 +47,11 @@ class Category extends Model
 
     public function getMaskTypeAttribute()
     {
+        return $this->{$this->mask_type()};
+    }
+
+    public function getMaskTypeNameAttribute()
+    {
         return CategoryType::getDescription($this->{$this->mask_type()});
     }
 

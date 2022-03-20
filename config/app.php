@@ -5,6 +5,7 @@ use Modules\Finance\Dao\Enums\PaymentMethod;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Master\Dao\Enums\PaymentModel;
 use Modules\Master\Dao\Enums\PaymentType;
+use Modules\Procurement\Dao\Enums\DeliveryStatus;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\System\Dao\Enums\ActionStatus;
@@ -289,6 +290,7 @@ return [
         'ActionStatus' => ActionStatus::class,
         'TransactionStatus' => TransactionStatus::class,
         'PurchaseStatus' => PurchaseStatus::class,
+        'DeliveryStatus' => DeliveryStatus::class,
         'CategoryType' => CategoryType::class,
         'PaymentModel' => PaymentModel::class,
         'PaymentType' => PaymentType::class,

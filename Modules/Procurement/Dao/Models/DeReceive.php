@@ -21,74 +21,74 @@ use Modules\System\Dao\Facades\TeamFacades;
 use Modules\System\Plugins\Helper;
 use Wildside\Userstamps\Userstamps;
 
-class PoReceive extends Model
+class DeReceive extends Model
 {
     use SoftDeletes, Userstamps, PowerJoins, FilterQueryString;
 
-    protected $table = 'po_receive';
-    protected $primaryKey = 'po_receive_code';
+    protected $table = 'do_receive';
+    protected $primaryKey = 'do_receive_code';
     protected $primaryType = 'string';
 
     protected $fillable = [
-        'po_receive_code',
-        'po_receive_po_code',
-        'po_receive_date',
-        'po_receive_expired_date',
-        'po_receive_created_at',
-        'po_receive_updated_at',
-        'po_receive_deleted_at',
-        'po_receive_created_by',
-        'po_receive_updated_by',
-        'po_receive_qty',
-        'po_receive_receive',
-        'po_receive_buy',
-        'po_receive_sell',
-        'po_receive_start',
-        'po_receive_end',
-        'po_receive_type',
-        'po_receive_product_id',
-        'po_receive_supplier_id',
-        'po_receive_branch_id',
+        'do_receive_code',
+        'do_receive_do_code',
+        'do_receive_date',
+        'do_receive_expired_date',
+        'do_receive_created_at',
+        'do_receive_updated_at',
+        'do_receive_deleted_at',
+        'do_receive_created_by',
+        'do_receive_updated_by',
+        'do_receive_qty',
+        'do_receive_receive',
+        'do_receive_buy',
+        'do_receive_sell',
+        'do_receive_start',
+        'do_receive_end',
+        'do_receive_type',
+        'do_receive_product_id',
+        'do_receive_supplier_id',
+        'do_receive_branch_id',
     ];
 
     // public $with = ['has_detail', 'has_supplier'];
 
     protected $filters = [
-        'po_receive_supplier_id',
+        'do_receive_supplier_id',
     ];
 
     public $timestamps = true;
     public $incrementing = false;
 
-    const CREATED_AT = 'po_receive_created_at';
-    const UPDATED_AT = 'po_receive_updated_at';
-    const DELETED_AT = 'po_receive_deleted_at';
+    const CREATED_AT = 'do_receive_created_at';
+    const UPDATED_AT = 'do_receive_updated_at';
+    const DELETED_AT = 'do_receive_deleted_at';
 
-    const CREATED_BY = 'po_receive_created_by';
-    const UPDATED_BY = 'po_receive_updated_by';
-    const DELETED_BY = 'po_receive_deleted_by';
+    const CREATED_BY = 'do_receive_created_by';
+    const UPDATED_BY = 'do_receive_updated_by';
+    const DELETED_BY = 'do_receive_deleted_by';
 
-    public $searching = 'po_receive_code';
+    public $searching = 'do_receive_code';
     public $datatable = [
-        'po_receive_code' => [true => 'Purchase Code'],
+        'do_receive_code' => [true => 'Purchase Code'],
         'supplier_name' => [true => 'Supplier Name'],
-        'po_receive_date_order' => [true => 'Date', 'width' => 60],
-        'po_receive_sum_value' => [false => 'Value', 'width' => 60],
-        'po_receive_sum_discount' => [false => 'Discount', 'width' => 60],
-        'po_receive_sum_total' => [true => 'Total', 'width' => 60],
-        'po_receive_payment' => [true => 'Payment', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
-        'po_receive_status' => [true => 'Status', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
+        'do_receive_date_order' => [true => 'Date', 'width' => 60],
+        'do_receive_sum_value' => [false => 'Value', 'width' => 60],
+        'do_receive_sum_discount' => [false => 'Discount', 'width' => 60],
+        'do_receive_sum_total' => [true => 'Total', 'width' => 60],
+        'do_receive_payment' => [true => 'Payment', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
+        'do_receive_status' => [true => 'Status', 'width' => 60, 'class' => 'text-center', 'status' => 'status'],
     ];
 
     protected $casts = [
-        'po_receive_created_at' => 'datetime:Y-m-d',
-        'po_receive_status' => 'integer',
-        'po_receive_payment' => 'integer',
+        'do_receive_created_at' => 'datetime:Y-m-d',
+        'do_receive_status' => 'integer',
+        'do_receive_payment' => 'integer',
     ];
 
     public function mask_supplier_id()
     {
-        return 'po_receive_supplier_id';
+        return 'do_receive_supplier_id';
     }
 
     public function setMaskSupplierIdAttribute($value)
@@ -103,7 +103,7 @@ class PoReceive extends Model
 
     public function mask_branch_id()
     {
-        return 'po_receive_branch_id';
+        return 'do_receive_branch_id';
     }
 
     public function setMaskBranchIDAttribute($value)
@@ -118,7 +118,7 @@ class PoReceive extends Model
 
     public function mask_product_id()
     {
-        return 'po_receive_product_id';
+        return 'do_receive_product_id';
     }
 
     public function setMaskProductIdAttribute($value)
@@ -130,25 +130,25 @@ class PoReceive extends Model
     {
         return $this->{$this->mask_product_id()};
     }
-
-    public function mask_po_code()
+    
+    public function mask_do_code()
     {
-        return 'po_receive_po_code';
+        return 'do_receive_do_code';
     }
 
     public function setMaskPoCodeAttribute($value)
     {
-        $this->attributes[$this->mask_po_code()] = $value;
+        $this->attributes[$this->mask_do_code()] = $value;
     }
 
     public function getMaskPoCodeAttribute()
     {
-        return $this->{$this->mask_po_code()};
+        return $this->{$this->mask_do_code()};
     }
 
     public function mask_qty()
     {
-        return 'po_receive_qty';
+        return 'do_receive_qty';
     }
 
     public function setMaskQtyAttribute($value)
@@ -163,7 +163,7 @@ class PoReceive extends Model
 
     public function mask_receive()
     {
-        return 'po_receive_receive';
+        return 'do_receive_receive';
     }
 
     public function setMaskReceiveAttribute($value)
@@ -233,6 +233,7 @@ class PoReceive extends Model
 
     public function has_master()
     {
-        return $this->hasone(Po::class, PoFacades::getKeyName(), $this->mask_po_code());
+        return $this->hasone(Po::class, PoFacades::getKeyName(), $this->mask_do_code());
     }
+
 }

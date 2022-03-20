@@ -99,12 +99,8 @@ class PurchaseReceiveRequest extends FormRequest
             }
             if ($receive > $qty) {
 
-                $validator->errors()->add('po_receive_receive', 'Qty receive harus lebih besar dari Qty');
+                $validator->errors()->add('po_receive_receive', 'Qty receive tidak boleh lebih dari Qty');
             }
-            // if ($this->po_receive_type == CategoryType::Virtual && $this->po_receive_sell <= $this->po_receive_buy) {
-
-            //     $validator->errors()->add('po_receive_sell', 'Harga Jual harus lebih besar dari harga beli');
-            // }
             if (($remaining + $receive) > $qty) {
 
                 $validator->errors()->add('po_receive_receive', 'Qty Receive Sudah Melebihi Qty Pesanan');

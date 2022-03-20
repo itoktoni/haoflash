@@ -20,8 +20,8 @@ class Stock extends Model
     protected $fillable = [
         'stock_id',
         'stock_code',
-        'stock_po_code',
-        'stock_po_receive_code',
+        'stock_primary_code',
+        'stock_reference_code',
         'stock_branch_id',
         'stock_product_id',
         'stock_supplier_id',
@@ -106,34 +106,49 @@ class Stock extends Model
         return Helper::createRupiah($this->{$this->mask_buy()});
     }
 
-    public function mask_po_code()
+    public function mask_primary_code()
     {
-        return 'stock_po_code';
+        return 'stock_primary_code';
     }
 
-    public function setMaskPoCodeAttribute($value)
+    public function setMaskPrimaryCodeAttribute($value)
     {
-        $this->attributes[$this->mask_po_code()] = $value;
+        $this->attributes[$this->mask_primary_code()] = $value;
     }
 
-    public function getMaskPoCodeAttribute()
+    public function getMaskPrimaryCodeAttribute()
     {
-        return $this->{$this->mask_po_code()};
+        return $this->{$this->mask_primary_code()};
     }
 
-    public function mask_receive_code()
+    public function mask_reference_code()
     {
-        return 'stock_po_receive_code';
+        return 'stock_reference_code';
     }
 
-    public function setMaskReceiveCodeAttribute($value)
+    public function setMaskReferenceCodeAttribute($value)
     {
-        $this->attributes[$this->mask_receive_code()] = $value;
+        $this->attributes[$this->mask_reference_code()] = $value;
     }
 
-    public function getMaskReceiveCodeAttribute()
+    public function getMaskReferenceCodeAttribute()
     {
-        return $this->{$this->mask_receive_code()};
+        return $this->{$this->mask_reference_code()};
+    }
+
+    public function mask_prepare_code()
+    {
+        return 'stock_do_prepare_code';
+    }
+
+    public function setMaskPrepareCodeAttribute($value)
+    {
+        $this->attributes[$this->mask_prepare_code()] = $value;
+    }
+
+    public function getMaskPrepareCodeAttribute()
+    {
+        return $this->{$this->mask_prepare_code()};
     }
 
     public function mask_branch_id()
@@ -199,6 +214,21 @@ class Stock extends Model
     public function getMaskQtyAttribute()
     {
         return $this->{$this->mask_qty()};
+    }
+
+    public function mask_transfer()
+    {
+        return 'stock_transfer';
+    }
+
+    public function setMaskTransferAttribute($value)
+    {
+        $this->attributes[$this->mask_transfer()] = $value;
+    }
+
+    public function getMaskTransferAttribute()
+    {
+        return $this->{$this->mask_transfer()};
     }
 
     public function has_branch()

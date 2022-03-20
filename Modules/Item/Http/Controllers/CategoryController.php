@@ -60,7 +60,7 @@ class CategoryController extends Controller
         return $service
             ->setModel(self::$model)
             ->EditColumn([
-                self::$model->mask_type() => 'mask_type',
+                self::$model->mask_type() => 'mask_type_name',
             ])
             ->make();
     }

@@ -11,86 +11,90 @@ use Modules\Finance\Dao\Facades\PaymentFacades;
 use Modules\Finance\Dao\Models\Payment;
 use Modules\Procurement\Dao\Enums\PurchasePayment;
 use Modules\Procurement\Dao\Facades\BranchFacades;
+use Modules\Procurement\Dao\Facades\DeDetailFacades;
+use Modules\Procurement\Dao\Facades\DeFacades;
+use Modules\Procurement\Dao\Facades\DePrepareFacades;
+use Modules\Procurement\Dao\Facades\DeReceiveFacades;
 use Modules\Procurement\Dao\Facades\RoDetailFacades;
 use Modules\Procurement\Dao\Facades\RoFacades;
+use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\Procurement\Dao\Facades\SupplierFacades;
 use Modules\System\Dao\Facades\TeamFacades;
 use Modules\System\Plugins\Helper;
 use Wildside\Userstamps\Userstamps;
 
-class Delivery extends Model
+class De extends Model
 {
     use SoftDeletes, Userstamps, PowerJoins, FilterQueryString;
 
-    protected $table = 'ro';
-    protected $primaryKey = 'ro_code';
+    protected $table = 'do';
+    protected $primaryKey = 'do_code';
     protected $primaryType = 'string';
 
     protected $fillable = [
-        'ro_code',
-        'ro_created_at',
-        'ro_updated_at',
-        'ro_invoiced_at',
-        'ro_received_at',
-        'ro_deleted_at',
-        'ro_created_by',
-        'ro_invoiced_by',
-        'ro_received_by',
-        'ro_updated_by',
-        'ro_deleted_by',
-        'ro_branch_id',
-        'ro_date_order',
-        'ro_status',
-        'ro_notes',
-        'ro_sum_qty',
-        'ro_sum_value',
-        'ro_sum_tax',
-        'ro_sum_discount',
-        'ro_sum_total',
+        'do_code',
+        'do_created_at',
+        'do_updated_at',
+        'do_invoiced_at',
+        'do_received_at',
+        'do_deleted_at',
+        'do_created_by',
+        'do_invoiced_by',
+        'do_received_by',
+        'do_updated_by',
+        'do_deleted_by',
+        'do_branch_id',
+        'do_date_order',
+        'do_status',
+        'do_notes',
+        'do_sum_qty',
+        'do_sum_value',
+        'do_sum_tax',
+        'do_sum_discount',
+        'do_sum_total',
     ];
 
     // public $with = ['has_detail', 'has_supplier'];
 
     protected $filters = [
-        'ro_branch_id',
+        'do_branch_id',
     ];
 
     public $timestamps = true;
     public $incrementing = false;
     public $rules = [
-        'ro_code' => 'required|min:3',
+        'do_code' => 'required|min:3',
     ];
 
-    const CREATED_AT = 'ro_created_at';
-    const UPDATED_AT = 'ro_updated_at';
-    const DELETED_AT = 'ro_deleted_at';
+    const CREATED_AT = 'do_created_at';
+    const UPDATED_AT = 'do_updated_at';
+    const DELETED_AT = 'do_deleted_at';
 
-    const CREATED_BY = 'ro_created_by';
-    const UPDATED_BY = 'ro_updated_by';
-    const DELETED_BY = 'ro_deleted_by';
+    const CREATED_BY = 'do_created_by';
+    const UPDATED_BY = 'do_updated_by';
+    const DELETED_BY = 'do_deleted_by';
 
-    public $searching = 'ro_code';
+    public $searching = 'do_code';
     public $datatable = [
-        'ro_code' => [true => 'Request Code', 'width' => 100],
-        'ro_date_order' => [true => 'Date', 'width' => 60],
+        'do_code' => [true => 'Delivery Code', 'width' => 100],
+        'do_date_order' => [true => 'Date', 'width' => 60],
         'branch_name' => [true => 'Branch'],
-        'ro_updated_at' => [true => 'Last At', 'width' => 130],
-        'ro_sum_value' => [false => 'Value', 'width' => 80],
-        'ro_sum_total' => [true => 'Total', 'width' => 80],
-        'ro_status' => [true => 'Status', 'width' => 50, 'class' => 'text-center', 'status' => 'status'],
+        'do_updated_at' => [true => 'Last At', 'width' => 130],
+        'do_sum_value' => [false => 'Value', 'width' => 80],
+        'do_sum_total' => [true => 'Total', 'width' => 80],
+        'do_status' => [true => 'Status', 'width' => 50, 'class' => 'text-center', 'status' => 'status'],
     ];
 
     protected $casts = [
-        'ro_created_at' => 'datetime:Y-m-d H:i:s',
-        'ro_updated_at' => 'datetime:Y-m-d H:i:s',
-        'ro_status' => 'integer',
-        'ro_payment' => 'integer',
+        'do_created_at' => 'datetime:Y-m-d H:i:s',
+        'do_updated_at' => 'datetime:Y-m-d H:i:s',
+        'do_status' => 'integer',
+        'do_payment' => 'integer',
     ];
 
     public function mask_status()
     {
-
-        return 'ro_status';
+        return 'do_status';
     }
 
     public function setMaskStatusAttribute($value)
@@ -105,7 +109,7 @@ class Delivery extends Model
 
     public function mask_last_status()
     {
-        return 'ro_last_status';
+        return 'do_last_status';
     }
 
     public function setLastMaskStatusAttribute($value)
@@ -120,7 +124,7 @@ class Delivery extends Model
 
     public function mask_payment()
     {
-        return 'ro_payment';
+        return 'do_payment';
     }
 
     public function setMaskPaymentAttribute($value)
@@ -135,7 +139,7 @@ class Delivery extends Model
 
     public function mask_branch_id()
     {
-        return 'ro_branch_id';
+        return 'do_branch_id';
     }
 
     public function setMaskBranchIdAttribute($value)
@@ -155,7 +159,7 @@ class Delivery extends Model
 
     public function mask_total()
     {
-        return 'ro_sum_total';
+        return 'do_sum_total';
     }
 
     public function setMaskTotalAttribute($value)
@@ -175,7 +179,7 @@ class Delivery extends Model
 
     public function mask_notes()
     {
-        return 'ro_notes';
+        return 'do_notes';
     }
 
     public function setMaskNotesAttribute($value)
@@ -195,7 +199,7 @@ class Delivery extends Model
 
     public function mask_value()
     {
-        return 'ro_sum_value';
+        return 'do_sum_value';
     }
 
     public function setMaskValueAttribute($value)
@@ -215,7 +219,7 @@ class Delivery extends Model
 
     public function mask_discount()
     {
-        return 'ro_sum_discount';
+        return 'do_sum_discount';
     }
 
     public function setMaskDiscountAttribute($value)
@@ -235,7 +239,7 @@ class Delivery extends Model
 
     public function mask_tax()
     {
-        return 'ro_sum_tax';
+        return 'do_sum_tax';
     }
 
     public function setMaskTaxAttribute($value)
@@ -255,7 +259,7 @@ class Delivery extends Model
 
     public function mask_dpp()
     {
-        return 'ro_sum_dpp';
+        return 'do_sum_dpp';
     }
 
     public function setMaskDppAttribute($value)
@@ -275,7 +279,7 @@ class Delivery extends Model
 
     public function mask_ppn()
     {
-        return 'ro_sum_ppn';
+        return 'do_sum_ppn';
     }
 
     public function setMaskPpnAttribute($value)
@@ -295,7 +299,7 @@ class Delivery extends Model
 
     public function mask_pph()
     {
-        return 'ro_sum_pph';
+        return 'do_sum_pph';
     }
 
     public function setMaskPphAttribute($value)
@@ -345,7 +349,7 @@ class Delivery extends Model
 
     public function has_detail()
     {
-        return $this->hasMany(RoDetail::class, RoDetailFacades::mask_ro_code(), RoFacades::getKeyName());
+        return $this->hasMany(DeDetail::class, DeDetailFacades::mask_do_code(), DeFacades::getKeyName());
     }
 
     public function has_user()
@@ -361,6 +365,21 @@ class Delivery extends Model
     public function has_payment()
     {
         return $this->hasMany(Payment::class, PaymentFacades::mask_reference(), $this->getKeyName());
+    }
+
+    public function has_prepare()
+    {
+        return $this->hasMany(DePrepare::class, DePrepareFacades::mask_do_code(), $this->getKeyName());
+    }
+
+    public function has_stock_prepare()
+    {
+        return $this->hasMany(Stock::class, StockFacades::mask_primary_code(), $this->getKeyName());
+    }
+
+    public function has_receive()
+    {
+        return $this->hasMany(DeReceive::class, DeReceiveFacades::mask_do_code(), $this->getKeyName());
     }
 
     public static function boot()

@@ -15,7 +15,7 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', __('Branch'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    {!! Form::label('name', __('Request From'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
     <div class="col-md-4 col-sm-4 {{ $errors->has('ro_branch_id') ? 'has-error' : ''}}">
         {{ Form::select('ro_branch_id', $branch, null, ['class'=> 'form-control', 'id' => 'branch']) }}
         {!! $errors->first('ro_branch_id', '<p class="help-block">:message</p>') !!}

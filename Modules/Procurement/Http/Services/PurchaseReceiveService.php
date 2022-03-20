@@ -26,8 +26,8 @@ class PurchaseReceiveService
 
                 StockFacades::create([
                     'stock_code' => Helper::autoNumber(StockFacades::getTable(), StockFacades::mask_code(), 'SN' . date('Ym'), 20),
-                    'stock_po_code' => $data->po_receive_po_code,
-                    'stock_po_receive_code' => $data->po_receive_code,
+                    'stock_primary_code' => $data->po_receive_po_code,
+                    'stock_reference_code' => $data->po_receive_code,
                     'stock_branch_id' => $data->po_receive_branch_id,
                     'stock_supplier_id' => $data->po_receive_supplier_id,
                     'stock_product_id' => $data->po_receive_product_id,
@@ -40,8 +40,8 @@ class PurchaseReceiveService
                 foreach (range($data->po_receive_start, $data->po_receive_end) as $selisih) {
                     StockFacades::create([
                         'stock_code' => $selisih,
-                        'stock_po_code' => $data->po_receive_po_code,
-                        'stock_po_receive_code' => $data->po_receive_code,
+                        'stock_primary_code' => $data->po_receive_po_code,
+                        'stock_reference_code' => $data->po_receive_code,
                         'stock_branch_id' => $data->po_receive_branch_id,
                         'stock_supplier_id' => $data->po_receive_supplier_id,
                         'stock_product_id' => $data->po_receive_product_id,
@@ -57,8 +57,8 @@ class PurchaseReceiveService
                 foreach (range($data->po_receive_start, $data->po_receive_end) as $selisih) {
                     StockFacades::create([
                         'stock_code' => $selisih,
-                        'stock_po_code' => $data->po_receive_po_code,
-                        'stock_po_receive_code' => $data->po_receive_code,
+                        'stock_primary_code' => $data->po_receive_po_code,
+                        'stock_reference_code' => $data->po_receive_code,
                         'stock_branch_id' => $data->po_receive_branch_id,
                         'stock_supplier_id' => $data->po_receive_supplier_id,
                         'stock_product_id' => $data->po_receive_product_id,

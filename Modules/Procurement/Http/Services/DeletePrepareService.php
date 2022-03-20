@@ -3,19 +3,23 @@
 namespace Modules\Procurement\Http\Services;
 
 use Illuminate\Validation\Rule;
+use Modules\Procurement\Dao\Facades\DePrepareFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
 use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Http\Services\DeleteService;
 use Modules\System\Plugins\Alert;
 
-class DeleteReceiveService
+class DeletePrepareService
 {
     public function delete($code)
     {
-        $check = PoReceiveFacades::find($code);
+        $check = DePrepareFacades::with(['has_detail'])->find($code);
+        
         if ($check) {
-            StockFacades::where(StockFacades::mask_reference_code(), $code)->delete();
+            $stock = $check->has_detail()->update([
+                StockFacades::mask_transfer() => null
+            ]);
             $check->delete();
         }
 
