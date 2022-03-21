@@ -54,9 +54,6 @@ class PurchaseOrderController extends Controller
 
     private function share($data = [])
     {
-        // $product = Views::option(new ProductRepository());
-        // $supplier = Views::option(new SupplierRepository());
-
         $supplier = Views::option(new SupplierRepository(), false, true)->mapWithKeys(function ($item) {
             $pph = '';
             if ($item->mask_pph) {

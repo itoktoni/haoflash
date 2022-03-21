@@ -81,12 +81,12 @@ class DeliveryOrderController extends Controller
         $category = Views::option(new CategoryRepository(), false, true)
             ->where(CategoryFacades::mask_type(), '!=', CategoryType::BDP)
             ->pluck(CategoryFacades::mask_name(), CategoryFacades::getKeyName())
-            ->prepend('- Select Category -');
+            ->prepend('- Select Category -', '');
 
         $product = Views::option(new ProductRepository(), false, true)
             ->where(CategoryFacades::mask_type(), '!=', CategoryType::BDP)
             ->pluck(ProductFacades::mask_name(), ProductFacades::getKeyName())
-            ->prepend('- Select Product -');
+            ->prepend('- Select Product -', '');
 
         $view = [
             'product' => $product,
