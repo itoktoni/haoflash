@@ -67,8 +67,8 @@ class Stock extends Model
         'product_name' => [true => 'Product'],
         'product_description' => [true => 'Product Description'],
         'stock_qty' => [true => 'Qty', 'width' => 50],
-        'stock_buy' => [true => 'Price','width' => 50],
-        'stock_expired' => [true => 'Expired','width' => 80],
+        'stock_buy' => [true => 'Price', 'width' => 50],
+        'stock_expired' => [true => 'Expired', 'width' => 80],
     ];
 
     public function mask_code()
@@ -231,6 +231,21 @@ class Stock extends Model
         return $this->{$this->mask_transfer()};
     }
 
+    public function mask_expired()
+    {
+        return 'stock_expired';
+    }
+
+    public function setMaskExpiredAttribute($value)
+    {
+        $this->attributes[$this->mask_expired()] = $value;
+    }
+
+    public function getMaskExpiredAttribute()
+    {
+        return $this->{$this->mask_expired()};
+    }
+
     public function has_branch()
     {
         return $this->hasOne(Branch::class, BranchFacades::getKeyName(), $this->mask_branch_id());
@@ -240,7 +255,7 @@ class Stock extends Model
     {
         return $this->hasOne(Supplier::class, SupplierFacades::getKeyName(), $this->mask_supplier_id());
     }
-   
+
     public function has_product()
     {
         return $this->hasOne(Product::class, ProductFacades::getKeyName(), $this->mask_product_id());

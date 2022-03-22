@@ -191,7 +191,7 @@
         $('#product').change(function(e) {
             var id = $("#product option:selected").val();
             $.ajax({
-                url: '{{ route("product_api") }}',
+                url: '{{ route("product_delivery_api") }}',
                 method: 'POST',
                 data: {
                     id: id,
@@ -200,12 +200,12 @@
                 success: function(result) {
                     if (result) {
                         // console.log(result);
-                        var mask_price = number_format(result.product_buy.toString());
+                        var mask_price = number_format(result.stock_buy);
                         var price = $('#price').val(mask_price);
                         var sub_total = $('#sub_total').val(mask_price);
                         var desc = $('#desc').val(result.product_description);
                         setTimeout(function() {
-                            $('#qty').val(1);
+                            $('#qty').val(result.stock_qty);
                             $('#qty').focus();
                         });
                     }
@@ -216,7 +216,7 @@
         $('#category').change(function(e) {
             var id = $("#category option:selected").val();
             $.ajax({
-                url: '{{ route("category_api") }}',
+                url: '{{ route("category_delivery_api") }}',
                 method: 'POST',
                 data: {
                     id: id,
@@ -227,7 +227,7 @@
                     $("#product").empty();
                     $('#product').append('<option value="">- Select Product -</option>');
                     $.each(result, function(i,item) {
-                        $('#product').append('<option value="' + item.product_id + '">' + item.product_name + '</option>');
+                        $('#product').append('<option value="' + item.id + '">' + item.name + '</option>');
                     });
                     $("#product").trigger("chosen:updated");
                 }

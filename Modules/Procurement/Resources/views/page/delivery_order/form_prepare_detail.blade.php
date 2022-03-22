@@ -44,7 +44,7 @@
 
                         {!! Form::label('name', __('Selling Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
                         <div class="col-md-4 col-sm-4 {{ $errors->has('do_prepare_sell') ? 'has-error' : ''}}">
-                            {!! Form::text('do_prepare_sell', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('do_prepare_sell', $prepare->mask_sell ?? 0, ['class' => 'form-control']) !!}
                             {!! $errors->first('do_prepare_sell', '<p class="help-block">:message</p>') !!}
                         </div>
 
@@ -72,7 +72,7 @@
                     <input type="hidden" value="{{ $prepare->has_product->has_category->mask_type ?? '' }}" name="do_prepare_type">
                     <input type="hidden" value="{{ $total ?? 0 }}" name="remaining">
                     <input type="hidden" value="{{ $model->mask_status ?? '' }}" name="status">
-                    
+                    <input type="hidden" value="{{ $prepare->mask_expired ?? '' }}" name="do_prepare_expired">
 
                     @if($prepare->has_product->has_category->mask_type != CategoryType::Accesories)
 

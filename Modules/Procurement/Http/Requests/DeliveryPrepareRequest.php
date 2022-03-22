@@ -72,7 +72,6 @@ class DeliveryPrepareRequest extends FormRequest
 
             $prepare = !empty($this->do_prepare_prepare) ? $this->do_prepare_prepare : 0;
             $qty = !empty($this->do_prepare_qty) ? $this->do_prepare_qty : 0;
-            // $remaining = !empty($this->remaining) ? $this->remaining : 0;
 
             if ($this->do_prepare_type != CategoryType::Accesories) {
 
@@ -100,6 +99,8 @@ class DeliveryPrepareRequest extends FormRequest
                 $stock = StockFacades::whereIn(StockFacades::mask_code(), $this->serial)
                     ->where(StockFacades::mask_product_id(), $this->do_prepare_product_id)
                     ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                    ->where(StockFacades::mask_expired(), $this->do_prepare_expired)
+                    ->where(StockFacades::mask_buy(), $this->do_prepare_buy)
                     ->whereNull(StockFacades::mask_transfer())
                     ->sum(StockFacades::mask_qty());
 
@@ -117,6 +118,8 @@ class DeliveryPrepareRequest extends FormRequest
             $remaining = StockFacades::where(StockFacades::mask_primary_code(), $this->do_prepare_do_code)
                 ->where(StockFacades::mask_product_id(), $this->do_prepare_product_id)
                 ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                ->where(StockFacades::mask_expired(), $this->do_prepare_expired)
+                ->where(StockFacades::mask_buy(), $this->do_prepare_buy)
                 ->where(StockFacades::mask_transfer(), 1)
                 ->sum(StockFacades::mask_qty());
 

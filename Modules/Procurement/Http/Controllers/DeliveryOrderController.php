@@ -89,7 +89,7 @@ class DeliveryOrderController extends Controller
             ->prepend('- Select Product -', '');
 
         $view = [
-            'product' => $product,
+            // 'product' => $product,
             'category' => $category,
             'branch' => $branch,
             'model' => self::$model,
@@ -210,6 +210,7 @@ class DeliveryOrderController extends Controller
     public function formPrepareDetail($code)
     {
         $id = request()->get('detail');
+        $key = request()->get('key');
 
         $query = DePrepareFacades::with(['has_master', 'has_product', 'has_product.has_category'])
             ->where(DePrepareFacades::mask_do_code(), $code)
@@ -223,6 +224,7 @@ class DeliveryOrderController extends Controller
 
             $prepare = DeDetailFacades::with(['has_master', 'has_product', 'has_product.has_category'])
                 ->where(DeDetailFacades::mask_do_code(), $code)
+                ->where(DeDetailFacades::mask_key(), $key)
                 ->where(DeDetailFacades::mask_product_id(), $id)->first();
         }
 

@@ -29,13 +29,14 @@
                 </div>
 
                 <label class="col-md-1 control-label" for="inputDefault">Product</label>
-                <div class="col-md-3 {{ $errors->has('product') ? 'has-error' : ''}}">
-                    {{ Form::select('', $product, null, ['class'=> 'form-control', 'id' => 'product']) }}
+                <div class="col-md-6 {{ $errors->has('product') ? 'has-error' : ''}}">
+                    {{ Form::select('', [], null, ['class'=> 'form-control', 'id' => 'product']) }}
                 </div>
 
-                {!! Form::label('name', __('Notes'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
-                <div class="col-md-4 col-sm-4" style="margin-top:-40px">
-                    {!! Form::textarea('', null, ['class' => 'form-control', 'rows' => '3', 'readonly', 'id' => 'desc']) !!}
+                <div class="col-md-2">
+                    <h2 class="panel-title text-right">
+                        <span style="margin-top:0px" id="add" class="btn btn-primary btn-block detail">Add Detail</span>
+                    </h2>
                 </div>
 
             </div>
@@ -43,12 +44,12 @@
                 <div class="form-group {{ $errors->has('detail') ? 'has-error' : ''}}">
 
                     <label class="col-md-1 control-label" for="inputDefault">Qty</label>
-                    <div class="col-md-2">
+                    <div class="col-md-1">
                         {!! Form::text('', null, ['id' => 'qty', 'class' => 'number form-control']) !!}
                     </div>
 
                     <label class="col-md-1 control-label" for="inputDefault">Price</label>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         {!! Form::text('', null, ['id' => 'price', 'class' => 'money form-control']) !!}
                     </div>
 
@@ -58,10 +59,9 @@
                         !!}
                     </div>
 
-                    <div class="col-md-2">
-                        <h2 class="panel-title text-right">
-                            <span style="margin-top:0px" id="add" class="btn btn-primary btn-block detail">Add Detail</span>
-                        </h2>
+                    {!! Form::label('name', __('Notes'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                    <div class="col-md-3 col-sm-3">
+                        {!! Form::textarea('', null, ['class' => 'form-control', 'rows' => '3', 'readonly', 'id' => 'desc']) !!}
                     </div>
 
                 </div>

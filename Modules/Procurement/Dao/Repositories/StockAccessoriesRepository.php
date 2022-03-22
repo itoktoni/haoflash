@@ -16,7 +16,7 @@ class StockAccessoriesRepository extends StockAccessories implements CrudInterfa
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable);
-        return $this->select(DB::raw("1 as stock_id,branch_name,supplier_name,stock_buy,stock_expired,stock_product_id, product_name,product_description, sum(stock_qty) as stock_qty"))
+        return $this->select(DB::raw("1 as stock_id,branch_name,supplier_name,stock_buy,stock_expired,stock_product_id, product_name,product_sku,product_description, sum(stock_qty) as stock_qty"))
             ->where('stock_type', CategoryType::Accesories)
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')

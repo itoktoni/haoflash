@@ -15,7 +15,7 @@
         <tr>
             <td data-title="ID Product">
                 @if(old('detail'))
-                <button id="delete" value="{{ $item['temp_id'] }}" type="button" class="btn btn-danger btn-xs btn-block">Delete {{ $item['temp_id'] }}</button>
+                <button id="delete" value="{{ $item['temp_id'] }}" type="button" class="btn btn-danger btn-xs btn-block">Delete</button>
                 @else
                 <a id="delete" master="{{ $item->do_detail_do_code }}" value="{{ $item->do_detail_product_id }}" href="{{ route(config('module').'_delete') }}" class="btn btn-danger btn-xs btn-block delete-{{ $item->do_detail_product_id }}">
                     Delete

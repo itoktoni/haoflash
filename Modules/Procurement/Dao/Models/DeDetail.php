@@ -24,6 +24,8 @@ class DeDetail extends Model
         'do_detail_total',
         'do_detail_receive',
         'do_detail_prepare',
+        'do_detail_key',
+        'do_detail_expired',
     ];
 
     // public $with = ['has_product'];
@@ -44,6 +46,36 @@ class DeDetail extends Model
     public function getMaskPoCodeAttribute()
     {
         return $this->{$this->mask_do_code()};
+    }
+
+    public function mask_key()
+    {
+        return 'do_detail_key';
+    }
+
+    public function setMaskKeyAttribute($value)
+    {
+        $this->attributes[$this->mask_key()] = $value;
+    }
+
+    public function getMaskKeyAttribute()
+    {
+        return $this->{$this->mask_key()};
+    }
+
+    public function mask_expired()
+    {
+        return 'do_detail_expired';
+    }
+
+    public function setMaskExpiredAttribute($value)
+    {
+        $this->attributes[$this->mask_expired()] = $value;
+    }
+
+    public function getMaskExpiredAttribute()
+    {
+        return $this->{$this->mask_expired()};
     }
 
     public function mask_product_id()
@@ -114,7 +146,7 @@ class DeDetail extends Model
 
     public function mask_price()
     {
-        return 'do_detail_price';
+        return 'do_detail_product_price';
     }
 
     public function setMaskPriceAttribute($value)
@@ -125,6 +157,21 @@ class DeDetail extends Model
     public function getMaskPriceAttribute()
     {
         return $this->{$this->mask_price()};
+    }
+
+    public function mask_sell()
+    {
+        return 'do_detail_price';
+    }
+
+    public function setMaskSellAttribute($value)
+    {
+        $this->attributes[$this->mask_sell()] = $value;
+    }
+
+    public function getMaskSellAttribute()
+    {
+        return $this->{$this->mask_sell()};
     }
 
     public function mask_sent()

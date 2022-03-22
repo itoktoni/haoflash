@@ -51,6 +51,7 @@ class DePrepare extends Model
         'do_prepare_product_id',
         'do_prepare_supplier_id',
         'do_prepare_branch_id',
+        'do_prepare_expired',
     ];
 
     // public $with = ['has_detail', 'has_supplier'];
@@ -191,6 +192,21 @@ class DePrepare extends Model
     public function getMaskSellAttribute()
     {
         return $this->{$this->mask_sell()};
+    }
+
+    public function mask_expired()
+    {
+        return 'do_prepare_expired';
+    }
+
+    public function setMaskExpiredAttribute($value)
+    {
+        $this->attributes[$this->mask_expired()] = $value;
+    }
+
+    public function getMaskExpiredAttribute()
+    {
+        return $this->{$this->mask_expired()};
     }
 
     public function mask_prepare()

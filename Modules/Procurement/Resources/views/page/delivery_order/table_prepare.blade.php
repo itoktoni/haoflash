@@ -30,7 +30,7 @@
             </td>
             <td data-title="Account" class="col-lg-1 text-center">
                 @if(($model->mask_status == DeliveryStatus::Create || $model->mask_status == DeliveryStatus::Prepare) && $remaining > 0)
-                <a href="{!! route($module.'_form_prepare_detail', ['code' => $model->{$model->getKeyName()}, 'detail' => $item->mask_product_id]) !!}" class="btn btn-success btn-xs">{{ __('Prepare') }}</a>
+                <a href="{!! route($module.'_form_prepare_detail', ['code' => $model->{$model->getKeyName()}, 'detail' => $item->mask_product_id, 'key' => $item->mask_key]) !!}" class="btn btn-success btn-xs">{{ __('Prepare') }}</a>
                 @endif
                 <!-- <a href="{!! route($route_index) !!}" class="btn btn-danger btn-xs">{{ __('Invoice') }}</a> -->
             </td>
