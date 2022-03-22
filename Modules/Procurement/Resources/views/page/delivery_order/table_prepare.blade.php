@@ -4,6 +4,8 @@
         <tr>
             <th class="text-left col-md-2">Product Name</th>
             <th class="text-left col-md-1">Qty</th>
+            <th class="text-left col-md-1">Buy Price</th>
+            <th class="text-left col-md-1">Expired</th>
             <th class="text-left col-md-1">Prepare</th>
             <th class="text-left col-md-1">Remaining</th>
             <th class="text-center col-md-1">Action</th>
@@ -21,6 +23,12 @@
             </td>
             <td data-title="Qty">
                 {{ $item->mask_qty }}
+            </td>
+            <td data-title="Price">
+                {{ Helper::createRupiah($item->mask_price) }}
+            </td>
+            <td data-title="Expired">
+                {{ $item->mask_expired }}
             </td>
             <td data-title="Receive" class="col-lg-1">
                 {{ $receive }}
