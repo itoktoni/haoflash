@@ -29,6 +29,11 @@ class Supplier extends Model
         'supplier_bank_account',
     ];
 
+    protected $casts = [
+        'supplier_ppn' => 'integer',
+        'supplier_pph' => 'integer',
+    ];
+
     // public $with = ['module'];
 
     public $timestamps = false;
@@ -104,7 +109,8 @@ class Supplier extends Model
 
     public function getMaskPpnNameAttribute()
     {
-        return strtoupper(SupplierPpn::getDescription($this->{$this->mask_ppn()})) ?? '';
+        $value = intval($this->{$this->mask_ppn()});
+        return strtoupper(SupplierPpn::getDescription($value)) ?? '';
     }
 
     public function mask_pph()
@@ -124,11 +130,8 @@ class Supplier extends Model
 
     public function getMaskPphNameAttribute()
     {
-        $pph = '-';
-        if($this->mask_pph){
-           $pph = strtoupper(SupplierPph::getDescription($this->mask_pph));
-        }
-        return $pph;
+        $value = intval($this->{$this->mask_pph()});
+        return strtoupper(SupplierPph::getDescription($value)) ?? '';
     }
 
 }

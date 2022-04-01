@@ -57,7 +57,7 @@ class PurchaseOrderController extends Controller
         $supplier = Views::option(new SupplierRepository(), false, true)->mapWithKeys(function ($item) {
             $pph = '';
             if ($item->mask_pph) {
-                $pph = ' (' . strtolower(SupplierPph::getDescription($item->mask_pph)) . ')';
+                $pph = ' (' . strtoupper(SupplierPph::getDescription($item->mask_pph)) . ')';
             }
             $data[$item->supplier_id] = $item->supplier_name . ' - ' . strtoupper(SupplierPpn::getDescription($item->supplier_ppn)) . $pph;
             return $data;

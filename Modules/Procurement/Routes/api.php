@@ -81,7 +81,7 @@ Route::match(
                     $price = Helper::createRupiah($item->stock_buy);
                     $exp = $item->stock_expired ? " - exp [ $item->stock_expired ]" : '';
                     $data['id'] = $item->id;
-                    $data['name'] = "id $item->stock_product_id : ($item->stock_qty) $item->product_name = $price $exp";
+                    $data['name'] = "$item->product_name - Stock : ($item->stock_qty) = $price $exp";
                     return $data;
                 });
                 return $check;

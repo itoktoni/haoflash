@@ -78,7 +78,7 @@ class DeliveryRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-            if (empty($this->code)) {
+            if (empty($this->code) && !empty($this->input)) {
                 foreach ($this->input as $detail) {
                     $id_product = $detail['temp_id'];
                     $name_product = $detail['temp_product'];
