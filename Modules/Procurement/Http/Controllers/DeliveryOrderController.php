@@ -3,6 +3,7 @@
 namespace Modules\Procurement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Item\Dao\Facades\CategoryFacades;
 use Modules\Item\Dao\Facades\ProductFacades;
@@ -220,12 +221,17 @@ class DeliveryOrderController extends Controller
         $detail = $query->get();
         $prepare = $query->first();
 
+        $supplier = $prepare->mask_supplier_id ?? null;
+
         if (!$prepare) {
 
             $prepare = DeDetailFacades::with(['has_master', 'has_product', 'has_product.has_category'])
                 ->where(DeDetailFacades::mask_do_code(), $code)
                 ->where(DeDetailFacades::mask_key(), $key)
                 ->where(DeDetailFacades::mask_product_id(), $id)->first();
+            
+            $data_supplier = DB::table('view_summary_stock')->where('id', $prepare->mask_key)->first();
+            $supplier = $data_supplier->stock_supplier_id ?? null; 
         }
 
         $model = $prepare->has_master ?? false;
@@ -236,6 +242,7 @@ class DeliveryOrderController extends Controller
                 'detail' => $detail,
                 'prepare' => $prepare,
                 'total' => $total,
+                'supplier' => $supplier,
             ]));
     }
 

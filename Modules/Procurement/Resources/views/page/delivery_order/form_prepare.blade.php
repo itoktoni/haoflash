@@ -16,7 +16,6 @@
                 <div class="">
 
                     @include($folder.'::page.'.$template.'.combine')
-
                     <hr>
 
                     @include($folder.'::page.'.$template.'.table_prepare')

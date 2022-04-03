@@ -11,9 +11,9 @@ class CategoryType extends Enum
     use StatusTrait;
 
     const Type                  =  null;
-    const Virtual              =  1;
-    const BDP               =  2;
-    const Accesories             =  3;
+    const Virtual               =  1;
+    const BDP                   =  2;
+    const Accesories            =  3;
 
     public static function colors()
     {

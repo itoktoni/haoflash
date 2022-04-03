@@ -19,7 +19,7 @@ class DeliveryReceiveService extends UpdateService
 
             $stock = $select->has_stock_prepare()->where(StockFacades::mask_transfer(), 1)->update([
                 StockFacades::mask_branch_id() => $data->do_branch_id,
-                StockFacades::mask_transfer() => null,
+                StockFacades::mask_transfer() => 0,
             ]);
 
             $select->update([

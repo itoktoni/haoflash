@@ -204,10 +204,9 @@
                         var price = $('#price').val(mask_price);
                         var sub_total = $('#sub_total').val(mask_price);
                         var desc = $('#desc').val(result.product_description);
-                        setTimeout(function() {
-                            $('#qty').val(1);
-                            $('#qty').focus();
-                        });
+
+                        $('#qty').val(1);
+                        $('#qty').focus();
                     }
                 }
             });

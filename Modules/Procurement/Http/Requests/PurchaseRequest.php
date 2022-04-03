@@ -54,21 +54,23 @@ class PurchaseRequest extends FormRequest
         $total_discount = Helper::filterInput($this->{PoFacades::mask_discount()}) ?? 0;
         $supplier = SupplierFacades::find($this->po_supplier_id);
 
-        $percent_pph = 0.5;
-        $percent_ppn = 10;
-        $percent_dpp = $percent_pph + $percent_ppn;
+        $percent_pph = env('TAX_PPH', 0.5) / 100;
+        $percent_ppn = env('TAX_PPN', 10) / 100;
+        $percent_dpp = $total_value;
 
         $total_tax = $total_dpp = $total_pph = $total_ppn = 0;
         if ($supplier && $supplier->mask_ppn == SupplierPpn::PPN) {
             
-            $total_ppn = $total_value * $percent_ppn / 100;
+            $total_dpp = round($total_value / ((env('TAX_PPN', 10) + 100) / 100));
+            $total_ppn = round($total_dpp * $percent_ppn);
             $total_tax = $total_ppn;
-            $total_dpp = $total_value - $total_tax;
             
             if ($supplier->mask_pph == SupplierPph::PPH) {
-                $total_pph = $total_value * $percent_pph / 100;
-                $total_tax = $total_pph + $total_ppn;
-                $total_dpp = $total_value - $total_tax;
+                $dpp_ppn = ((env('TAX_PPN', 10) + 100) / 100);
+                $total_dpp = round($total_value / ($dpp_ppn + $percent_pph));
+                $total_ppn = round($total_dpp * $percent_ppn);
+                $total_pph = round($total_dpp * $percent_pph);
+                $total_tax = $total_pph + $total_pph;
             }
         }
 

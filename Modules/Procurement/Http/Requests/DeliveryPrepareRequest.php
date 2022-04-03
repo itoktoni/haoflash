@@ -99,9 +99,10 @@ class DeliveryPrepareRequest extends FormRequest
                 $stock = StockFacades::whereIn(StockFacades::mask_code(), $this->serial)
                     ->where(StockFacades::mask_product_id(), $this->do_prepare_product_id)
                     ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                    ->where(StockFacades::mask_supplier_id(), $this->do_prepare_supplier_id)
                     ->where(StockFacades::mask_expired(), $this->do_prepare_expired)
                     ->where(StockFacades::mask_buy(), $this->do_prepare_buy)
-                    ->whereNull(StockFacades::mask_transfer())
+                    ->where(StockFacades::mask_transfer(), 0)
                     ->sum(StockFacades::mask_qty());
 
                 if ($stock != $prepare) {

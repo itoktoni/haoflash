@@ -5,8 +5,6 @@
             <th class="text-left col-md-3">Product Name</th>
             <th class="text-left col-md-4">Product Description</th>
             <th class="text-right col-md-1">Qty</th>
-            <th class="text-right col-md-2">Price</th>
-            <th class="text-right col-md-2">Total</th>
         </tr>
     </thead>
     <tbody class="markup">
@@ -33,13 +31,6 @@
             <td data-title="Qty" class="text-right col-lg-1">
                 <input type="text" tabindex="{{ $loop->iteration }}1" name="detail[{{ $loop->index }}][temp_qty]" class="form-control input-sm text-right number temp_qty" value="{{ $item['temp_qty'] ?? $item->ro_detail_qty }}">
 
-            </td>
-            <td data-title="Price" class="text-right col-lg-1">
-                <input type="text" tabindex="{{ $loop->iteration }}2" name="detail[{{ $loop->index }}][temp_price]" class="form-control input-sm text-right money temp_price" value="{{ $item['temp_price'] ?? $item->ro_detail_price }}">
-
-            </td>
-            <td data-title="Total" class="text-right col-lg-1">
-                <input type="text" readonly name="detail[{{ $loop->index }}][temp_total]" class="form-control input-sm text-right number temp_total" value="{{ $item['temp_total'] ?? $item->ro_detail_total }}">
             </td>
         </tr>
         @endforeach

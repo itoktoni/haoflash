@@ -65,7 +65,6 @@
                         </div>
 
                     </div>
-
                     <input type="hidden" value="{{ $model->mask_branch_id ?? '' }}" name="do_prepare_branch_id">
                     <input type="hidden" value="{{ $model->{$model->getKeyName()} ?? '' }}" name="do_prepare_do_code">
                     <input type="hidden" value="{{ $prepare->mask_product_id ?? '' }}" name="do_prepare_product_id">
@@ -73,6 +72,7 @@
                     <input type="hidden" value="{{ $total ?? 0 }}" name="remaining">
                     <input type="hidden" value="{{ $model->mask_status ?? '' }}" name="status">
                     <input type="hidden" value="{{ $prepare->mask_expired ?? '' }}" name="do_prepare_expired">
+                    <input type="hidden" value="{{ $supplier ?? '' }}" name="do_prepare_supplier_id">
 
                     @if($prepare->has_product->has_category->mask_type != CategoryType::Accesories)
 

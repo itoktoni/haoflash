@@ -45,16 +45,15 @@ class DeliveryRequest extends FormRequest
         $input = $this->detail;
         $map = collect($this->detail)->map(function ($item) use ($autonumber) {
             $data_product = DB::table('view_summary_stock')->where('id', $item['temp_id'])->first();
-
             $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
             $data[DeDetailFacades::mask_do_code()] = $autonumber;
             $data[DeDetailFacades::mask_key()] = $item['temp_id'];
-            $data[DeDetailFacades::mask_product_id()] = $data_product->stock_product_id;
-            $data[DeDetailFacades::mask_notes()] = $data_product->product_description;
-            $data[DeDetailFacades::mask_expired()] = $data_product->stock_expired;
-            $data[DeDetailFacades::mask_product_price()] = $data_product->stock_buy ?? '';
+            $data[DeDetailFacades::mask_product_id()] = $data_product->stock_product_id ?? null;
+            $data[DeDetailFacades::mask_notes()] = $data_product->product_description ?? null;
+            $data[DeDetailFacades::mask_expired()] = $data_product->stock_expired ?? null;
+            $data[DeDetailFacades::mask_product_price()] = $data_product->stock_buy ?? null;
             $data[DeDetailFacades::mask_qty()] = Helper::filterInput($item['temp_qty']);
-            $data[DeDetailFacades::mask_price()] = Helper::filterInput($item['temp_price']) ?? 0;
+            $data[DeDetailFacades::mask_sell()] = Helper::filterInput($item['temp_price']) ?? 0;
             $data[DeDetailFacades::mask_total()] = $total;
             return $data;
         });
@@ -82,9 +81,9 @@ class DeliveryRequest extends FormRequest
                 foreach ($this->input as $detail) {
                     $id_product = $detail['temp_id'];
                     $name_product = $detail['temp_product'];
-
+                    $qty = $detail['temp_qty'] ?? 0;
                     $stock = DB::table('view_summary_stock')->where('id', $id_product)->first();
-                    if ($detail['temp_qty'] > $stock->stock_qty) {
+                    if (is_null($stock) || $qty > $stock->stock_qty) {
                         $validator->errors()->add($id_product, 'Stock ' . $name_product . ' tinggal = ' . $stock->stock_qty);
                     }
                 }

@@ -8,9 +8,10 @@
         function calculate() {
 
             var qty = $('#qty').val();
-            var price = $('#price').val();
+            // var price = $('#price').val();
             var disc = $('#disc').val();
-            var total = numeral(qty).value() * numeral(price).value();
+            // var total = numeral(qty).value() * numeral(price).value();
+            var total = numeral(qty);
 
             if (disc != '') {
                 total = total - (total * numeral(disc).value() / 100);
@@ -23,7 +24,7 @@
         function sumTotal() {
 
             var sum = 0;
-            $('.temp_total').each(function() {
+            $('.temp_qty').each(function() {
                 sum += numeral($(this).val()).value();
             });
             var total_name = $('#total_name');
@@ -113,7 +114,7 @@
             var mask_total = numeral(product_total).format('0,0');
             var real_price = numeral(product_price).value();
 
-            var counter = $(".temp_total").length;
+            var counter = $(".temp_qty").length;
 
             if (product_id) {
 
@@ -145,13 +146,8 @@
                         "</td>" +
                         "<td data-title='Qty/Disc' class='text-right col-lg-1'>" +
                         "<input tabindex='" + counter + "1' class='form-control input-sm text-right number temp_qty' name='detail[" + counter + "][temp_qty]' value='" + product_qty + "'></td>" +
-                        "<td data-title='Price' class='text-right col-lg-1'>" +
-                        "<input tabindex='" + counter + "2' name='detail[" + counter + "][temp_price]' class='form-control input-sm text-right number temp_price' value='" + numeral(product_price).format('0,0') + "'>" +
-                        "</td>" +
-                        "<td data-title='Total' class='text-right col-lg-1'><input type='text' name='detail[" + counter + "][temp_total]' readonly class='form-control input-sm text-right money temp_total' value='" + mask_total + "'></td>" +
                         "<input type='hidden' value='" + product_id + "' name='detail[" + counter + "][temp_id]'><input type='hidden' value='" + product_id + "' name='temp_id[]'>" +
-                        "'" +
-                        "</tr>";
+                       "</tr>";
                     $("#transaction .markup").append(markup);
                     sumTotal();
                     $('#price').val("");

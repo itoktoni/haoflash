@@ -9,7 +9,6 @@ use Modules\Procurement\Dao\Facades\DeDetailFacades;
 use Modules\Procurement\Dao\Facades\DeFacades;
 use Modules\Procurement\Dao\Facades\DePrepareFacades;
 use Modules\Procurement\Dao\Facades\StockFacades;
-use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 
@@ -23,12 +22,17 @@ class DeliveryPrepareService
             $check = $repository->create($data->all());
             if ($data->do_prepare_type == CategoryType::Accesories) {
 
-                $stock = StockFacades::select([StockFacades::getKeyName(), StockFacades::mask_qty()])
+                $stock = StockFacades::select(
+                    [
+                        StockFacades::getKeyName(), StockFacades::mask_qty(),
+                    ])
                     ->where(StockFacades::mask_product_id(), $data->do_prepare_product_id)
-                    ->whereNull(StockFacades::mask_transfer());
+                    ->where(StockFacades::mask_supplier_id(), $data->do_prepare_supplier_id)
+                    ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                    ->where(StockFacades::mask_transfer(), 0);
 
-                $stock_sum = $stock->sum(StockFacades::mask_qty());
-                $pengurangan = $stock_sum - $data->do_prepare_prepare;
+                    $stock_sum = $stock->sum(StockFacades::mask_qty());
+                    $pengurangan = $stock_sum - $data->do_prepare_prepare;
 
                 $array = [
                     'stock_code' => Helper::autoNumber(StockFacades::getTable(), StockFacades::mask_code(), 'SN' . date('Ym'), 20),
@@ -36,6 +40,7 @@ class DeliveryPrepareService
                     'stock_reference_code' => $data->do_prepare_code,
                     'stock_branch_id' => env('BRANCH_ID'),
                     'stock_product_id' => $data->do_prepare_product_id,
+                    'stock_supplier_id' => $data->do_prepare_supplier_id,
                     'stock_qty' => $data->do_prepare_prepare,
                     'stock_sell' => $data->do_prepare_sell,
                     'stock_buy' => $data->do_prepare_buy,
@@ -54,24 +59,26 @@ class DeliveryPrepareService
                         'stock_reference_code' => $data->do_prepare_code,
                         'stock_branch_id' => env('BRANCH_ID'),
                         'stock_product_id' => $data->do_prepare_product_id,
+                        'stock_supplier_id' => $data->do_prepare_supplier_id,
                         'stock_qty' => $pengurangan,
+                        'stock_sell' => $data->do_prepare_sell,
                         'stock_buy' => $data->do_prepare_buy,
-                        'stock_transfer' => null,
+                        'stock_transfer' => 0,
                         'stock_type' => CategoryType::Accesories,
                     ];
 
                     StockFacades::create($array);
                 }
             } elseif ($data->do_prepare_type == CategoryType::Virtual) {
-                
+
                 StockFacades::whereIn(StockFacades::mask_code(), $data->serial)->update([
-                    'stock_sell' => $data->do_prepare_sell, 
-                    'stock_sell' => $data->do_prepare_sell, 
-                    'stock_primary_code' => $data->do_prepare_do_code, 
-                    'stock_reference_code' => $data->do_prepare_code, 
-                    'stock_transfer' => 1, 
+                    'stock_sell' => $data->do_prepare_sell,
+                    'stock_sell' => $data->do_prepare_sell,
+                    'stock_primary_code' => $data->do_prepare_do_code,
+                    'stock_reference_code' => $data->do_prepare_code,
+                    'stock_transfer' => 1,
                 ]);
-            } 
+            }
 
             $total_prepare_qty = DePrepareFacades::where(DePrepareFacades::mask_do_code(), $data->do_prepare_do_code)->sum(DePrepareFacades::mask_prepare());
             $total_detail_qty = DeDetailFacades::where(DeDetailFacades::mask_do_code(), $data->do_prepare_do_code)->sum(DeDetailFacades::mask_qty());

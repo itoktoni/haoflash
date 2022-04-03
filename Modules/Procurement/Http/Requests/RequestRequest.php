@@ -41,14 +41,14 @@ class RequestRequest extends FormRequest
 
         $map = collect($this->detail)->map(function ($item) use ($autonumber) {
             $data_product = ProductFacades::singleRepository($item['temp_id']);
-            $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
+            // $total = Helper::filterInput($item['temp_qty']) * Helper::filterInput($item['temp_price']) ?? 0;
             $data[RoDetailFacades::mask_ro_code()] = $autonumber;
             $data[RoDetailFacades::mask_product_id()] = $item['temp_id'];
             $data[RoDetailFacades::mask_notes()] = $item['temp_desc'];
             $data[RoDetailFacades::mask_product_price()] = $data_product->mask_buy ?? '';
             $data[RoDetailFacades::mask_qty()] = Helper::filterInput($item['temp_qty']);
-            $data[RoDetailFacades::mask_price()] = Helper::filterInput($item['temp_price']) ?? 0;
-            $data[RoDetailFacades::mask_total()] = $total;
+            // $data[RoDetailFacades::mask_price()] = Helper::filterInput($item['temp_price']) ?? 0;
+            $data[RoDetailFacades::mask_total()] = Helper::filterInput($item['temp_qty']);
             return $data;
         });
 
