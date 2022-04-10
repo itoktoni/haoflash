@@ -14,6 +14,6 @@ class Adapter
 
     public static function getTotalStockDoProduct($code, $product, $expired)
     {
-        return DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)->where(DePrepareFacades::mask_product_id()->where(DePrepareFacades::mask_expired(), $expired), $product)->sum(DePrepareFacades::mask_prepare());
+        return DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)->where(DePrepareFacades::mask_product_id(), $product)->where(DePrepareFacades::mask_expired(), $expired)->sum(DePrepareFacades::mask_prepare());
     }
 }
