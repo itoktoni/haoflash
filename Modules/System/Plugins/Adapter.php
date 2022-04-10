@@ -12,8 +12,8 @@ class Adapter
         return PoReceiveFacades::where(PoReceiveFacades::mask_po_code(), $code)->where(PoReceiveFacades::mask_product_id(), $product)->sum(PoReceiveFacades::mask_receive());
     }
 
-    public static function getTotalStockDoProduct($code, $product)
+    public static function getTotalStockDoProduct($code, $product, $expired)
     {
-        return DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)->where(DePrepareFacades::mask_key(), $product)->sum(DePrepareFacades::mask_prepare());
+        return DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)->where(DePrepareFacades::mask_product_id()->where(DePrepareFacades::mask_expired(), $expired), $product)->sum(DePrepareFacades::mask_prepare());
     }
 }

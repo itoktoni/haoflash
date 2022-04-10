@@ -14,7 +14,7 @@
     <tbody class="markup">
         @foreach ($detail as $item)
         @php
-        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $item->mask_key);
+        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $item->mask_product_id,  $item->mask_expired);
         $remaining = $item->mask_qty - $receive;
         @endphp
         <tr>
