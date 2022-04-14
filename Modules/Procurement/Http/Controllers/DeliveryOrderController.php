@@ -52,6 +52,7 @@ use Modules\System\Http\Requests\GeneralRequest;
 use Modules\System\Http\Services\CreateService;
 use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\SingleService;
+use Modules\System\Plugins\Adapter;
 use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
@@ -213,9 +214,18 @@ class DeliveryOrderController extends Controller
         $id = request()->get('detail');
         $key = request()->get('key');
 
+        $split = Adapter::splitKey($key);
+        $split_product = $split[0];
+        $split_supplier = $split[1];
+        $split_buy = $split[2];
+        $split_expired = $split[3];
+
         $query = DePrepareFacades::with(['has_master', 'has_product', 'has_product.has_category'])
             ->where(DePrepareFacades::mask_do_code(), $code)
-            ->where(DePrepareFacades::mask_product_id(), $id);
+            ->where(DePrepareFacades::mask_supplier_id(), $split_supplier)
+            ->where(DePrepareFacades::mask_price(), $split_buy)
+            ->where(DePrepareFacades::mask_expired(), $split_expired)
+            ->where(DePrepareFacades::mask_product_id(), $split_product);
 
         $total = $query->sum(DePrepareFacades::mask_qty());
         $detail = $query->get();
@@ -229,9 +239,9 @@ class DeliveryOrderController extends Controller
                 ->where(DeDetailFacades::mask_do_code(), $code)
                 ->where(DeDetailFacades::mask_key(), $key)
                 ->where(DeDetailFacades::mask_product_id(), $id)->first();
-            
+
             $data_supplier = DB::table('view_summary_stock')->where('id', $prepare->mask_key)->first();
-            $supplier = $data_supplier->stock_supplier_id ?? null; 
+            $supplier = $data_supplier->stock_supplier_id ?? null;
         }
 
         $model = $prepare->has_master ?? false;
@@ -367,7 +377,7 @@ class DeliveryOrderController extends Controller
             ]));
     }
 
-    public function postReceiveDetail(PurchaseReceiveRequest $request, PurchaseReceiveService $service, PoReceive $receive)
+    public function postReceiveDetail(DeliveryReceiveRequest $request, DeliveryReceiveService $service, PoReceive $receive)
     {
         $data = $service->save($receive, $request);
         return Response::redirectBack($data);

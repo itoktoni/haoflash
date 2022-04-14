@@ -31,6 +31,10 @@ class Customer extends Model
         'customer_owner',
     ];
 
+    protected $casts = [
+        'customer_ppn' => 'integer',
+    ];
+
     // public $with = ['module'];
 
     public $timestamps = false;

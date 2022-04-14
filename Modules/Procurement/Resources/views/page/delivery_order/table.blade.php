@@ -2,8 +2,8 @@
     <thead>
         <tr>
             <th class="text-left col-md-1">Action</th>
-            <th class="text-left col-md-3">Product Name</th>
-            <th class="text-left col-md-4">Product Description</th>
+            <th class="text-left col-md-4">Product Name</th>
+            <th class="text-left col-md-2">Product Description</th>
             <th class="text-right col-md-1">Qty</th>
             <th class="text-right col-md-2">Price</th>
             <th class="text-right col-md-2">Total</th>
@@ -25,7 +25,7 @@
                 <input type="hidden" value="{{ $item['temp_id'] ?? $item->do_detail_product_id }}" name="detail[{{ $loop->index }}][temp_id]">
             </td>
             <td data-title="Product">
-                <input type="text" readonly class="form-control input-sm" value="{{ $item['temp_product'] ?? $item->has_product->product_name }}" name="detail[{{ $loop->index }}][temp_product]">
+                <textarea rows="2" readonly class="form-control input-sm" name="detail[{{ $loop->index }}][temp_product]">{{ $item['temp_product'] ?? $item->has_product->product_name }}</textarea>
             </td>
             <td data-title="Description">
                 <textarea rows="2" readonly class="form-control input-sm" name="detail[{{ $loop->index }}][temp_desc]">{{ $item['temp_desc'] ?? $item->has_product->product_description }}</textarea>

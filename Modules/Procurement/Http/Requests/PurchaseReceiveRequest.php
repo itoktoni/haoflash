@@ -68,7 +68,7 @@ class PurchaseReceiveRequest extends FormRequest
             $receive = !empty($this->po_receive_receive) ? $this->po_receive_receive : 0;
             $qty = !empty($this->po_receive_qty) ? $this->po_receive_qty : 0;
             $remaining = !empty($this->remaining) ? $this->remaining : 0;
-            
+
             if ($this->po_receive_type != CategoryType::Accesories) {
 
                 if (empty($this->po_receive_expired_date)) {

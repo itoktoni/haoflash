@@ -11,15 +11,21 @@
     <tbody class="markup">
         @foreach ($detail as $item)
         @php
-        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $item->mask_product_id, $item->mask_expired);
+
+        $split = Adapter::splitKey($item->mask_key);
+        $split_product = $split[0];
+        $split_supplier = $split[1];
+        $split_buy = $split[2];
+        $split_expired = $split[3];
+        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $split_product, $split_supplier, $split_buy ,$item->mask_expired);
         $remaining = $item->mask_qty - $receive;
         @endphp
         <tr>
             <input type="hidden" value="{{ $model->{$model->getKeyName()} }}" name="detail[{{ $loop->index }}][do_detail_do_code]">
-            <input type="hidden" value="{{ $item->mask_product_id }}" name="detail[{{ $loop->index }}][do_detail_product_id]">
+            <input type="hidden" value="{{ $item->mask_key }}" name="detail[{{ $loop->index }}][do_detail_key]">
             <input type="hidden" value="{{ $item->mask_qty }}" name="detail[{{ $loop->index }}][do_detail_qty]">
             <input type="hidden" value="{{ $receive }}" name="detail[{{ $loop->index }}][do_detail_prepare]">
-            <input type="hidden" value="{{ $item->mask_qty - $receive }}" name="detail[{{ $loop->index }}][do_detail_receive]">
+            <input type="hidden" value="{{ $receive }}" name="detail[{{ $loop->index }}][do_detail_receive]">
 
             <td data-title="Product Name">
                 {{ $item->mask_product_name }}

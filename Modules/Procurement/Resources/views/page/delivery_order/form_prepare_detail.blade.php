@@ -104,7 +104,9 @@
         <div class="navbar-fixed-bottom" id="menu_action">
             <div class="text-right action-wrapper">
                 <a id="linkMenu" href="{!! route($route_index) !!}" class="btn btn-warning">{{ __('Back') }}</a>
+                @if(($model->mask_status == DeliveryStatus::Create) || ($model->mask_status == DeliveryStatus::Prepare && (isset($detail) && ($prepare->mask_qty != $detail->sum('do_prepare_prepare')))))
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
+                @endif
             </div>
         </div>
         {!! Form::close() !!}

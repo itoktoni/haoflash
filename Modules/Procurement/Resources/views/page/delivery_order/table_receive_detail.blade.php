@@ -51,7 +51,7 @@
                 {{ $item->po_receive_expired_date ?? '' }}
             </td>
             @endif
-           
+
             <td data-title="Receive" class="col-lg-1">
                 {{ $item->po_receive_receive }}
             </td>

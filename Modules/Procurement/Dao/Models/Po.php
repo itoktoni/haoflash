@@ -81,14 +81,14 @@ class Po extends Model
         'po_code' => [true => 'Purchase Code', 'width' => 100],
         'supplier_name' => [true => 'Supplier Name'],
         'po_date_order' => [true => 'Date', 'width' => 60],
-        'po_updated_at' => [true => 'Last At', 'width' => 60],
+        'po_updated_at' => [false => 'Last At', 'width' => 50],
         'name' => [true => 'Last By', 'width' => 60],
         'po_sum_value' => [false => 'Value', 'width' => 80],
-        'po_sum_dpp' => [true => 'DPP', 'width' => 60],
-        'po_sum_ppn' => [true => 'PPN', 'width' => 60],
-        'po_sum_pph' => [true => 'PPH', 'width' => 60],
-        'po_sum_total' => [true => 'Total', 'width' => 80],
-        'po_payment' => [true => 'Payment', 'width' => 55, 'class' => 'text-center', 'status' => 'status'],
+        'po_sum_dpp' => [true => 'DPP', 'width' => 50],
+        'po_sum_ppn' => [true => 'PPN', 'width' => 50],
+        'po_sum_pph' => [true => 'PPH', 'width' => 50],
+        'po_sum_total' => [true => 'Total', 'width' => 70],
+        'po_payment' => [true => 'Payment', 'width' => 50, 'class' => 'text-center', 'status' => 'status'],
         'po_status' => [true => 'Status', 'width' => 50, 'class' => 'text-center', 'status' => 'status'],
     ];
 
@@ -101,7 +101,7 @@ class Po extends Model
 
     public function mask_status()
     {
-       
+
         return 'po_status';
     }
 

@@ -27,9 +27,6 @@
                 <a onClick="return confirm('Are you sure you want to delete?')" href="{!! route($module.'_delete_receive_detail', ['code' => $item->po_receive_code]) !!}" class="btn btn-danger btn-xs">
                     Delete
                 </a>
-                <a href="{!! route($module.'_show_receive_detail', ['code' => $item->po_receive_code]) !!}" class="btn btn-primary btn-xs">
-                    Detail
-                </a>
             </td>
             <td data-title="Receive Date">
                 {{ $item->po_receive_date ?? '' }}
@@ -51,7 +48,7 @@
                 {{ $item->po_receive_expired_date ?? '' }}
             </td>
             @endif
-           
+
             <td data-title="Receive" class="col-lg-1">
                 {{ $item->po_receive_receive }}
             </td>

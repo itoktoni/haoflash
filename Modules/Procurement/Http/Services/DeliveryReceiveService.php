@@ -27,9 +27,9 @@ class DeliveryReceiveService extends UpdateService
             ]);
         }
 
-        DeDetailFacades::upsert($data->detail, [
+        DeDetailFacades::update($data->detail, [
             DeDetailFacades::mask_do_code(),
-            DeDetailFacades::mask_product_id(),
+            DeDetailFacades::mask_key(),
         ], [
             DeDetailFacades::mask_qty(),
             DeDetailFacades::mask_total(),

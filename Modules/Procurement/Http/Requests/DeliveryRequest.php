@@ -71,6 +71,8 @@ class DeliveryRequest extends FormRequest
             'detail' => array_values($map->toArray()),
             'input' => $input,
         ]);
+
+        // dd($this->all());
     }
 
     public function withValidator($validator)

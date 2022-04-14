@@ -2,6 +2,7 @@
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
+            <th class="text-left col-md-2">Supplier Name</th>
             <th class="text-left col-md-2">Product Name</th>
             <th class="text-left col-md-1">Qty</th>
             <th class="text-left col-md-1">Buy Price</th>
@@ -14,10 +15,19 @@
     <tbody class="markup">
         @foreach ($detail as $item)
         @php
-        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $item->mask_product_id,  $item->mask_expired);
+        $split = Adapter::splitKey($item->mask_key);
+        $split_product = $split[0];
+        $split_supplier = $split[1];
+        $split_buy = $split[2];
+        $split_expired = $split[3];
+
+        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $split_product , $split_supplier, $split_buy, $split_expired) ?? 0;
         $remaining = $item->mask_qty - $receive;
         @endphp
         <tr>
+            <td data-title="Product Name">
+                {{ Adapter::getSupplierName($split_supplier) ?? '' }}
+            </td>
             <td data-title="Product Name">
                 {{ $item->mask_product_name }}
             </td>
@@ -37,10 +47,7 @@
                 {{ $remaining }}
             </td>
             <td data-title="Account" class="col-lg-1 text-center">
-                @if(($model->mask_status == DeliveryStatus::Create || $model->mask_status == DeliveryStatus::Prepare) && $remaining > 0)
                 <a href="{!! route($module.'_form_prepare_detail', ['code' => $model->{$model->getKeyName()}, 'detail' => $item->mask_product_id, 'key' => $item->mask_key]) !!}" class="btn btn-success btn-xs">{{ __('Prepare') }}</a>
-                @endif
-                <!-- <a href="{!! route($route_index) !!}" class="btn btn-danger btn-xs">{{ __('Invoice') }}</a> -->
             </td>
         </tr>
         @endforeach

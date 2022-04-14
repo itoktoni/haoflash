@@ -26,9 +26,6 @@
                 <a onClick="return confirm('Are you sure you want to delete?')" href="{!! route($module.'_delete_prepare_detail', ['code' => $item->do_prepare_code]) !!}" class="btn btn-danger btn-xs">
                     Delete
                 </a>
-                <a href="{!! route($module.'_show_prepare_detail', ['code' => $item->do_prepare_code]) !!}" class="btn btn-primary btn-xs">
-                    Detail
-                </a>
             </td>
             <td data-title="Receive Date">
                 {{ $item->do_prepare_date ?? '' }}

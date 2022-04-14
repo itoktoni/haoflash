@@ -49,6 +49,7 @@ class DeliveryPrepareRequest extends FormRequest
             'complete' => $complete,
             'serial' => $data,
         ]);
+
     }
 
     public function rules()
@@ -119,6 +120,7 @@ class DeliveryPrepareRequest extends FormRequest
             $remaining = StockFacades::where(StockFacades::mask_primary_code(), $this->do_prepare_do_code)
                 ->where(StockFacades::mask_product_id(), $this->do_prepare_product_id)
                 ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
+                ->where(StockFacades::mask_supplier_id(), $this->do_prepare_supplier_id)
                 ->where(StockFacades::mask_expired(), $this->do_prepare_expired)
                 ->where(StockFacades::mask_buy(), $this->do_prepare_buy)
                 ->where(StockFacades::mask_transfer(), 1)

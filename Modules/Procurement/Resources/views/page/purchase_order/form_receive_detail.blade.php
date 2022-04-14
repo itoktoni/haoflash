@@ -53,13 +53,13 @@
 
                     <div class="form-group">
 
-                    {!! Form::label('name', __('Buying Price'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                    {!! Form::label('name', __('Buy'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_buy') ? 'has-error' : ''}}">
                             {!! Form::text('po_receive_buy', null, ['class' => 'form-control', $model->po_receive_type == CategoryType::BDP ? '' : 'readonly']) !!}
                             {!! $errors->first('po_receive_buy', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('Receive Date'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        {!! Form::label('name', __('Receive'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_date') ? 'has-error' : ''}}">
                             <div class="input-group">
                                 {!! Form::text('po_receive_date', $model->po_receive_date ?? date('Y-m-d'), ['class' =>
@@ -115,19 +115,19 @@
 
                     <div class="form-group">
 
-                        {!! Form::label('name', __('Start Number'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        {!! Form::label('name', __('Start'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_start') ? 'has-error' : ''}}">
                             {!! Form::text('po_receive_start', '', ['class' => 'form-control']) !!}
                             {!! $errors->first('po_receive_start', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('End Number'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        {!! Form::label('name', __('End'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_end') ? 'has-error' : ''}}">
                             {!! Form::text('po_receive_end', '', ['class' => 'form-control']) !!}
                             {!! $errors->first('po_receive_end', '<p class="help-block">:message</p>') !!}
                         </div>
 
-                        {!! Form::label('name', __('Expired Date'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
+                        {!! Form::label('name', __('Expired'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_expired_date') ? 'has-error' : ''}}">
                             <div class="input-group">
                                 {!! Form::text('po_receive_expired_date', $model->po_receive_expired_date ?? date('Y-m-d'), ['class' =>
