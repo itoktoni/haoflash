@@ -31,7 +31,7 @@ class Category extends Model
     public $datatable = [
         'category_id' => [false => 'Code', 'width' => 50],
         'category_name' => [true => 'Name'],
-        'category_type' => [true => 'Type'],
+        'category_type' => [false => 'Type'],
         'category_description' => [true => 'Description'],
     ];
 

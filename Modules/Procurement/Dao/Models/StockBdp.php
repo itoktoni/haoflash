@@ -12,7 +12,7 @@ class StockBdp extends Stock
         'product_name' => [true => 'Product'],
         'product_description' => [true => 'Product Description'],
         'stock_qty' => [true => 'Qty', 'width' => 50],
-        'stock_buy' => [true => 'Price', 'width' => 50],
+        'stock_buy' => [true => 'Buying Price', 'width' => 50],
         'stock_expired' => [true => 'Expired', 'width' => 80],
     ];
 }
