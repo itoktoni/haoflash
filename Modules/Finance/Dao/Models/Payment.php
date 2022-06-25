@@ -408,7 +408,7 @@ class Payment extends Model
 
             if ($model->mask_model == PaymentModel::PaymentPurchase && $model->mask_reference) {
                 $po = PoFacades::find($model->mask_reference);
-                if ($po->has_payment) {
+                if ($po) {
 
                     $po->mask_payment = PurchasePayment::instalment;
 
@@ -421,16 +421,19 @@ class Payment extends Model
                     }
 
                     $po->save();
+
+                    $po->update([
+                        PoFacades::getUpdatedAtColumn() => date('Y-m-d H:i:s')
+                    ]);
                 }
 
-                $po->update([
-                    PoFacades::getUpdatedAtColumn() => date('Y-m-d H:i:s')
-                ]);
+
             }
         });
 
         parent::creating(function ($model) {
 
+            $model->payment_value_approve = Helper::filterInput($model->payment_value_approve);
             $model->mask_voucher = Helper::autoNumber($model->getTable(), $model->mask_voucher(), 'V' . date('Ym'), env('WEBSITE_AUTONUMBER'));
         });
 

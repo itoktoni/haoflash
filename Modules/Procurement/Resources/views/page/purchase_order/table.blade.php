@@ -4,7 +4,7 @@
             <th class="text-left col-md-1">Action</th>
             <th class="text-left col-md-3">Product Name</th>
             <th class="text-left col-md-4">Product Description</th>
-            <th class="text-right col-md-1">Qty</th>
+            <th class="text-right col-md-2">Qty</th>
             <th class="text-right col-md-2">Price</th>
             <th class="text-right col-md-2">Total</th>
         </tr>
@@ -83,14 +83,13 @@
     </tbody>
     @endif
 
-    @if(env('WEBSITE.DISCOUNT'))
-    <tbody>
+    <tbody class="discount_container">
         <tr>
-            <td data-title="Sebelum Discount" colspan="4" class="text-right">
+            <td data-title="Sebelum Discount" colspan="5" class="text-right">
                 <strong>Total Sebelum Discount</strong>
             </td>
             <td data-title="" class="text-right">
-                {!! Form::text('purchase_sum_product', null, ['id' => 'before_discount',
+                {!! Form::text('po_sum_product', $model->mask_value, ['id' => 'before_discount',
                 'readonly', 'class' => 'number form-control text-right']) !!}
             </td>
         </tr>
@@ -98,24 +97,23 @@
             <td data-title="" class="text-left col-md-1 hide-xs">
                 <button value="Discount" type="button" class="btn btn-xs btn-success btn-block">Discount</button>
             </td>
-            <td data-title="Description" class="text-left col-md-4">
-                {!! Form::textarea('purchase_discount_name', null, ['id' => 'grand_discount_description', 'class' =>
+            <td data-title="Description" class="text-left col-md-4" colspan="2">
+                {!! Form::textarea('po_discount_name', null, ['id' => 'grand_discount_description', 'class' =>
                 'form-control', 'rows' => 2, 'tabindex' => 500]) !!}
             </td>
             <td data-title="Value" class="text-right col-md-1">
-                {!! Form::text('purchase_discount_percent', null, ['id' => 'grand_discount_value', 'placeholder' =>
-                'Dalam %' ,'class' => 'number form-control text-right', 'tabindex' => 501]) !!}
+                {!! Form::text('po_discount_value', null, ['id' => 'grand_discount_value', 'placeholder' =>
+                'Dalam Rupiah' ,'class' => 'number form-control text-right', 'tabindex' => 501]) !!}
             </td>
             <td data-title="Price" class="text-right col-md-1">
-                {!! Form::text('purchase_discount_value', null, ['id' => 'grand_discount_price',
+                {!! Form::text('po_discount_value', null, ['id' => 'grand_discount_price',
                 'readonly', 'class' => 'number form-control text-right', 'tabindex' => 502]) !!}
             </td>
             <td data-title="Total" class="text-right col-md-1">
-                {!! Form::text('purchase_sum_discount', null, ['id' => 'grand_discount_total',
+                {!! Form::text('po_sum_discount', null, ['id' => 'grand_discount_total',
                 'readonly', 'class' => 'number form-control text-right']) !!}
             </td>
         </tr>
 
     </tbody>
-    @endif
 </table>

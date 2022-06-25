@@ -3,40 +3,25 @@
 namespace Modules\Procurement\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Carbon;
-use Modules\Finance\Dao\Enums\PaymentMethod;
-use Modules\Finance\Dao\Enums\PaymentStatus;
-use Modules\Finance\Dao\Repositories\BankRepository;
-use Modules\Finance\Dao\Repositories\PaymentRepository;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Item\Dao\Facades\CategoryFacades;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Repositories\CategoryRepository;
 use Modules\Item\Dao\Repositories\ProductRepository;
-use Modules\Procurement\Dao\Enums\RequestPayment;
+use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\Procurement\Dao\Enums\RequestStatus;
-use Modules\Procurement\Dao\Enums\SupplierPph;
-use Modules\Procurement\Dao\Enums\SupplierPpn;
-use Modules\Procurement\Dao\Enums\SupplierType;
 use Modules\Procurement\Dao\Facades\BranchFacades;
-use Modules\Procurement\Dao\Facades\PoDetailFacades;
-use Modules\Procurement\Dao\Facades\PoReceiveFacades;
-use Modules\Procurement\Dao\Models\PoReceive;
+use Modules\Procurement\Dao\Facades\DeDetailFacades;
+use Modules\Procurement\Dao\Facades\DeFacades;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
-use Modules\Procurement\Dao\Repositories\RequestRepository;
+use Modules\Procurement\Dao\Repositories\DeRepository;
 use Modules\Procurement\Dao\Repositories\RoRepository;
-use Modules\Procurement\Dao\Repositories\SupplierRepository;
-use Modules\Procurement\Http\Requests\PaymentRequest;
-use Modules\Procurement\Http\Requests\RequestReceiveRequest;
 use Modules\Procurement\Http\Requests\RequestRequest;
-use Modules\Procurement\Http\Services\DeleteRequestService;
-use Modules\Procurement\Http\Services\DeleteReceiveService;
+use Modules\Procurement\Http\Services\DeliveryCreateService;
 use Modules\Procurement\Http\Services\RequestCreateService;
-use Modules\Procurement\Http\Services\RequestReceiveService;
 use Modules\Procurement\Http\Services\RequestUpdateService;
 use Modules\System\Dao\Enums\GroupUserType;
 use Modules\System\Http\Requests\DeleteRequest;
-use Modules\System\Http\Services\CreateService;
 use Modules\System\Http\Services\DataService;
 use Modules\System\Http\Services\SingleService;
 use Modules\System\Plugins\Alert;
@@ -114,12 +99,52 @@ class RequestOrderController extends Controller
             ->EditStatus([
                 self::$model->mask_status() => RequestStatus::class,
             ])->EditColumn([
-                'ro_updated_at' => 'ro_updated_at',
-                self::$model->mask_total() => 'mask_total_rupiah',
-            ])->EditAction([
-                'page'      => config('page'),
-                'folder'    => config('folder'),
-            ])->make();
+            'ro_updated_at' => 'ro_updated_at',
+            self::$model->mask_total() => 'mask_total_rupiah',
+        ])->EditAction([
+            'page' => config('page'),
+            'folder' => config('folder'),
+        ])->make();
+    }
+
+    public function copy($code, DeliveryCreateService $service)
+    {
+        $autonumber = Helper::autoNumber(DeFacades::getTable(), DeFacades::getKeyName(), 'DO' . date('Ym'), env('WEBSITE_AUTONUMBER'));
+        $data = $this->get($code, ['has_detail']);
+        // $detail = $data->has_detail;
+        // $delivery_detail = [];
+        // $grand = 0;
+        // $counter = 0;
+        // if ($detail) {
+        //     foreach ($detail as $item) {
+        //         $counterPlus = $counter++;
+        //         $total = Helper::filterInput($item->ro_detail_product_price) * Helper::filterInput($item->ro_detail_qty) ?? 0;
+        //         $grand = $grand + $total;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_do_code()] = $autonumber;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_product_id()] = $item->ro_detail_product_id ?? null;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_notes()] = $item->ro_detail_notes ?? null;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_product_price()] = $item->ro_detail_product_price ?? null;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_qty()] = Helper::filterInput($item->ro_detail_qty);
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_sell()] = Helper::filterInput($item->ro_detail_product_price) ?? 0;
+        //         $delivery_detail[$counterPlus][DeDetailFacades::mask_total()] = $total;
+        //     }
+        // }
+        $delivery = [
+            'do_code' => $autonumber,
+            'do_request_id' => $data['ro_code'],
+            'do_branch_id' => $data['ro_branch_id'],
+            'do_date_order' => $data['ro_date_order'],
+            'do_status' => PurchaseStatus::Create,
+            'do_notes' => $data['do_notes'],
+            // 'do_sum_value' => $grand,
+            // 'do_sum_total' => $grand,
+            // 'detail' => $delivery_detail,
+        ];
+
+        $delivery = collect($delivery);
+
+        $check = $service->save(new DeRepository(), $delivery);
+        return redirect()->route('procurement_delivery_order_edit', ['code' => $autonumber]);
     }
 
     public function edit($code)
@@ -150,7 +175,7 @@ class RequestOrderController extends Controller
         return view(Views::show())->with($this->share([
             'fields' => Helper::listData(self::$model->datatable),
             'model' => $data,
-            'detail' => $data->detail ?? []
+            'detail' => $data->detail ?? [],
         ]));
     }
 

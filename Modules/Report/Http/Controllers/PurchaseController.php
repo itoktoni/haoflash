@@ -3,23 +3,17 @@
 namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Modules\Master\Dao\Facades\ProductFacades;
-use Modules\Master\Dao\Repositories\CompanyRepository;
-use Modules\Master\Dao\Repositories\ProductRepository;
-use Modules\Report\Dao\Repositories\ReportSoDetail;
-use Modules\Report\Dao\Repositories\ReportSoSummary;
-use Modules\Report\Dao\Repositories\ReportSummarySo;
-use Modules\Report\Dao\Repositories\SoSummaryExcel;
-use Modules\System\Dao\Repositories\TeamRepository;
-use Modules\System\Http\Services\PreviewService;
+use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Repositories\PurchaseRepository;
+use Modules\Procurement\Dao\Repositories\SupplierRepository;
+use Modules\Report\Dao\Repositories\ReportPurchaseDetail;
+use Modules\Report\Dao\Repositories\ReportPurchaseSummary;
+use Modules\Report\Dao\Repositories\ReportWoDetail;
+use Modules\Report\Dao\Repositories\ReportWoSummary;
 use Modules\System\Http\Services\ReportService;
-use Modules\System\Http\Services\SingleService;
 use Modules\System\Plugins\Views;
-use Modules\Transaction\Dao\Repositories\SoRepository;
 
-class SalesController extends Controller
+class PurchaseController extends Controller
 {
     public static $template;
     public static $service;
@@ -30,19 +24,17 @@ class SalesController extends Controller
     private function share($data = [])
     {
         $product = Views::option(new ProductRepository());
-        $company = Views::option(new CompanyRepository());
-        $customer = Views::option(new TeamRepository());
+        $supplier = Views::option(new SupplierRepository());
 
         $view = [
             'product' => $product,
-            'company' => $company,
-            'customer' => $customer,
+            'supplier' => $supplier,
         ];
 
         return array_merge($view, $data);
     }
 
-    public function detail(ReportSoDetail $repository)
+    public function detail(ReportPurchaseDetail $repository)
     {
         $preview = false;
         if ($name = request()->get('name')) {
@@ -55,12 +47,12 @@ class SalesController extends Controller
             ]));
     }
 
-    public function detailExport(ReportService $service, ReportSoDetail $repository)
+    public function detailExport(ReportService $service, ReportPurchaseDetail $repository)
     {
         return $service->generate($repository, 'export_detail');
     }
 
-    public function summary(ReportSoSummary $repository)
+    public function summary(ReportPurchaseSummary $repository)
     {
         $preview = false;
         if ($name = request()->get('name')) {
@@ -74,7 +66,7 @@ class SalesController extends Controller
             ]));
     }
 
-    public function summaryExport(ReportService $service, ReportSoSummary $repository)
+    public function summaryExport(ReportService $service, ReportPurchaseSummary $repository)
     {
         return $service->generate($repository, 'export_summary');
     }

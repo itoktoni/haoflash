@@ -52,6 +52,7 @@ class PurchaseRequest extends FormRequest
 
         $total_value = Helper::filterInput($map->sum(PoDetailFacades::mask_total())) ?? 0;
         $total_discount = Helper::filterInput($this->{PoFacades::mask_discount()}) ?? 0;
+        $discount_value = Helper::filterInput($this->{PoFacades::mask_discount_value()}) ?? 0;
         $supplier = SupplierFacades::find($this->po_supplier_id);
 
         $percent_pph = env('TAX_PPH', 0.5) / 100;
@@ -84,6 +85,7 @@ class PurchaseRequest extends FormRequest
             PoFacades::mask_ppn() => $total_ppn,
             PoFacades::mask_dpp() => $total_dpp,
             PoFacades::mask_discount() => $total_discount,
+            PoFacades::mask_discount_value() => $discount_value,
             PoFacades::mask_total() => $total_summary,
             'detail' => array_values($map->toArray()),
         ]);

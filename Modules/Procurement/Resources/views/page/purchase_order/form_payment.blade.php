@@ -3,6 +3,7 @@
 @section('content')
 
 <x-date :array="['date']" />
+<x-mask :array="['number', 'money']" />
 
 <div class="row">
     <div class="panel-body">
@@ -57,7 +58,7 @@
 
                         {!! Form::label('name', __('Amount'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
                         <div class="col-md-4 col-sm-4 {{ $errors->has('payment_value_approve') ? 'has-error' : ''}}">
-                            {!! Form::text('payment_value_approve', null, ['class' => 'form-control']) !!}
+                            {!! Form::text('payment_value_approve', null, ['class' => 'form-control number']) !!}
                             {!! $errors->first('payment_value_approve', '<p class="help-block">:message</p>') !!}
                         </div>
 

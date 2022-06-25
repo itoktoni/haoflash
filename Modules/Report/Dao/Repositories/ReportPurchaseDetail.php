@@ -2,16 +2,16 @@
 
 namespace Modules\Report\Dao\Repositories;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 use Modules\Report\Dao\Interfaces\GenerateReport;
-use Modules\Transaction\Dao\Repositories\WoRepository;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ReportWoSummary extends WoRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
+class ReportPurchaseDetail extends PurchaseRepository implements FromView, WithColumnFormatting, WithColumnWidths, ShouldAutoSize, GenerateReport
 {
     public $name;
 
@@ -23,17 +23,19 @@ class ReportWoSummary extends WoRepository implements FromView, WithColumnFormat
 
     public function data()
     {
-        $query = $this->dataRepository()->with(['has_customer', 'has_supplier'])->filter();
+        $query = $this->dataRepository()->leftJoinRelationship('has_detail')->filter();
 
         if ($from = request()->get('from')) {
-            $query->whereDate('wo_created_at', '>=', $from);
+            $query->whereDate('po_created_at', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
-            $query->whereDate('wo_created_at', '<=', $to);
+            $query->whereDate('po_created_at', '<=', $to);
         }
 
-        // dd($query->get());
+        if($product = request()->get('po_product_id')){
+            $query->where('po_detail_product_id', $product);
+        }
 
         return $query->get();
     }
@@ -49,6 +51,9 @@ class ReportWoSummary extends WoRepository implements FromView, WithColumnFormat
     {
         return [
             'E' => NumberFormat::FORMAT_TEXT,
+            'F' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'H' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -60,6 +65,9 @@ class ReportWoSummary extends WoRepository implements FromView, WithColumnFormat
             'C' => 30,
             'D' => 30,
             'E' => 20,
+            'F' => 10,
+            'G' => 15,
+            'H' => 20,
         ];
     }
 }

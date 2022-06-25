@@ -5,6 +5,7 @@ namespace Modules\Procurement\Dao\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Kirschbaum\PowerJoins\PowerJoins;
+use Mehradsadeghi\FilterQueryString\FilterQueryString;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Item\Dao\Models\Product;
 use Modules\Procurement\Dao\Facades\BranchFacades;
@@ -13,7 +14,7 @@ use Modules\System\Plugins\Helper;
 
 class Stock extends Model
 {
-    use PowerJoins;
+    use PowerJoins, FilterQueryString;
     protected $table = 'stocks';
     protected $primaryKey = 'stock_id';
 
@@ -38,6 +39,10 @@ class Stock extends Model
         'stock_activated_at',
         'stock_activated_by',
         'stock_refer_product_id',
+    ];
+
+    protected $filters = [
+        'stock_branch_id',
     ];
 
     const CREATED_AT = 'stock_created_at';

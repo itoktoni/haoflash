@@ -1,9 +1,10 @@
+<h4>Delivery Order : </h4>
 <table id="transaction" class="table table-no-more table-bordered table-striped">
     <thead>
         <tr>
             <th class="text-left col-md-1">Action</th>
-            <th class="text-left col-md-4">Product Name</th>
-            <th class="text-left col-md-2">Product Description</th>
+            <th class="text-left col-md-3">Product Name</th>
+            <th class="text-left col-md-4">Product Description</th>
             <th class="text-right col-md-1">Qty</th>
             <th class="text-right col-md-2">Price</th>
             <th class="text-right col-md-2">Total</th>

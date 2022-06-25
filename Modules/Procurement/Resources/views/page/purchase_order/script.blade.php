@@ -13,7 +13,7 @@
             var total = numeral(qty).value() * numeral(price).value();
 
             if (disc != '') {
-                total = total - (total * numeral(disc).value() / 100);
+                total = total - numeral(disc).value();
             }
 
             var mask_total = numeral(total).format('0,0');
@@ -34,7 +34,7 @@
             var before_discount = $('#before_discount');
 
             var disc = $('#grand_discount_value');
-            var price = sum * numeral(disc.val()).value() / 100;
+            var price = numeral(disc.val()).value();
             var mask_price_discount = numeral(price).format('0,0');
 
             var total_discount = sum - price;

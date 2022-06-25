@@ -3,13 +3,15 @@
 namespace Modules\Report\Dao\Repositories;
 
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Modules\Procurement\Dao\Models\Stock;
+use Modules\Procurement\Dao\Repositories\StockRepository;
 use Modules\Report\Dao\Interfaces\GenerateReport;
-use Modules\Transaction\Dao\Repositories\StockRepository;
 
 class ReportStockDetail extends StockRepository implements FromView, WithColumnFormatting, WithColumnWidths, ShouldAutoSize, GenerateReport
 {
@@ -23,7 +25,7 @@ class ReportStockDetail extends StockRepository implements FromView, WithColumnF
 
     public function data()
     {
-        $query = $this->dataRepository()->with(['has_customer', 'has_product', 'has_warehouse', 'has_location'])->filter();
+        $query = Stock::with(['has_supplier', 'has_product', 'has_branch']);
 
         if ($from = request()->get('from')) {
             $query->whereDate('stock_created_at', '>=', $from);
@@ -31,6 +33,10 @@ class ReportStockDetail extends StockRepository implements FromView, WithColumnF
 
         if ($to = request()->get('to')) {
             $query->whereDate('stock_created_at', '<=', $to);
+        }
+
+        if ($branch = request()->get('stock_branch_id')) {
+            $query->where('stock_branch_id', $branch);
         }
 
         return $query->get();

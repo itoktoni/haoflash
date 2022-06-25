@@ -13,7 +13,9 @@ class DeliveryCreateService
         $check = false;
         try {
             $check = $repository->saveRepository($data->all());
-            DeDetailFacades::insert($data['detail']);
+            if(!empty($data['detail'])){
+                DeDetailFacades::insert($data['detail']);
+            }
 
             if(isset($check['status']) && $check['status']){
 

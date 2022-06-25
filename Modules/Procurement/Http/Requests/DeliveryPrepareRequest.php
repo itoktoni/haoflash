@@ -48,6 +48,8 @@ class DeliveryPrepareRequest extends FormRequest
             'selisih' => $selisih,
             'complete' => $complete,
             'serial' => $data,
+            'do_prepare_buy' => Helper::filterInput($this->do_prepare_buy),
+            'do_prepare_sell' => Helper::filterInput($this->do_prepare_sell),
         ]);
 
     }

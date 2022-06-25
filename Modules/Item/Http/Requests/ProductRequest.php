@@ -6,6 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Item\Dao\Facades\CategoryFacades;
 use Modules\System\Http\Requests\GeneralRequest;
+use Modules\System\Plugins\Helper;
 
 class ProductRequest extends GeneralRequest
 {
@@ -20,7 +21,7 @@ class ProductRequest extends GeneralRequest
     public function prepareForValidation()
     {
         $this->merge([
-            // 'content' => ''
+            'product_buy' => Helper::filterInput($this->product_buy),
         ]);
     }
 

@@ -26,15 +26,19 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', __('Branch'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('stock_branch_id') ? 'has-error' : ''}}">
-        {{ Form::select('stock_branch_id', $branch, request()->get('stock_branch_id') ?? null, ['class'=> 'form-control ']) }}
-        {!! $errors->first('stock_branch_id', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', __('Product'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('do_product_id') ? 'has-error' : ''}}">
+        {{ Form::select('do_product_id', $product, request()->get('do_product_id') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('do_product_id', '<p class="help-block">:message</p>') !!}
     </div>
 
+    {!! Form::label('name', __('Branch'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('do_branch_id') ? 'has-error' : ''}}">
+        {{ Form::select('do_branch_id', $branch, request()->get('do_branch_id') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('do_branch_id', '<p class="help-block">:message</p>') !!}
+    </div>
 
 </div>
-
 
 
 @isset($preview)

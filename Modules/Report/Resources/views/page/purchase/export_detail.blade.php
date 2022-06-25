@@ -19,8 +19,7 @@
             <tr>
                 <th class="text-left" style="width:3%">No.</th>
                 <th class="text-left" style="width:12%">No. Order</th>
-                <th class="text-left" style="width:20%">No. Sales</th>
-                <th class="text-left" style="width:20%">Nama Customer</th>
+                <th class="text-left" style="width:20%">Nama Supplier</th>
                 <th class="text-left" style="width:20%">Nama Product</th>
                 <th class="text-right" style="width:5%">Qty</th>
                 <th class="text-right" style="width:7%">Harga</th>
@@ -29,26 +28,33 @@
         </thead>
         <tbody>
             @if(!empty($test))
+@php
+$total = 0;
+@endphp
             @foreach($preview as $data)
             @if($detail = $data->has_detail)
             @foreach($detail as $item)
+@php
+$total = $total + $item->po_detail_total;
+@endphp
             <tr>
                 <td data-title="No">{{ $loop->iteration }} </td>
-                <td data-title="No. Order">{{ $data->jo_code ?? '' }} </td>
-                <td data-title="Nama Company">{{ $data->jo_so_code ?? '' }} </td>
-                <td data-title="Nama Customer">{{ $data->has_customer->name ?? '' }} </td>
-                <td data-title="Nama Product">{{ $item->has_product->mask_name ?? '' }} </td>
-                <td data-title="Qty" class="text-right">{{ $item->mask_qty ?? '' }} </td>
-                <td data-title="Harga" class="text-right">{{ Helper::createRupiah($item->mask_price) ?? '' }} </td>
-                <td data-title="Total" class="text-right">{{ Helper::createRupiah($data->jo_sum_total) }} </td>
+                <td data-title="No. Order">{{ $data->po_code ?? '' }} </td>
+                <td data-title="Nama Supplier">{{ $data->supplier_name ?? '' }} </td>
+                <td data-title="Nama Product">{{ $item->has_product->product_name ?? '' }} </td>
+                <td data-title="Qty" class="text-right">{{ $item->po_detail_qty ?? '' }} </td>
+                <td data-title="Harga" class="text-right">{{ Helper::createRupiah($item->po_detail_price) ?? '' }} </td>
+                <td data-title="Total" class="text-right">{{ Helper::createRupiah($item->po_detail_total) }} </td>
             </tr>
             @endforeach
             @endif
+
             @endforeach
             @endif
+
             <tr>
-                <td class="total" data-title="" colspan="7">Grand Total</td>
-                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('jo_sum_total')) }}</td>
+                <td class="total" data-title="" colspan="6">Grand Total</td>
+                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($total) }}</td>
             </tr>
         </tbody>
     </table>

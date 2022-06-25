@@ -67,6 +67,7 @@ class StockVoucherController extends Controller
                 self::$model->mask_buy() => 'mask_buy_format',
                 'product_description' => 'mask_product_description',
             ])
+            ->EditExpired(['stock_expired' => 'stock_expired'])
             ->make();
     }
 
@@ -89,6 +90,7 @@ class StockVoucherController extends Controller
                 self::$model->mask_buy() => 'mask_buy_format',
                 'product_description' => 'mask_product_description',
             ])
+            ->EditExpired(['stock_expired' => 'stock_expired'])
             ->make();
     }
 

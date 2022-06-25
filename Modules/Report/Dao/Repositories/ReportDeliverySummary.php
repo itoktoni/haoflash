@@ -2,16 +2,16 @@
 
 namespace Modules\Report\Dao\Repositories;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Modules\Procurement\Dao\Repositories\DeRepository;
 use Modules\Report\Dao\Interfaces\GenerateReport;
-use Modules\Transaction\Dao\Repositories\WoRepository;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ReportWoDetail extends WoRepository implements FromView, WithColumnFormatting, WithColumnWidths, ShouldAutoSize, GenerateReport
+class ReportDeliverySummary extends DeRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
 {
     public $name;
 
@@ -23,14 +23,14 @@ class ReportWoDetail extends WoRepository implements FromView, WithColumnFormatt
 
     public function data()
     {
-        $query = $this->dataRepository()->with(['has_customer', 'has_detail', 'has_supplier'])->filter();
+        $query = $this->dataRepository()->with(['has_branch'])->filter();
 
         if ($from = request()->get('from')) {
-            $query->whereDate('wo_created_at', '>=', $from);
+            $query->whereDate('do_created_at', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
-            $query->whereDate('wo_created_at', '<=', $to);
+            $query->whereDate('do_created_at', '<=', $to);
         }
 
         return $query->get();
@@ -47,9 +47,6 @@ class ReportWoDetail extends WoRepository implements FromView, WithColumnFormatt
     {
         return [
             'E' => NumberFormat::FORMAT_TEXT,
-            'F' => NumberFormat::FORMAT_TEXT,
-            'G' => NumberFormat::FORMAT_TEXT,
-            'H' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -61,9 +58,6 @@ class ReportWoDetail extends WoRepository implements FromView, WithColumnFormatt
             'C' => 30,
             'D' => 30,
             'E' => 20,
-            'F' => 10,
-            'G' => 15,
-            'H' => 20,
         ];
     }
 }

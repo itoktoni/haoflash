@@ -3,25 +3,14 @@
 namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Modules\Master\Dao\Facades\ProductFacades;
-use Modules\Master\Dao\Repositories\CompanyRepository;
-use Modules\Master\Dao\Repositories\ProductRepository;
-use Modules\Report\Dao\Repositories\ReportJoDetail;
-use Modules\Report\Dao\Repositories\ReportJoSummary;
-use Modules\Report\Dao\Repositories\ReportSoDetail;
-use Modules\Report\Dao\Repositories\ReportSoSummary;
-use Modules\Report\Dao\Repositories\ReportSummarySo;
-use Modules\Report\Dao\Repositories\SoSummaryExcel;
-use Modules\System\Dao\Repositories\TeamRepository;
-use Modules\System\Http\Services\PreviewService;
+use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Repositories\BranchRepository;
+use Modules\Report\Dao\Repositories\ReportDeliveryDetail;
+use Modules\Report\Dao\Repositories\ReportDeliverySummary;
 use Modules\System\Http\Services\ReportService;
-use Modules\System\Http\Services\SingleService;
 use Modules\System\Plugins\Views;
-use Modules\Transaction\Dao\Repositories\SoRepository;
 
-class JobController extends Controller
+class DeliveryController extends Controller
 {
     public static $template;
     public static $service;
@@ -32,19 +21,17 @@ class JobController extends Controller
     private function share($data = [])
     {
         $product = Views::option(new ProductRepository());
-        $company = Views::option(new CompanyRepository());
-        $customer = Views::option(new TeamRepository());
+        $branch = Views::option(new BranchRepository());
 
         $view = [
             'product' => $product,
-            'company' => $company,
-            'customer' => $customer,
+            'branch' => $branch,
         ];
 
         return array_merge($view, $data);
     }
 
-    public function detail(ReportJoDetail $repository)
+    public function detail(ReportDeliveryDetail $repository)
     {
         $preview = false;
         if ($name = request()->get('name')) {
@@ -57,12 +44,12 @@ class JobController extends Controller
             ]));
     }
 
-    public function detailExport(ReportService $service, ReportJoDetail $repository)
+    public function detailExport(ReportService $service, ReportDeliveryDetail $repository)
     {
         return $service->generate($repository, 'export_detail');
     }
 
-    public function summary(ReportJoSummary $repository)
+    public function summary(ReportDeliverySummary $repository)
     {
         $preview = false;
         if ($name = request()->get('name')) {
@@ -76,7 +63,7 @@ class JobController extends Controller
             ]));
     }
 
-    public function summaryExport(ReportService $service, ReportJoSummary $repository)
+    public function summaryExport(ReportService $service, ReportDeliverySummary $repository)
     {
         return $service->generate($repository, 'export_summary');
     }

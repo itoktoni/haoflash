@@ -3,6 +3,7 @@
 @section('content')
 
 <x-date :array="['date']" />
+<x-mask :array="['number', 'money']" />
 
 <div class="row">
     <div class="panel-body">
@@ -55,7 +56,7 @@
 
                     {!! Form::label('name', __('Buy'), ['class' => 'col-md-1 col-sm-1 control-label']) !!}
                         <div class="col-md-3 col-sm-3 {{ $errors->has('po_receive_buy') ? 'has-error' : ''}}">
-                            {!! Form::text('po_receive_buy', null, ['class' => 'form-control', $model->po_receive_type == CategoryType::BDP ? '' : 'readonly']) !!}
+                            {!! Form::text('po_receive_buy', null, ['class' => 'form-control number', $model->po_receive_type == CategoryType::BDP ? '' : 'readonly']) !!}
                             {!! $errors->first('po_receive_buy', '<p class="help-block">:message</p>') !!}
                         </div>
 

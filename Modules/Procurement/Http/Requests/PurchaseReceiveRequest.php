@@ -44,6 +44,7 @@ class PurchaseReceiveRequest extends FormRequest
             PoReceiveFacades::getKeyName() => $autonumber,
             'selisih' => $selisih,
             'complete' => $complete,
+            'po_receive_buy' => Helper::filterInput($this->po_receive_buy)
         ]);
     }
 

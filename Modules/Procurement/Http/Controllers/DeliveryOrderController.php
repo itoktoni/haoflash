@@ -19,6 +19,8 @@ use Modules\Procurement\Dao\Facades\DePrepareFacades;
 use Modules\Procurement\Dao\Facades\DeReceiveFacades;
 use Modules\Procurement\Dao\Facades\PoDetailFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
+use Modules\Procurement\Dao\Facades\RoDetailFacades;
+use Modules\Procurement\Dao\Facades\RoFacades;
 use Modules\Procurement\Dao\Models\DePrepare;
 use Modules\Procurement\Dao\Models\PoReceive;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
@@ -139,6 +141,12 @@ class DeliveryOrderController extends Controller
     public function edit($code)
     {
         $data = $this->get($code, ['has_detail']);
+        $dataRo = false;
+        $ro = $data->do_request_id ?? request()->get('ro');
+
+        if($ro){
+            $dataRo = RoDetailFacades::with('has_product')->where('ro_detail_ro_code', $ro)->get();
+        }
 
         $status = DeliveryStatus::getOptions();
         if (auth()->user()->group_user != GroupUserType::Developer) {
@@ -148,6 +156,7 @@ class DeliveryOrderController extends Controller
         return view(Views::update(config('page'), config('folder')))->with($this->share([
             'model' => $data,
             'status' => $status,
+            'data_ro' => $dataRo,
             'detail' => $data->has_detail,
         ]));
     }

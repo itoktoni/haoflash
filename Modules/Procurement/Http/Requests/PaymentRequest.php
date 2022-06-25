@@ -29,9 +29,11 @@ class PaymentRequest extends FormRequest
 
     public function prepareForValidation()
     {
+        $this->payment_value_approve =  Helper::filterInput($this->payment_value_approve);
         $this->merge([
             'payment_reference' => $this->code,
             'payment_model' => PaymentModel::PaymentPurchase,
+            'payment_value_approve' => $this->payment_value_approve
         ]);
     }
 
@@ -45,20 +47,20 @@ class PaymentRequest extends FormRequest
                 $get = !empty($this->payment_value_approve) ? $this->payment_value_approve : 0;
                 $total = $purchase->mask_total;
                 $instalment = $purchase->has_payment->sum('payment_value_approve') ?? 0;
-                $payment = $instalment + $get;
+                $payment = $instalment + Helper::formatNumber($get);
 
                 if ($payment > $total) {
                     $validator->errors()->add('payment_value_approve', 'Pembayaran tidak boleh lebih dari Total PO');
                 }
             }
-            
+
             if($this->payment_method == PaymentMethod::Cash && !empty($this->payment_from)){
-                
+
                 $validator->errors()->add('payment_from', 'Jika Pembayaran Cash, Bank tidak boleh dipilih !');
             }
 
             if($this->payment_method == PaymentMethod::Transfer && empty($this->payment_from)){
-                
+
                 $validator->errors()->add('payment_from', 'Jika Pembayaran Transfer, Bank harus dipilih !');
             }
 

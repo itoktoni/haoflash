@@ -3,6 +3,8 @@
 @section('content')
 
 <x-date :array="['date']" />
+<x-mask :array="['number', 'money']" />
+
 <div class="row">
     <div class="panel-body">
         {!! Form::model($model, ['route'=>[$module.'_post_prepare_detail'],'class'=>'form-horizontal','files'=>true]) !!}
@@ -38,13 +40,13 @@
 
                         {!! Form::label('name', __('Buying Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
                         <div class="col-md-4 col-sm-4 {{ $errors->has('do_prepare_buy') ? 'has-error' : ''}}">
-                            {!! Form::text('do_prepare_buy', $prepare->mask_price ?? null, ['class' => 'form-control', 1 == CategoryType::BDP ? '' : 'readonly']) !!}
+                            {!! Form::text('do_prepare_buy', $prepare->mask_price ?? null, ['class' => 'form-control number', 1 == CategoryType::BDP ? '' : 'readonly']) !!}
                             {!! $errors->first('do_prepare_buy', '<p class="help-block">:message</p>') !!}
                         </div>
 
                         {!! Form::label('name', __('Selling Price'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
                         <div class="col-md-4 col-sm-4 {{ $errors->has('do_prepare_sell') ? 'has-error' : ''}}">
-                            {!! Form::text('do_prepare_sell', $prepare->mask_sell ?? 0, ['class' => 'form-control']) !!}
+                            {!! Form::text('do_prepare_sell', $prepare->mask_sell ?? 0, ['class' => 'form-control number']) !!}
                             {!! $errors->first('do_prepare_sell', '<p class="help-block">:message</p>') !!}
                         </div>
 

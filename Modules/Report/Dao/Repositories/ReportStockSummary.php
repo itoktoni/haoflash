@@ -7,11 +7,12 @@ use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Modules\Procurement\Dao\Repositories\StockRepository as RepositoriesStockRepository;
 use Modules\Report\Dao\Interfaces\GenerateReport;
 use Modules\Transaction\Dao\Repositories\StockRepository;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ReportStockSummary extends StockRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
+class ReportStockSummary extends RepositoriesStockRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
 {
     public $name;
 
@@ -23,18 +24,18 @@ class ReportStockSummary extends StockRepository implements FromView, WithColumn
 
     public function data()
     {
-        $query = $this->dataRepository()->with(['has_customer', 'has_product', 'has_warehouse', 'has_location'])->filter();
+        // $query = $this->dataRepository()->with(['has_customer', 'has_product', 'has_warehouse', 'has_location'])->filter();
+        $query = DB::table('view_summary_stock');
 
         if ($from = request()->get('from')) {
-            $query->whereDate('stock_created_at', '>=', $from);
+            $query->whereDate('stock_expired', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
-            $query->whereDate('stock_created_at', '<=', $to);
+            $query->whereDate('stock_expired', '<=', $to);
         }
 
-        $data = $query->groupBy(['stock_product_id', 'stock_customer_id', 'stock_so_code']);
-        return $data->get();
+        return $query->get();
     }
 
     public function view(): View

@@ -5,11 +5,12 @@ namespace Modules\Report\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Master\Dao\Facades\ProductFacades;
 use Modules\Master\Dao\Repositories\CompanyRepository;
 use Modules\Master\Dao\Repositories\LocationRepository;
-use Modules\Master\Dao\Repositories\ProductRepository;
 use Modules\Master\Dao\Repositories\WarehouseRepository;
+use Modules\Procurement\Dao\Repositories\BranchRepository;
 use Modules\Report\Dao\Repositories\ReportSoDetail;
 use Modules\Report\Dao\Repositories\ReportSoSummary;
 use Modules\Report\Dao\Repositories\ReportStockDetail;
@@ -34,7 +35,11 @@ class StockController extends Controller
     private function share($data = [])
     {
         $customer = Views::option(new TeamRepository());
+        $product = Views::option(new ProductRepository());
+        $branch = Views::option(new BranchRepository());
         $view = [
+            'branch' => $branch,
+            'product' => $product,
             'customer' => $customer,
         ];
 

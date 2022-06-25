@@ -26,16 +26,16 @@
 
 <div class="form-group">
 
-    {!! Form::label('name', __('Company'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('wo_company_id') ? 'has-error' : ''}}">
-        {{ Form::select('wo_company_id', $company, request()->get('wo_company_id') ?? null, ['class'=> 'form-control ']) }}
-        {!! $errors->first('wo_company_id', '<p class="help-block">:message</p>') !!}
+    {!! Form::label('name', __('Product'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('po_product_id') ? 'has-error' : ''}}">
+        {{ Form::select('po_product_id', $product, request()->get('po_product_id') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('po_product_id', '<p class="help-block">:message</p>') !!}
     </div>
 
     {!! Form::label('name', __('Supplier'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
-    <div class="col-md-4 col-sm-4 {{ $errors->has('wo_supplier_id') ? 'has-error' : ''}}">
-        {{ Form::select('wo_supplier_id', $supplier, request()->get('wo_supplier_id') ?? null, ['class'=> 'form-control ']) }}
-        {!! $errors->first('wo_supplier_id', '<p class="help-block">:message</p>') !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('po_supplier_id') ? 'has-error' : ''}}">
+        {{ Form::select('po_supplier_id', $supplier, request()->get('po_supplier_id') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('po_supplier_id', '<p class="help-block">:message</p>') !!}
     </div>
 
 </div>

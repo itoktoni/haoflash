@@ -44,6 +44,7 @@ class De extends Model
         'do_updated_by',
         'do_deleted_by',
         'do_branch_id',
+        'do_request_id',
         'do_date_order',
         'do_status',
         'do_notes',

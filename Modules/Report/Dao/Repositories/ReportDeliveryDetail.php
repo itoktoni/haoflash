@@ -8,11 +8,10 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Modules\Procurement\Dao\Repositories\DeRepository;
 use Modules\Report\Dao\Interfaces\GenerateReport;
-use Modules\Transaction\Dao\Repositories\JoRepository;
-use Modules\Transaction\Dao\Repositories\SoRepository;
 
-class ReportJoDetail extends JoRepository implements FromView, WithColumnFormatting, WithColumnWidths, ShouldAutoSize, GenerateReport
+class ReportDeliveryDetail extends DeRepository implements FromView, WithColumnFormatting, WithColumnWidths, ShouldAutoSize, GenerateReport
 {
     public $name;
 
@@ -24,14 +23,18 @@ class ReportJoDetail extends JoRepository implements FromView, WithColumnFormatt
 
     public function data()
     {
-        $query = $this->dataRepository()->with(['has_customer', 'has_detail'])->filter();
+        $query = $this->dataRepository()->leftJoinRelationship('has_detail')->filter();
 
         if ($from = request()->get('from')) {
-            $query->whereDate('jo_created_at', '>=', $from);
+            $query->whereDate('do_created_at', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
-            $query->whereDate('jo_created_at', '<=', $to);
+            $query->whereDate('do_created_at', '<=', $to);
+        }
+
+        if($product = request()->get('do_product_id')){
+            $query->where('do_detail_product_id', $product);
         }
 
         return $query->get();

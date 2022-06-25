@@ -72,4 +72,8 @@
     </div>
 </div>
 
+@if(!empty($data_ro))
+@include($folder.'::page.'.$template.'.ro_table')
+@endif
+
 @include($folder.'::page.'.$template.'.table')

@@ -2,6 +2,7 @@
 
 namespace Modules\Procurement\Http\Services;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Plugins\Debug;
 use Modules\System\Dao\Interfaces\CrudInterface;
@@ -123,19 +124,6 @@ class DataStockVoucherService extends DataService
             $this->datatable->addColumn('action', function($model){
                 return view(Views::action())->with(['model' => $model]);
             });
-        }
-    }
-
-    protected function setColumn()
-    {
-        if (!empty($this->transform)) {
-            foreach ($this->transform as $key => $data) {
-                $this->datatable->editColumn($key, function ($select) use ($key, $data) {
-                    return $select->{$data};
-                });
-            }
-
-            $this->column = array_merge($this->column, array_keys($this->transform));
         }
     }
 

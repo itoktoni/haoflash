@@ -55,7 +55,7 @@ class Po extends Model
         'po_last_status',
     ];
 
-    // public $with = ['has_detail', 'has_supplier'];
+    // public $with = ['has_detail'];
 
     protected $filters = [
         'po_supplier_id',
@@ -228,6 +228,11 @@ class Po extends Model
     public function mask_discount()
     {
         return 'po_sum_discount';
+    }
+
+    public function mask_discount_value()
+    {
+        return 'po_discount_value';
     }
 
     public function setMaskDiscountAttribute($value)

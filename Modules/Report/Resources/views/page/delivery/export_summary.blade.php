@@ -18,9 +18,10 @@
         <thead>
             <tr>
                 <th class="text-left" style="width:2%">No.</th>
-                <th class="text-left" style="width:12%">No. Order</th>
-                <th class="text-left" style="width:20%">No. Sales</th>
-                <th class="text-left" style="width:20%">Nama Customer</th>
+                <th class="text-left" style="width:15%">No. Order</th>
+                <th class="text-left" style="width:20%">Nama Branch</th>
+                <th class="text-left" style="width:12%">Date</th>
+                <th class="text-left" style="width:12%">Status</th>
                 <th class="text-right" style="width:10%">Total</th>
             </tr>
         </thead>
@@ -28,15 +29,16 @@
             @foreach($preview as $data)
             <tr>
                 <td data-title="No">{{ $loop->iteration }} </td>
-                <td data-title="No. Order">{{ $data->jo_code ?? '' }} </td>
-                <td data-title="Nama Company">{{ $data->jo_so_code ?? '' }} </td>
-                <td data-title="Nama Customer">{{ $data->has_customer->name ?? '' }} </td>
-                <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->jo_sum_total) }} </td>
+                <td data-title="No. Order">{{ $data->do_code ?? '' }} </td>
+                <td data-title="Nama Branch">{{ $data->branch_name ?? '' }} </td>
+                <td data-title="Date">{{ $data->do_date_order ?? '' }} </td>
+                <td data-title="Status">{{ PurchaseStatus::getDescription($data->do_status) ?? '' }} </td>
+                <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->do_sum_total) }} </td>
             </tr>
             @endforeach
             <tr>
-                <td class="total" data-title="" colspan="4">Grand Total</td>
-                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('jo_sum_total')) }}</td>
+                <td class="total" data-title="" colspan="5">Grand Total</td>
+                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('do_sum_total')) }}</td>
             </tr>
         </tbody>
     </table>
