@@ -74,6 +74,7 @@
                     <input type="hidden" value="{{ $total ?? 0 }}" name="remaining">
                     <input type="hidden" value="{{ $model->mask_status ?? '' }}" name="status">
                     <input type="hidden" value="{{ $prepare->mask_expired ?? '' }}" name="do_prepare_expired">
+                    <input type="hidden" value="{{ $prepare->do_detail_key ?? '' }}" name="do_prepare_key">
                     <input type="hidden" value="{{ $supplier ?? '' }}" name="do_prepare_supplier_id">
 
                     @if($prepare->has_product->has_category->mask_type != CategoryType::Accesories)

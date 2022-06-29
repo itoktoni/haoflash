@@ -3,6 +3,7 @@
 namespace Modules\Procurement\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Item\Dao\Facades\ProductFacades;
 use Modules\Procurement\Dao\Enums\DeliveryStatus;
@@ -99,6 +100,7 @@ class DeliveryPrepareRequest extends FormRequest
                     $validator->errors()->add('do_prepare_end', 'Format tidak valid');
                 }
 
+                $detail = DB::table('view_summary_stock')->where('id', $this->do_prepare_key)->first();
                 $stock = StockFacades::whereIn(StockFacades::mask_code(), $this->serial)
                     ->where(StockFacades::mask_product_id(), $this->do_prepare_product_id)
                     ->where(StockFacades::mask_branch_id(), env('BRANCH_ID'))
@@ -113,7 +115,6 @@ class DeliveryPrepareRequest extends FormRequest
                     $validator->errors()->add('do_prepare_prepare', 'Qty Stock tidak tersedia');
                 }
             }
-
             if ($prepare > $qty) {
 
                 $validator->errors()->add('do_prepare_prepare', 'Qty prepare tidak boleh lebih dari Qty');
