@@ -11,6 +11,7 @@ use Modules\Master\Dao\Repositories\CompanyRepository;
 use Modules\Master\Dao\Repositories\LocationRepository;
 use Modules\Master\Dao\Repositories\WarehouseRepository;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
+use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\Report\Dao\Repositories\ReportSoDetail;
 use Modules\Report\Dao\Repositories\ReportSoSummary;
 use Modules\Report\Dao\Repositories\ReportStockDetail;
@@ -36,9 +37,11 @@ class StockController extends Controller
     {
         $customer = Views::option(new TeamRepository());
         $product = Views::option(new ProductRepository());
+        $supplier = Views::option(new SupplierRepository());
         $branch = Views::option(new BranchRepository());
         $view = [
             'branch' => $branch,
+            'supplier' => $supplier,
             'product' => $product,
             'customer' => $customer,
         ];

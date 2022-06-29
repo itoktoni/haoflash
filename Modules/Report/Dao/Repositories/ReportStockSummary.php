@@ -35,6 +35,14 @@ class ReportStockSummary extends RepositoriesStockRepository implements FromView
             $query->whereDate('stock_expired', '<=', $to);
         }
 
+        if ([$product] = request()->get('stock_product_id')) {
+            $query = $query->where('stock_product_id', [$product]);
+        }
+
+        if ($supplier = request()->get('stock_supplier_id')) {
+            $query = $query->where('stock_supplier_id', $supplier);
+        }
+
         return $query->get();
     }
 

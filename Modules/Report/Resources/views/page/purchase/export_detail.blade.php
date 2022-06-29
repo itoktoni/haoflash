@@ -30,6 +30,7 @@
             @if(!empty($test))
 @php
 $total = 0;
+$number = 1;
 @endphp
             @foreach($preview as $data)
             @if($detail = $data->has_detail)
@@ -38,7 +39,7 @@ $total = 0;
 $total = $total + $item->po_detail_total;
 @endphp
             <tr>
-                <td data-title="No">{{ $loop->iteration }} </td>
+                <td data-title="No">{{ $number++ }} </td>
                 <td data-title="No. Order">{{ $data->po_code ?? '' }} </td>
                 <td data-title="Nama Supplier">{{ $data->supplier_name ?? '' }} </td>
                 <td data-title="Nama Product">{{ $item->has_product->product_name ?? '' }} </td>

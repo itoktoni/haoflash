@@ -102,7 +102,7 @@
         <div class="navbar-fixed-bottom" id="menu_action">
             <div class="text-right action-wrapper">
                 <a id="linkMenu" href="{!! route($route_index) !!}" class="btn btn-warning">{{ __('Back') }}</a>
-                @if(isset($actions['post_payment']) && $model->mask_payment != PurchasePayment::Paid)
+                @if(isset($actions['post_payment']) && $model->mask_payment != PurchasePayment::Paid && $model->mask_status != PurchaseStatus::Create)
                 <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                 @endif
             </div>

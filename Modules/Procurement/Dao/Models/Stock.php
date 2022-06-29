@@ -43,6 +43,8 @@ class Stock extends Model
 
     protected $filters = [
         'stock_branch_id',
+        'stock_supplier_id',
+        'stock_product_id',
     ];
 
     const CREATED_AT = 'stock_created_at';
