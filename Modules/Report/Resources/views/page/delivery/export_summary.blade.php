@@ -33,12 +33,12 @@
                 <td data-title="Nama Branch">{{ $data->branch_name ?? '' }} </td>
                 <td data-title="Date">{{ $data->do_date_order ?? '' }} </td>
                 <td data-title="Status">{{ PurchaseStatus::getDescription($data->do_status) ?? '' }} </td>
-                <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->do_sum_total) }} </td>
+                <td class="text-right" data-title="Total">{{ number_format($data->do_sum_total) }} </td>
             </tr>
             @endforeach
             <tr>
                 <td class="total" data-title="" colspan="5">Grand Total</td>
-                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('do_sum_total')) }}</td>
+                <td class="total text-right" data-title="Grand Total">{{ number_format($preview->sum('do_sum_total')) }}</td>
             </tr>
         </tbody>
     </table>

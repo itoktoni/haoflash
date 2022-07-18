@@ -9,10 +9,12 @@ use Modules\Item\Dao\Repositories\ProductRepository;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
 use Modules\Procurement\Dao\Repositories\StockBdpRepository;
 use Modules\Procurement\Dao\Repositories\StockRepository;
+use Modules\Procurement\Dao\Repositories\StockSummaryBdpRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\Procurement\Http\Requests\BdpRequest;
 use Modules\Procurement\Http\Services\BdpCreateService;
 use Modules\Procurement\Http\Services\DataBdpService;
+use Modules\Procurement\Http\Services\DataSummaryStockBdpService;
 use Modules\Procurement\Http\Services\DataSummaryStockVoucherService;
 use Modules\System\Http\Requests\DeleteRequest;
 use Modules\System\Http\Requests\GeneralRequest;
@@ -58,13 +60,6 @@ class StockBdpController extends Controller
         return array_merge($view, $data);
     }
 
-    public function index()
-    {
-        return view(Views::index(config('page'), config('folder')))->with([
-            'fields' => Helper::listData(self::$model->datatable),
-        ]);
-    }
-
     public function create()
     {
         return view(Views::create())->with($this->share());
@@ -74,6 +69,36 @@ class StockBdpController extends Controller
     {
         $data = $service->save(self::$model, $request);
         return Response::redirectBack($data);
+    }
+
+    public function indexSummary(StockSummaryBdpRepository $model)
+    {
+        return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))->with([
+            'fields' => Helper::listData($model->datatable),
+        ]);
+    }
+
+    public function dataSummary(DataSummaryStockBdpService $service, StockSummaryBdpRepository $model)
+    {
+        return $service
+            ->setModel($model)
+            ->EditAction([
+                'page'      => config('page'),
+                'folder'    => config('folder'),
+            ], false)
+            ->EditColumn([
+                self::$model->mask_buy() => 'mask_buy_format',
+                'product_description' => 'mask_product_description',
+            ])
+            ->EditExpired(['stock_expired' => 'stock_expired'])
+            ->make();
+    }
+
+    public function index()
+    {
+        return view(Views::index(config('page'), config('folder')))->with([
+            'fields' => Helper::listData(self::$model->datatable),
+        ]);
     }
 
     public function data(DataBdpService $service)

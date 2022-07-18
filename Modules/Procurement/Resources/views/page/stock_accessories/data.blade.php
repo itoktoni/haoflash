@@ -19,7 +19,7 @@
         processing: true,
                 dom: '<<t>p><"pull-left"i>',
                 serverSide: true,
-                order: [ [4, 'desc'] ],
+                order: [ [5, 'desc'] ],
                 pageLength: {{ env('WEBSITE_PAGINATION', 10) }},
                 pagingType: 'first_last_numbers',
                 ajax: {
@@ -53,7 +53,7 @@
         });
     });
 
-    
+
 </script>
 @endpush
 
@@ -103,7 +103,7 @@
                                 </select>
                             </div>
                         </div>
-                        
+
                         <div class="col-md-6 col-sm-12">
                             <div class="row input-group filter-search">
                                 <span class="input-group-addon">
@@ -135,7 +135,7 @@
                                 <th width="9" class="center"><input id="checkAll" class="selectall"
                                         onclick="toggle(this)" type="checkbox"></th>
 
-                                
+
                             </tr>
                         </thead>
                     </table>

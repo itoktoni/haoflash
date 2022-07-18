@@ -1,17 +1,18 @@
 <?php
 
-namespace Modules\System\Http\Services;
+namespace Modules\Procurement\Http\Services;
 
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Modules\System\Plugins\Debug;
 use Modules\System\Dao\Interfaces\CrudInterface;
+use Modules\System\Http\Services\DataService;
 use Modules\System\Plugins\Views;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Notes;
 use Yajra\DataTables\Facades\DataTables;
 
-class DataService
+class DataSummaryStockBdpService
 {
     protected $model;
     protected $filter;
@@ -19,14 +20,14 @@ class DataService
     protected $searching;
     protected $raw;
     protected $datatable;
+    protected $expired;
     protected $status = null;
     protected $image = null;
     protected $action = null;
     protected $transform = null;
-    protected $expired = null;
     protected $column = ['action', 'checkbox'];
 
-    public function setModel(CrudInterface $repository)
+    public function setModel($repository)
     {
         $this->model = $repository->dataRepository();
         return $this;
@@ -44,6 +45,12 @@ class DataService
         return $this;
     }
 
+    public function EditExpired($data)
+    {
+        $this->expired = $data;
+        return $this;
+    }
+
     public function EditAction($data, $active = true)
     {
         $this->action = $data;
@@ -53,12 +60,6 @@ class DataService
     public function EditColumn($data){
 
         $this->transform = $data;
-        return $this;
-    }
-
-    public function EditExpired($data){
-
-        $this->expired = $data;
         return $this;
     }
 

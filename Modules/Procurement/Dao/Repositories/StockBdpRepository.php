@@ -6,21 +6,23 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Modules\Item\Dao\Enums\CategoryType;
 use Modules\Procurement\Dao\Models\Stock;
+use Modules\Procurement\Dao\Models\StockBdp;
 use Modules\System\Dao\Interfaces\CrudInterface;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Notes;
 
-class StockBdpRepository extends StockSummaryRepository
+class StockBdpRepository extends Stock
 {
     public function dataRepository()
     {
         $list = Helper::dataColumn($this->datatable);
-        return $this->select(DB::raw("1 as stock_id,supplier_name,branch_name,stock_buy,stock_expired,stock_product_id, product_name,product_description, sum(stock_qty) as stock_qty"))
+        return $this->select($list)
             ->where('stock_type', CategoryType::BDP)
             ->joinRelationship('has_branch')
             ->joinRelationship('has_product')
-            ->joinRelationship('has_supplier')
-            ->groupBy(['stock_product_id', 'stock_branch_id', 'stock_supplier_id', 'stock_buy', 'stock_expired'])->orderBy('stock_expired');
+            ->joinRelationship('has_supplier');
+
+        // return DB::table('view_summary_stock');
     }
 
     public function updateRepository($request, $code)

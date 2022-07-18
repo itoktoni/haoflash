@@ -33,10 +33,6 @@ class ReportPurchaseDetail extends PurchaseRepository implements FromView, WithC
             $query->whereDate('po_created_at', '<=', $to);
         }
 
-        if($product = request()->get('po_product_id')){
-            $query->where('po_detail_product_id', $product);
-        }
-
         return $query->get();
     }
 

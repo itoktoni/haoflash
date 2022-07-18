@@ -36,17 +36,17 @@
                 <td data-title="No. Order">{{ $data->po_code ?? '' }} </td>
                 <td data-title="Nama Supplier">{{ $data->supplier_name ?? '' }} </td>
                 <td data-title="Date">{{ $data->po_date_order ?? '' }} </td>
-                <td data-title="DPP">{{ Helper::createRupiah($data->po_sum_dpp) ?? '' }} </td>
-                <td data-title="PPN">{{ Helper::createRupiah($data->po_sum_ppn) ?? '' }} </td>
-                <td data-title="PPH">{{ Helper::createRupiah($data->po_sum_pph) ?? '' }} </td>
+                <td data-title="DPP">{{ number_format($data->po_sum_dpp) ?? '' }} </td>
+                <td data-title="PPN">{{ number_format($data->po_sum_ppn) ?? '' }} </td>
+                <td data-title="PPH">{{ number_format($data->po_sum_pph) ?? '' }} </td>
                 <td data-title="Payment">{{ PurchasePayment::getDescription($data->po_payment) ?? '' }} </td>
                 <td data-title="Status">{{ PurchaseStatus::getDescription($data->po_status) ?? '' }} </td>
-                <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->po_sum_total) }} </td>
+                <td class="text-right" data-title="Total">{{ number_format($data->po_sum_total) }} </td>
             </tr>
             @endforeach
             <tr>
                 <td class="total" data-title="" colspan="9">Grand Total</td>
-                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('po_sum_total')) }}</td>
+                <td class="total text-right" data-title="Grand Total">{{ number_format($preview->sum('po_sum_total')) }}</td>
             </tr>
         </tbody>
     </table>

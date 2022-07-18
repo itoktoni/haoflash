@@ -33,10 +33,6 @@ class ReportDeliveryDetail extends DeRepository implements FromView, WithColumnF
             $query->whereDate('do_created_at', '<=', $to);
         }
 
-        if($product = request()->get('do_product_id')){
-            $query->where('do_detail_product_id', $product);
-        }
-
         return $query->get();
     }
 

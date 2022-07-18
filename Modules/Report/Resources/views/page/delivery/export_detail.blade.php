@@ -34,6 +34,12 @@ $number = 1;
 @endphp
             @foreach($preview as $data)
             @if($detail = $data->has_detail)
+@php
+if($product = request()->get('do_product_id')){
+    $detail = $detail->where('do_detail_product_id', $product);
+}
+@endphp
+
             @foreach($detail as $item)
 @php
 $total = $total + $item->do_detail_total;
@@ -44,8 +50,8 @@ $total = $total + $item->do_detail_total;
                 <td data-title="Nama Supplier">{{ $data->branch_name ?? '' }} </td>
                 <td data-title="Nama Product">{{ $item->has_product->product_name ?? '' }} </td>
                 <td data-title="Qty" class="text-right">{{ $item->do_detail_qty ?? '' }} </td>
-                <td data-title="Harga" class="text-right">{{ Helper::createRupiah($item->do_detail_price) ?? '' }} </td>
-                <td data-title="Total" class="text-right">{{ Helper::createRupiah($item->do_detail_total) }} </td>
+                <td data-title="Harga" class="text-right">{{ number_format($item->do_detail_price) ?? '' }} </td>
+                <td data-title="Total" class="text-right">{{ number_format($item->do_detail_total) }} </td>
             </tr>
             @endforeach
             @endif
@@ -55,7 +61,7 @@ $total = $total + $item->do_detail_total;
 
             <tr>
                 <td class="total" data-title="" colspan="6">Grand Total</td>
-                <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($total) }}</td>
+                <td class="total text-right" data-title="Grand Total">{{ number_format($total) }}</td>
             </tr>
         </tbody>
     </table>

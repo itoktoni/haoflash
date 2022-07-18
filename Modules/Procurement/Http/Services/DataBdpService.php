@@ -57,7 +57,7 @@ class DataBdpService
     }
 
     public function EditColumn($data){
-        
+
         $this->transform = $data;
         return $this;
     }
@@ -148,23 +148,23 @@ class DataBdpService
         if (!empty($this->expired)) {
             foreach ($this->expired as $key => $data) {
                 $this->datatable->editColumn($key, function ($select) use ($key, $data) {
-                    $expired = $select->{$data}; 
-                    $compareDate = Carbon::createFromFormat('Y-m-d',  $expired); 
+                    $expired = $select->{$data};
+                    $compareDate = Carbon::createFromFormat('Y-m-d',  $expired);
                     $nowDate = Carbon::now();
-                    
+
                     $check = $nowDate->diffInDays($compareDate, false);
                     if($check < 0){
                         return "<b><h4 class='text-primary text-center'>$expired<h4></b>";
                     }
                     else if($check < 14){
                         return "<b><h4 class='text-danger text-center'>$expired<h4></b>";
-                    }  
+                    }
                     else if($check < 20){
                         return "<b><h4 class='text-warning text-center'>$expired<h4></b>";
-                    }  
+                    }
                     else if($check < 30 || $check > 29){
                         return "<b><h4 class='text-success text-center'>$expired<h4></b>";
-                    }     
+                    }
 
                     return $expired;
                 });
@@ -205,7 +205,7 @@ class DataBdpService
     public function make()
     {
         $this->setFilter();
-        
+
         if (!request()->ajax()) {
             return $this->setApi();
         }

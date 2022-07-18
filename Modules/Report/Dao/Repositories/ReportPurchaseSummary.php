@@ -49,6 +49,9 @@ class ReportPurchaseSummary extends PurchaseRepository implements FromView, With
     {
         return [
             'E' => NumberFormat::FORMAT_TEXT,
+            'F' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -60,6 +63,11 @@ class ReportPurchaseSummary extends PurchaseRepository implements FromView, With
             'C' => 30,
             'D' => 30,
             'E' => 20,
+            'F' => 15,
+            'G' => 15,
+            'H' => 15,
+            'I' => 15,
+            'J' => 15,
         ];
     }
 }

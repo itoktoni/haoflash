@@ -26,6 +26,7 @@ class ReportStockDetail extends StockRepository implements FromView, WithColumnF
     public function data()
     {
         $query = Stock::with(['has_supplier', 'has_product', 'has_branch']);
+        $query->where('stock_transfer', "0");
 
         if ($from = request()->get('from')) {
             $query->whereDate('stock_created_at', '>=', $from);
