@@ -25,17 +25,25 @@ class ReportStockSummary extends RepositoriesStockRepository implements FromView
     public function data()
     {
         // $query = $this->dataRepository()->with(['has_customer', 'has_product', 'has_warehouse', 'has_location'])->filter();
-        $query = DB::table('view_summary_stock');
+        $query = DB::table('view_summary_stock')->WhereNull('stock_expired');
+
+        if ($product = request()->get('stock_product_id')) {
+            $query = $query->where('stock_product_id', $product);
+        }
+
+        if ($supplier = request()->get('stock_supplier_id')) {
+            $query = $query->where('stock_supplier_id', $supplier);
+        }
 
         if ($from = request()->get('from')) {
-            $query->where('stock_expired', '>=', $from);
+            $query->orWhere('stock_expired', '>=', $from);
         }
 
         if ($to = request()->get('to')) {
             $query->where('stock_expired', '<=', $to);
         }
 
-        if ([$product] = request()->get('stock_product_id')) {
+        if ($product = request()->get('stock_product_id')) {
             $query = $query->where('stock_product_id', $product);
         }
 
