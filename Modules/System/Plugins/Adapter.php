@@ -5,6 +5,7 @@ namespace Modules\System\Plugins;
 use Illuminate\Support\Facades\DB;
 use Modules\Procurement\Dao\Facades\DePrepareFacades;
 use Modules\Procurement\Dao\Facades\PoReceiveFacades;
+use Modules\Procurement\Dao\Facades\StockFacades;
 use Modules\Procurement\Dao\Models\Supplier;
 
 class Adapter
@@ -22,6 +23,18 @@ class Adapter
             ->where(DePrepareFacades::mask_price(), $buy)
             ->where(DePrepareFacades::mask_expired(), $expired)
             ->sum(DePrepareFacades::mask_prepare());
+    }
+
+    public static function getTotalStockReceiveProduct($code, $product, $supplier, $branch, $buy, $expired)
+    {
+        return StockFacades::where(StockFacades::mask_primary_code(), $code)
+            ->where(StockFacades::mask_product_id(), $product)
+            ->where(StockFacades::mask_supplier_id(), $supplier)
+            ->where(StockFacades::mask_branch_id(), $branch)
+            ->where(StockFacades::mask_buy(), $buy)
+            ->where(StockFacades::mask_expired(), $expired)
+            ->where(StockFacades::mask_transfer(), 0)
+            ->sum(StockFacades::mask_qty());
     }
 
     public static function getViewSummary($id)

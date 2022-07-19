@@ -39,7 +39,7 @@ Route::match(
 
         $query = false;
         if ($input) {
-            $query = DB::table('view_summary_stock')->where('id', $input)->first();
+            $query = DB::table('view_summary_stock')->where('id', $input)->where('stock_branch_id', env('BRANCH_ID'))->first();
             return $query;
         }
         return $query;

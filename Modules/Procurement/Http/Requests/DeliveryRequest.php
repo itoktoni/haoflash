@@ -98,7 +98,6 @@ class DeliveryRequest extends FormRequest
         if (request()->isMethod('POST')) {
             return [
                 DeFacades::mask_branch_id() => 'required',
-                'detail' => 'required',
             ];
         }
         return [];

@@ -5,7 +5,8 @@
             <th class="text-left col-md-2">Product Name</th>
             <th class="text-left col-md-1">Qty</th>
             <th class="text-left col-md-1">Prepare</th>
-            <th class="text-left col-md-1">Remaining</th>
+            <th class="text-left col-md-1">Receive</th>
+            <th class="text-left col-md-1">Remaining Receive</th>
         </tr>
     </thead>
     <tbody class="markup">
@@ -17,14 +18,15 @@
         $split_supplier = $split[1];
         $split_buy = $split[2];
         $split_expired = $split[3];
-        $receive = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $split_product, $split_supplier, $split_buy ,$item->mask_expired);
+        $prepare = Adapter::getTotalStockDoProduct($model->{$model->getKeyName()}, $split_product, $split_supplier, $split_buy ,$item->mask_expired);
+        $receive = Adapter::getTotalStockReceiveProduct($model->{$model->getKeyName()}, $split_product , $split_supplier, $model->do_branch_id, $split_buy, $item->mask_expired) ?? 0;
         $remaining = $item->mask_qty - $receive;
         @endphp
         <tr>
             <input type="hidden" value="{{ $model->{$model->getKeyName()} }}" name="detail[{{ $loop->index }}][do_detail_do_code]">
             <input type="hidden" value="{{ $item->mask_key }}" name="detail[{{ $loop->index }}][do_detail_key]">
             <input type="hidden" value="{{ $item->mask_qty }}" name="detail[{{ $loop->index }}][do_detail_qty]">
-            <input type="hidden" value="{{ $receive }}" name="detail[{{ $loop->index }}][do_detail_prepare]">
+            <input type="hidden" value="{{ $prepare }}" name="detail[{{ $loop->index }}][do_detail_prepare]">
             <input type="hidden" value="{{ $receive }}" name="detail[{{ $loop->index }}][do_detail_receive]">
 
             <td data-title="Product Name">
@@ -33,11 +35,14 @@
             <td data-title="Qty">
                 {{ $item->mask_qty }}
             </td>
+            <td data-title="Prepare" class="col-lg-1">
+                {{ $prepare }}
+            </td>
             <td data-title="Receive" class="col-lg-1">
                 {{ $receive }}
             </td>
             <td data-title="Remaining" class="col-lg-1">
-                {{ $remaining }}
+                {{ $model->mask_status == DeliveryStatus::Receive ? $remaining : $item->mask_qty }}
             </td>
         </tr>
         @endforeach

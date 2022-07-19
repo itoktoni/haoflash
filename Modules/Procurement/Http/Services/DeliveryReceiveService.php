@@ -26,13 +26,14 @@ class DeliveryReceiveService extends UpdateService
                 DeFacades::mask_status() => DeliveryStatus::Receive
             ]);
         }
-
         DeDetailFacades::update($data->detail, [
             DeDetailFacades::mask_do_code(),
             DeDetailFacades::mask_key(),
         ], [
             DeDetailFacades::mask_qty(),
             DeDetailFacades::mask_total(),
+            'do_detail_prepare',
+            'do_detail_receive',
         ]);
 
         Alert::update();

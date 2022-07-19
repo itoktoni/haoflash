@@ -198,6 +198,7 @@
                     "_token": "{{ csrf_token() }}"
                 },
                 success: function(result) {
+                    console.log(result);
                     if (result) {
                         // console.log(result);
                         var mask_price = number_format(result.stock_buy);

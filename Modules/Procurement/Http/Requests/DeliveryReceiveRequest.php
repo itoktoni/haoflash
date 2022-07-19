@@ -44,9 +44,8 @@ class DeliveryReceiveRequest extends FormRequest
         $validator->after(function ($validator) {
 
             foreach ($this->detail as $detail) {
-
                 if ($detail['do_detail_prepare'] != $detail['do_detail_qty']) {
-                    $validator->errors()->add($detail['do_detail_product_id'], 'Qty tidak sama dengan yang di receive');
+                    $validator->errors()->add($detail['do_detail_key'], 'Qty tidak sama dengan yang di receive');
                 }
             }
         });

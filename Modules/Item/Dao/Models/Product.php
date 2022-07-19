@@ -12,7 +12,7 @@ use Modules\System\Plugins\Helper;
 class Product extends Model
 {
     use SoftDeletes;
-    
+
     protected $table = 'product';
     protected $primaryKey = 'product_id';
 

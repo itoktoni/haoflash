@@ -47,6 +47,7 @@ class ReportDeliverySummary extends DeRepository implements FromView, WithColumn
     {
         return [
             'E' => NumberFormat::FORMAT_TEXT,
+            'F' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -58,6 +59,7 @@ class ReportDeliverySummary extends DeRepository implements FromView, WithColumn
             'C' => 30,
             'D' => 30,
             'E' => 20,
+            'F' => 20,
         ];
     }
 }

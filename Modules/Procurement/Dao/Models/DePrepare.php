@@ -283,4 +283,13 @@ class DePrepare extends Model
     {
         return $this->hasone(De::class, DeFacades::getKeyName(), $this->mask_do_code());
     }
+
+    public static function boot()
+    {
+        parent::saving(function ($model) {
+            $model->do_prepare_expired = !empty($model->do_prepare_expired) ? $model->do_prepare_expired : null;
+        });
+
+        parent::boot();
+    }
 }
