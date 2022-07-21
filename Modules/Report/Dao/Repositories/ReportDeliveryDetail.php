@@ -23,7 +23,7 @@ class ReportDeliveryDetail extends DeRepository implements FromView, WithColumnF
 
     public function data()
     {
-        $query = $this->dataRepository()->leftJoinRelationship('has_detail')->filter();
+        $query = $this->dataRepository()->filter();
 
         if ($from = request()->get('from')) {
             $query->whereDate('do_created_at', '>=', $from);
