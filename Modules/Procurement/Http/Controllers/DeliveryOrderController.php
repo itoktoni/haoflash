@@ -233,11 +233,13 @@ class DeliveryOrderController extends Controller
             ->where(DePrepareFacades::mask_do_code(), $code)
             ->where(DePrepareFacades::mask_supplier_id(), $split_supplier)
             ->where(DePrepareFacades::mask_price(), $split_buy)
-            ->where(DePrepareFacades::mask_expired(), $split_expired)
             ->where(DePrepareFacades::mask_product_id(), $split_product);
+            if($split_expired != 0){
+                $query = $query->where(DePrepareFacades::mask_expired(), $split_expired);
+            }
+        $detail = $query->get();
 
         $total = $query->sum(DePrepareFacades::mask_qty());
-        $detail = $query->get();
         $prepare = $query->first();
 
         $supplier = $prepare->mask_supplier_id ?? null;
@@ -257,7 +259,7 @@ class DeliveryOrderController extends Controller
 
         return view(Views::form(Helper::snake(__FUNCTION__), config('page'), config('folder')))
             ->with($this->share([
-                'model' => (object) $model,
+                'model' => $model,
                 'detail' => $detail,
                 'prepare' => $prepare,
                 'total' => $total,

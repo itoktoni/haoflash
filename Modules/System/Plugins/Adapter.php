@@ -17,23 +17,27 @@ class Adapter
 
     public static function getTotalStockDoProduct($code, $product, $supplier, $buy, $expired)
     {
-        return DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)
+        $query = DePrepareFacades::where(DePrepareFacades::mask_do_code(), $code)
             ->where(DePrepareFacades::mask_product_id(), $product)
             ->where(DePrepareFacades::mask_supplier_id(), $supplier)
-            ->where(DePrepareFacades::mask_price(), $buy)
-            ->where(DePrepareFacades::mask_expired(), $expired)
-            ->sum(DePrepareFacades::mask_prepare());
+            ->where(DePrepareFacades::mask_price(), $buy);
+            if($expired != 0){
+                $query->where(DePrepareFacades::mask_expired(), $expired);
+            }
+            return $query->sum(DePrepareFacades::mask_prepare());
     }
 
     public static function getTotalStockReceiveProduct($code, $product, $supplier, $branch, $buy, $expired)
     {
-        return StockFacades::where(StockFacades::mask_primary_code(), $code)
+        $query = StockFacades::where(StockFacades::mask_primary_code(), $code)
             ->where(StockFacades::mask_product_id(), $product)
             ->where(StockFacades::mask_supplier_id(), $supplier)
             ->where(StockFacades::mask_branch_id(), $branch)
-            ->where(StockFacades::mask_buy(), $buy)
-            ->where(StockFacades::mask_expired(), $expired)
-            ->where(StockFacades::mask_transfer(), 0)
+            ->where(StockFacades::mask_buy(), $buy);
+            if($expired != 0){
+                $query->where(StockFacades::mask_expired(), $expired);
+            }
+            return $query->where(StockFacades::mask_transfer(), 0)
             ->sum(StockFacades::mask_qty());
     }
 
