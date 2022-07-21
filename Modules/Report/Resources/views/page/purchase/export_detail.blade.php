@@ -27,7 +27,7 @@
             </tr>
         </thead>
         <tbody>
-            @if(!empty($test))
+            @if(!empty($preview))
 @php
 $total = 0;
 $number = 1;

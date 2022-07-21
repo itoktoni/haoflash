@@ -23,7 +23,7 @@ class ReportPurchaseDetail extends PurchaseRepository implements FromView, WithC
 
     public function data()
     {
-        $query = $this->dataRepository()->leftJoinRelationship('has_detail')->filter();
+        $query = $this->dataRepository()->filter();
 
         if ($from = request()->get('from')) {
             $query->whereDate('po_created_at', '>=', $from);
