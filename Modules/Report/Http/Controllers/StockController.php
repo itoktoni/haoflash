@@ -15,6 +15,7 @@ use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\Report\Dao\Repositories\ReportSoDetail;
 use Modules\Report\Dao\Repositories\ReportSoSummary;
 use Modules\Report\Dao\Repositories\ReportStockDetail;
+use Modules\Report\Dao\Repositories\ReportStockExpired;
 use Modules\Report\Dao\Repositories\ReportStockSummary;
 use Modules\Report\Dao\Repositories\ReportSummarySo;
 use Modules\Report\Dao\Repositories\SoSummaryExcel;
@@ -84,5 +85,24 @@ class StockController extends Controller
     public function summaryExport(ReportService $service, ReportStockSummary $repository)
     {
         return $service->generate($repository, 'export_summary');
+    }
+
+    public function expired(ReportStockExpired $repository)
+    {
+        $preview = false;
+        if ($name = request()->get('name')) {
+            $preview = $repository->generate($name)->data();
+        }
+
+        return view(Views::form(__FUNCTION__, config('page'), config('folder')))
+            ->with($this->share([
+                'model' => $repository,
+                'preview' => $preview,
+            ]));
+    }
+
+    public function expiredExport(ReportService $service, ReportStockExpired $repository)
+    {
+        return $service->generate($repository, 'export_expired');
     }
 }

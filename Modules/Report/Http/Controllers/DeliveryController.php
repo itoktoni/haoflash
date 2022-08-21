@@ -4,6 +4,7 @@ namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Enums\DeliveryStatus;
 use Modules\Procurement\Dao\Repositories\BranchRepository;
 use Modules\Report\Dao\Repositories\ReportDeliveryDetail;
 use Modules\Report\Dao\Repositories\ReportDeliverySummary;
@@ -22,10 +23,12 @@ class DeliveryController extends Controller
     {
         $product = Views::option(new ProductRepository());
         $branch = Views::option(new BranchRepository());
+        $status = collect(DeliveryStatus::getOptions())->prepend('- Select Status', '');
 
         $view = [
             'product' => $product,
             'branch' => $branch,
+            'status' => $status,
         ];
 
         return array_merge($view, $data);

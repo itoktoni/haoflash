@@ -89,7 +89,7 @@
                 <strong>Total Sebelum Discount</strong>
             </td>
             <td data-title="" class="text-right">
-                {!! Form::text('po_sum_product', $model->mask_value, ['id' => 'before_discount',
+                {!! Form::text('po_sum_discount', $model->mask_value, ['id' => 'before_discount',
                 'readonly', 'class' => 'number form-control text-right']) !!}
             </td>
         </tr>

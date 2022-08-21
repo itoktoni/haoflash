@@ -59,6 +59,7 @@ use Modules\System\Plugins\Alert;
 use Modules\System\Plugins\Helper;
 use Modules\System\Plugins\Response;
 use Modules\System\Plugins\Views;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class DeliveryOrderController extends Controller
 {
@@ -409,5 +410,22 @@ class DeliveryOrderController extends Controller
     {
         $check = $service->delete($code);
         return Response::redirectBack();
+    }
+
+    public function getPrintDo($code)
+    {
+        $data = $this->get($code, ['has_detail', 'has_detail.has_product']);
+        if($data){
+            $pasing = [
+                'master' => $data,
+                'branch' => $data->has_branch,
+                'detail' => $data->has_detail,
+            ];
+
+            $pdf = PDF::loadView(Views::pdf(config('page'), config('folder'), 'print_delivery_order'), $pasing);
+            return $pdf->stream();
+            // return $pdf->download($id . '.pdf');
+        }
+
     }
 }

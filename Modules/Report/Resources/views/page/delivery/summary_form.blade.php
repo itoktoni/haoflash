@@ -32,6 +32,12 @@
         {!! $errors->first('do_branch_id', '<p class="help-block">:message</p>') !!}
     </div>
 
+    {!! Form::label('name', __('Status'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('do_status') ? 'has-error' : ''}}">
+        {{ Form::select('do_status', $status, request()->get('do_status') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('do_status', '<p class="help-block">:message</p>') !!}
+    </div>
+
 </div>
 
 

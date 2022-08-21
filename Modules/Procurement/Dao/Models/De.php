@@ -59,6 +59,7 @@ class De extends Model
 
     protected $filters = [
         'do_branch_id',
+        'do_status',
     ];
 
     public $timestamps = true;

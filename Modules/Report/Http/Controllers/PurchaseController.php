@@ -4,6 +4,7 @@ namespace Modules\Report\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Modules\Item\Dao\Repositories\ProductRepository;
+use Modules\Procurement\Dao\Enums\PurchaseStatus;
 use Modules\Procurement\Dao\Repositories\PurchaseRepository;
 use Modules\Procurement\Dao\Repositories\SupplierRepository;
 use Modules\Report\Dao\Repositories\ReportPurchaseDetail;
@@ -25,10 +26,12 @@ class PurchaseController extends Controller
     {
         $product = Views::option(new ProductRepository());
         $supplier = Views::option(new SupplierRepository());
+        $status = collect(PurchaseStatus::getOptions())->prepend('- Select Status', '');
 
         $view = [
             'product' => $product,
             'supplier' => $supplier,
+            'status' => $status,
         ];
 
         return array_merge($view, $data);

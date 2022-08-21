@@ -32,6 +32,12 @@
         {!! $errors->first('po_supplier_id', '<p class="help-block">:message</p>') !!}
     </div>
 
+    {!! Form::label('name', __('Status'), ['class' => 'col-md-2 col-sm-2 control-label']) !!}
+    <div class="col-md-4 col-sm-4 {{ $errors->has('po_status') ? 'has-error' : ''}}">
+        {{ Form::select('po_status', $status, request()->get('po_status') ?? null, ['class'=> 'form-control ']) }}
+        {!! $errors->first('po_status', '<p class="help-block">:message</p>') !!}
+    </div>
+
 </div>
 
 

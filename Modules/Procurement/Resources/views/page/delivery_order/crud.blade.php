@@ -6,7 +6,7 @@
         @if(isset($actions['create']))
         <a href="{!! route($route_create) !!}" class="btn btn-success">{{ __('Create') }}</a>
         @endif
-        
+
         @if(isset($actions['delete']))
         <button type="submit" onclick="return confirm('Are you sure to delete data ?');" id="delete-action"
             value="delete" name="action" class="btn btn-danger">{{ __('Delete') }}</button>
@@ -23,6 +23,7 @@
 
         @case('edit')
         <a id="linkMenu" href="{!! route($route_index) !!}" class="btn btn-warning">{{ __('Back') }}</a>
+        <a target="_blank" id="linkMenu" href="{!! route('procurement_delivery_order_get_print_do', ['code' => $model->{$model->getKeyName()}]) !!}" class="btn btn-danger">{{ __('Cetak DO') }}</a>
         @if(isset($actions['update']) && ($model->mask_status != PurchaseStatus::Cancel && $model->mask_status != PurchaseStatus::Finish))
         <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
         @endif

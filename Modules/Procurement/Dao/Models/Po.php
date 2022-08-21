@@ -59,7 +59,8 @@ class Po extends Model
 
     protected $filters = [
         'po_supplier_id',
-        'po_customer_id'
+        'po_customer_id',
+        'po_status'
     ];
 
     public $timestamps = true;
@@ -79,11 +80,12 @@ class Po extends Model
     public $searching = 'po_code';
     public $datatable = [
         'po_code' => [true => 'Purchase Code', 'width' => 100],
-        'supplier_name' => [true => 'Supplier Name'],
+        'supplier_name' => [true => 'Supplier Name', 'width' => 100],
         'po_date_order' => [true => 'Date', 'width' => 60],
         'po_updated_at' => [false => 'Last At', 'width' => 50],
         'name' => [true => 'Last By', 'width' => 60],
-        'po_sum_value' => [false => 'Value', 'width' => 80],
+        'po_sum_value' => [true => 'Value', 'width' => 60],
+        'po_discount_value' => [true => 'Discount', 'width' => 60],
         'po_sum_dpp' => [true => 'DPP', 'width' => 50],
         'po_sum_ppn' => [true => 'PPN', 'width' => 50],
         'po_sum_pph' => [true => 'PPH', 'width' => 50],
@@ -247,7 +249,7 @@ class Po extends Model
 
     public function getMaskDiscountFormatAttribute()
     {
-        return Helper::createRupiah($this->{$this->mask_discount()});
+        return Helper::createRupiah($this->po_discount_value);
     }
 
     public function mask_tax()

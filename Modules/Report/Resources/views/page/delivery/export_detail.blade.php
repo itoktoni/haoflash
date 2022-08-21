@@ -19,6 +19,7 @@
             <tr>
                 <th class="text-left" style="width:3%">No.</th>
                 <th class="text-left" style="width:12%">No. Order</th>
+                <th class="text-left" style="width:12%">Tanggal</th>
                 <th class="text-left" style="width:20%">Nama Branch</th>
                 <th class="text-left" style="width:20%">Nama Product</th>
                 <th class="text-right" style="width:5%">Qty</th>
@@ -47,6 +48,7 @@ $total = $total + $item->do_detail_total;
             <tr>
                 <td data-title="No">{{ $number++ }} </td>
                 <td data-title="No. Order">{{ $data->do_code ?? '' }} </td>
+                <td data-title="Date">{{ $data->do_date_order ?? '' }} </td>
                 <td data-title="Nama Supplier">{{ $data->branch_name ?? '' }} </td>
                 <td data-title="Nama Product">{{ $item->has_product->product_name ?? '' }} </td>
                 <td data-title="Qty" class="text-right">{{ $item->do_detail_qty ?? '' }} </td>
@@ -60,7 +62,7 @@ $total = $total + $item->do_detail_total;
             @endif
 
             <tr>
-                <td class="total" data-title="" colspan="6">Grand Total</td>
+                <td class="total" data-title="" colspan="7">Grand Total</td>
                 <td class="total text-right" data-title="Grand Total">{{ number_format($total) }}</td>
             </tr>
         </tbody>

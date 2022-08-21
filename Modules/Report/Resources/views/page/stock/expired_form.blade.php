@@ -1,5 +1,6 @@
 <x-date :array="['date']" />
 
+
 <div class="form-group">
 
 
@@ -22,6 +23,7 @@
 	</div>
 
 </div>
+
 
 
 @isset($preview)

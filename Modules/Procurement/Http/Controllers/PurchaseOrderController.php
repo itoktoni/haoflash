@@ -111,6 +111,8 @@ class PurchaseOrderController extends Controller
                 self::$model->mask_dpp() => 'mask_dpp_format',
                 self::$model->mask_pph() => 'mask_pph_format',
                 self::$model->mask_ppn() => 'mask_ppn_format',
+                self::$model->mask_value() => 'mask_value_format',
+                'po_discount_value' => 'mask_discount_format',
                 'po_updated_at' => 'po_updated_at',
                 self::$model->mask_total() => 'mask_total_rupiah',
             ])->EditAction([

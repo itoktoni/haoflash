@@ -12,7 +12,7 @@ use Modules\Report\Dao\Interfaces\GenerateReport;
 use Modules\Transaction\Dao\Repositories\StockRepository;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
-class ReportStockSummary extends RepositoriesStockRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
+class ReportStockExpired extends RepositoriesStockRepository implements FromView, WithColumnFormatting, WithColumnWidths, GenerateReport
 {
     public $name;
 
@@ -24,8 +24,8 @@ class ReportStockSummary extends RepositoriesStockRepository implements FromView
 
     public function data()
     {
-        // $query = $this->dataRepository()->with(['has_customer', 'has_product', 'has_warehouse', 'has_location'])->filter();
-        $query = DB::table('view_summary_stock');
+        $query = $this->dataRepository()
+        ->filter();
 
         if ($product = request()->get('stock_product_id')) {
             $query = $query->where('stock_product_id', $product);
