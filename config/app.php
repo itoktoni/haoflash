@@ -307,6 +307,7 @@ return [
         'GroupUserType' => GroupUserType::class,
         'PurchasePayment' => PurchasePayment::class,
         'PaymentMethod' => PaymentMethod::class,
+        'FastExcel' => Rap2hpoutre\FastExcel\Facades\FastExcel::class,
     ],
 
 ];

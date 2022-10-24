@@ -18,11 +18,13 @@
         <thead>
             <tr>
                 <th class="text-left" style="width:2%">No.</th>
-                <th class="text-left" style="width:10%">Serial Number</th>
+                <th class="text-left" style="width:15%">Serial Number</th>
                 <th class="text-left" style="width:20%">Product Name</th>
+                <th class="text-left" style="width:15%">Product Description</th>
                 <th class="text-left" style="width:10%">Supplier Name</th>
                 <th class="text-left" style="width:10%">Branch</th>
-                <th class="text-left" style="width:10%">Expired</th>
+                <th class="text-left" style="width:5%">Buy</th>
+                <th class="text-left" style="width:7%">Expired</th>
                 <th class="text-right" style="width:5%">Total</th>
             </tr>
         </thead>
@@ -32,14 +34,16 @@
                 <td data-title="No">{{ $loop->iteration }} </td>
                 <td data-title="Sales Order">{{ $data->stock_code ?? '' }} </td>
                 <td data-title="Nama Product">{{ $data->has_product->mask_name ?? '' }} </td>
+                <td data-title="Nama Product">{!! nl2br($data->has_product->mask_description) ?? '' !!} </td>
                 <td data-title="Nama Supplier">{{ $data->has_supplier->mask_name ?? '' }} </td>
                 <td data-title="Nama Branch">{{ $data->has_branch->mask_name ?? '' }} </td>
+                <td data-title="Expired">{{ number_format($data->stock_buy) ?? '' }} </td>
                 <td data-title="Expired">{{ $data->stock_expired ?? '' }} </td>
                 <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->stock_qty) }} </td>
             </tr>
             @endforeach
             <tr>
-                <td class="total" data-title="" colspan="6">Grand Total</td>
+                <td class="total" data-title="" colspan="8">Grand Total</td>
                 <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('stock_qty')) }}</td>
             </tr>
         </tbody>

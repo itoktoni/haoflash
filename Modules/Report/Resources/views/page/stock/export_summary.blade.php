@@ -21,6 +21,7 @@
                 <th class="text-left" style="width:5%">Branch</th>
                 <th class="text-left" style="width:12%">Supplier Name</th>
                 <th class="text-left" style="width:20%">Product Name</th>
+                <th class="text-left" style="width:20%">Product Description</th>
                 <th class="text-right" style="width:5%">Total</th>
             </tr>
         </thead>
@@ -31,11 +32,12 @@
                 <td data-title="Branch">{{ $data->branch_name ?? '' }} </td>
                 <td data-title="Nama Supplier">{{ $data->supplier_name ?? '' }} </td>
                 <td data-title="Nama Product">{{ $data->product_name ?? '' }} </td>
+                <td data-title="Nama Descirption">{!! nl2br($data->product_description) ?? '' !!} </td>
                 <td class="text-right" data-title="Total">{{ Helper::createRupiah($data->stock_qty) }} </td>
             </tr>
             @endforeach
             <tr>
-                <td class="total" data-title="" colspan="4">Grand Total</td>
+                <td class="total" data-title="" colspan="5">Grand Total</td>
                 <td class="total text-right" data-title="Grand Total">{{ Helper::createRupiah($preview->sum('stock_qty')) }}</td>
             </tr>
         </tbody>

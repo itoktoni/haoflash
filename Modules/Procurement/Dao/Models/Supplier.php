@@ -22,6 +22,7 @@ class Supplier extends Model
         'supplier_contact',
         'supplier_email',
         'supplier_ppn',
+        'supplier_address',
         'supplier_pph',
         'supplier_npwp',
         'supplier_pkp',
@@ -47,8 +48,8 @@ class Supplier extends Model
         'supplier_address' => 'required',
         'supplier_description' => 'required',
         'supplier_pph' => 'required_if:supplier_ppn,1',
-        'supplier_npwp' => 'integer|required_if:supplier_ppn,1',
-        'supplier_pkp' => 'integer|required_if:supplier_ppn,1',
+        'supplier_npwp' => 'numeric|required_if:supplier_ppn,1',
+        'supplier_pkp' => 'numeric|required_if:supplier_ppn,1',
     ];
 
     public $searching = 'supplier_name';
